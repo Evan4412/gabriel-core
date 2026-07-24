@@ -139,9 +139,7 @@ class ToolService:
         else:
             orm_tools = await self.repo.list_all()
 
-        tools = ToolLibraryIndexer().discover(force=True)
-        for t in orm_tools:
-            tools.append(orm_to_domain(t))
+        tools = [orm_to_domain(t) for t in orm_tools]
 
         if category is not None:
             tools = [t for t in tools if t.category == category]

@@ -191,3 +191,29 @@ async def delete_tool(
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
     return None
+
+
+@router.post("/sync", status_code=200)
+async def sync_tools(
+    context: ExecutionContext = Depends(get_execution_context),
+    session_factory: async_sessionmaker[AsyncSession] = Depends(get_db_session_factory),
+):
+    """Idempotent sync of discovered tool catalog into this org's Tool resources.
+
+    Safe to call repeatedly. Preserves org-controlled fields (enabled,
+    safety_level, configuration). Creates missing tools, updates
+    implementation-derived fields on existing ones.
+    """
+    from gabriel.tool.sync import ToolCatalogSynchronizer
+
+    report = await ToolCatalogSynchronizer(session_factory).sync_org(
+        org_id=context.organization,
+        actor_id=str(context.principal.id),
+    )
+    return {
+        "org_id": report.org_id,
+        "created": report.created,
+        "updated": report.updated,
+        "unchanged": report.unchanged,
+        "errors": report.errors,
+    }

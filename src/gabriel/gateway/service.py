@@ -414,7 +414,17 @@ class ChatRuntimeService:
                 content=json.dumps({"error": error}), success=False, error=error,
             )
 
-        grn = tool_grn(call.name, org_id, version=1)
+        async with self._session_factory() as session:
+            tool_service = ToolService(ToolRepository(session), None)
+            tool_domain = await tool_service.get_tool_by_name(org_id, call.name)
+            if tool_domain is None:
+                error = f"Tool '{call.name}' not found for org."
+                return ToolResult(
+                    tool_call_id=call.id, name=call.name,
+                    content=json.dumps({"error": error}), success=False, error=error,
+                )
+            grn = str(tool_domain.grn)
+
         context = self._build_execution_context(
             org_id=org_id, principal_id=principal_id, correlation_id=correlation_id
         )

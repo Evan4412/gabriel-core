@@ -43,6 +43,7 @@ from gabriel.tool.registry import function_registry
 from gabriel.policy.service import PolicyService
 from gabriel.runtime.context import ExecutionContext
 from gabriel.resource.grn import GRN
+from gabriel.logging_config import get_logger
 import gabriel.events.orm  # noqa: F401
 import gabriel.resource.read_model_orm  # noqa: F401
 import gabriel.events.projections.audit_projection  # noqa: F401
@@ -367,63 +368,6 @@ async def _build_persisted_event_store() -> SqlAlchemyEventStore:
                 return await SqlAlchemyEventStore.load_from_db(fallback_session)
 
 
-async def _auto_seed_tools_if_empty(session_factory: async_sessionmaker[AsyncSession]) -> None:
-        """Auto-seed platform tools on first-run if no tools exist for any org.
-        
-        This eliminates the need to manually run scripts/seed_tools.py after
-        running `alembic upgrade head` on a fresh database.
-        """
-        from gabriel.organization.repository import OrganizationRepository
-        from gabriel.organization.service import OrganizationService
-        from gabriel.tool.repository import ToolRepository
-        
-        logger = get_logger(__name__)
-        
-        async with session_factory() as session:
-                org_service = OrganizationService(OrganizationRepository(session))
-                orgs = await org_service.list_organizations()
-                
-                if not orgs:
-                        logger.info("No organizations found - skipping tool auto-seed")
-                        return
-                
-                tool_repo = ToolRepository(session)
-                # Check if any org has tools seeded
-                for org in orgs:
-                        org_tools = await tool_repo.list_for_org(org.org_id)
-                        if org_tools:
-                                logger.debug("Tools already seeded for org '%s' - skipping auto-seed", org.org_id)
-                                return
-        
-        # All orgs have zero tools - run auto-seed
-        logger.info("Empty tools catalog detected - auto-seeding platform tools...")
-        
-        # Import here to avoid circular dependency
-        import sys
-        import os
-        script_dir = os.path.join(os.path.dirname(__file__), "..", "..", "scripts")
-        sys.path.insert(0, script_dir)
-        
-        try:
-                from seed_tools import seed_tools
-                
-                for org in orgs:
-                        logger.info("  → Seeding tools for org '%s'", org.org_id)
-                        counts = await seed_tools(
-                                org_id=org.org_id,
-                                created_by="system:auto_seed",
-                                session_factory=session_factory,
-                        )
-                        logger.info(
-                                "  ✓ Created %s, updated %s tools for org '%s'",
-                                counts["created"],
-                                counts["updated"],
-                                org.org_id,
-                        )
-        finally:
-                sys.path.pop(0)
-
-
 async def initialize_gateway_state(app) -> None:
         event_store = await _build_persisted_event_store()
 
@@ -495,8 +439,6 @@ async def initialize_gateway_state(app) -> None:
 
         app.state.approval_registry = ApprovalRegistry()
         
-        # Auto-seed platform tools on first run (if tools catalog is empty).
-        await _auto_seed_tools_if_empty(policy_session_factory)
 
         # Document & Knowledge (Phase 4): hot-swappable embedding providers
         # (Ollama default) and the RAG retriever used by the chat runtime.
@@ -579,6 +521,14 @@ def get_knowledge_retriever(request: Request):
 def get_chat_runtime_service(request: Request):
         """ChatRuntimeService wired to the app's registries and DB sessions."""
         from gabriel.gateway.service import ChatRuntimeService
+
+        logger = get_logger(__name__)
+
+        tools = request.app.state.runtime_tool_registry
+        if not tools:
+                logger.warning("No tools found")
+        else:
+                logger.info("Found %d tools", len(tools.llm_specs()))
 
         return ChatRuntimeService(
                 session_factory=get_db_session_factory(request),
