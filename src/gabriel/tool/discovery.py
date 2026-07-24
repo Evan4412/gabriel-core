@@ -17,7 +17,8 @@ The indexer is the single source of truth consumed by:
 
 * :func:`gabriel.gateway.tools.build_default_tool_registry` (LLM-facing
   runtime tools);
-* :mod:`scripts.seed_tools` (syncing ``Tool`` governance resources);
+* :class:`gabriel.tool.sync.ToolCatalogSynchronizer` (syncing ``Tool``
+  governance resources via ``POST /tools/sync`` or the CLI);
 * :class:`gabriel.tool.executor.ToolExecutor` (via the shared
   :class:`~gabriel.tool.registry.FunctionRegistry`).
 """

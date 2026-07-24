@@ -30,7 +30,6 @@ if TYPE_CHECKING:  # pragma: no cover - typing only, avoids import cycles
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from gabriel.agent.grn_bindings import tool_grn
 from gabriel.agent.mappers import orm_to_domain as agent_orm_to_domain
 from gabriel.agent.models import Agent
 from gabriel.agent.specification import AgentSpecification
@@ -414,7 +413,17 @@ class ChatRuntimeService:
                 content=json.dumps({"error": error}), success=False, error=error,
             )
 
-        grn = tool_grn(call.name, org_id, version=1)
+        async with self._session_factory() as session:
+            tool_service = ToolService(ToolRepository(session), None)
+            tool_domain = await tool_service.get_tool_by_name(org_id, call.name)
+            if tool_domain is None:
+                error = f"Tool '{call.name}' not found for org."
+                return ToolResult(
+                    tool_call_id=call.id, name=call.name,
+                    content=json.dumps({"error": error}), success=False, error=error,
+                )
+            grn = str(tool_domain.grn)
+
         context = self._build_execution_context(
             org_id=org_id, principal_id=principal_id, correlation_id=correlation_id
         )
@@ -656,17 +665,59 @@ class ChatRuntimeService:
                     confirmed = False
                     denied_decision: ApprovalDecision | None = None
                     if requires_confirmation:
-                        grn = tool_grn(call.name, org_id, version=1)
-                        key = self.approvals.register(
-                            chat_session.session_id, call.name
-                        )
+                        async with self._session_factory() as session:
+                            tool_service = ToolService(ToolRepository(session), None)
+                            tool = await tool_service.get_tool_by_name(org_id, call.name)
+
+                        # This should normally be impossible: `call.name` originated from
+                        # `config.allowed_tools`, which requires an enabled persisted resource.
+                        # Still fail closed if the resource disappeared between exposure and call.
+                        if tool is None:
+                            error = f"Tool '{call.name}' is no longer provisioned for this org."
+                            result = ToolResult(
+                                tool_call_id=call.id,
+                                name=call.name,
+                                content=json.dumps({"error": error}),
+                                success=False,
+                                error=error,
+                            )
+                            tool_call_records.append(
+                                {
+                                    "id": call.id,
+                                    "name": call.name,
+                                    "arguments": call.arguments,
+                                    "success": False,
+                                    "denied": False,
+                                }
+                            )
+                            yield sse_event(
+                                "tool_result",
+                                {
+                                    "id": call.id,
+                                    "name": call.name,
+                                    "success": False,
+                                    "denied": False,
+                                    "content": result.content,
+                                },
+                            )
+                            messages.append(
+                                ChatMessage(
+                                    role="tool",
+                                    content=result.content,
+                                    name=result.name,
+                                    tool_call_id=result.tool_call_id,
+                                )
+                            )
+                            continue
+
+                        key = self.approvals.register(chat_session.session_id, call.name)
                         yield sse_event(
                             "tool_approval_required",
                             {
                                 "id": call.id,
                                 "tool_name": call.name,
                                 "args": call.arguments,
-                                "tool_grn": grn,
+                                "tool_grn": str(tool.grn),
                                 "session_id": chat_session.session_id,
                             },
                         )

@@ -43,6 +43,7 @@ from gabriel.tool.registry import function_registry
 from gabriel.policy.service import PolicyService
 from gabriel.runtime.context import ExecutionContext
 from gabriel.resource.grn import GRN
+from gabriel.logging_config import get_logger
 import gabriel.events.orm  # noqa: F401
 import gabriel.resource.read_model_orm  # noqa: F401
 import gabriel.events.projections.audit_projection  # noqa: F401
@@ -437,6 +438,7 @@ async def initialize_gateway_state(app) -> None:
         from gabriel.gateway.approvals import ApprovalRegistry
 
         app.state.approval_registry = ApprovalRegistry()
+        
 
         # Document & Knowledge (Phase 4): hot-swappable embedding providers
         # (Ollama default) and the RAG retriever used by the chat runtime.
@@ -519,6 +521,14 @@ def get_knowledge_retriever(request: Request):
 def get_chat_runtime_service(request: Request):
         """ChatRuntimeService wired to the app's registries and DB sessions."""
         from gabriel.gateway.service import ChatRuntimeService
+
+        logger = get_logger(__name__)
+
+        tools = request.app.state.runtime_tool_registry
+        if not tools:
+                logger.warning("No tools found")
+        else:
+                logger.info("Found %d tools", len(tools.llm_specs()))
 
         return ChatRuntimeService(
                 session_factory=get_db_session_factory(request),
