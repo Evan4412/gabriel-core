@@ -1,24 +1,28 @@
 """ToolCatalogSynchronizer — idempotent tool provisioning for an org.
 
-Replaces the deprecated scripts/seed_tools.py auto-seeder.
-Called explicitly from:
-  - organization provisioning (new org onboarding)
-  - admin API: POST /tools/sync
-  - CLI: gabriel tools sync --org <org_id>
+Replaces the deprecated scripts/seed_tools.py auto-seeder (ADR-016).
 
-Never called automatically at app startup.
+Called explicitly from:
+  - POST /tools/sync  (admin API endpoint)
+  - gabriel tools sync --org <org_id>  (CLI, future)
+  - Organisation provisioning flow (new org onboarding)
+
+Never called automatically at app startup — fail-closed is preserved.
+
+Governance-controlled fields (enabled, safety_level, configuration,
+labels, metadata) are NEVER overwritten on existing rows.
+Only implementation-derived fields are updated:
+  description, parameters, runtime_binding, execution_runtime, category.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from gabriel.logging_config import get_logger
-from gabriel.resource.grn import GRN
 from gabriel.tool.discovery import tool_indexer
-from gabriel.tool.models import Tool
+from gabriel.tool.mappers import orm_to_domain
 from gabriel.tool.repository import ToolRepository
 from gabriel.tool.service import ToolService
 
@@ -33,33 +37,33 @@ class SyncReport:
     unchanged: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
+    @property
+    def ok(self) -> bool:
+        return len(self.errors) == 0
+
 
 class ToolCatalogSynchronizer:
-    """Idempotent sync of discovered tools into an org's Tool resource table.
-
-    Governance-controlled fields (enabled, safety_level, configuration,
-    labels, metadata) are NEVER overwritten on existing rows — only the
-    implementation-derived fields (description, parameters, runtime_binding,
-    execution_runtime, category) are updated.
-    """
+    """Idempotent sync of the discovered tool library into an org's Tool table."""
 
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._session_factory = session_factory
 
-    async def sync_org(self, org_id: str, actor_id: str = "system:sync") -> SyncReport:
+    async def sync_org(
+        self,
+        org_id: str,
+        actor_id: str = "system:sync",
+    ) -> SyncReport:
         report = SyncReport(org_id=org_id)
+
+        # Snapshot the discovered catalog once.
         discovered = {t.name: t for t in tool_indexer.discover()}
 
+        # Snapshot existing persisted tools for this org.
         async with self._session_factory() as session:
             repo = ToolRepository(session)
-            service = ToolService(repo)
             existing = {
-                t.name: t
-                for t in [
-                    __import__("gabriel.tool.mappers", fromlist=["orm_to_domain"])
-                    .orm_to_domain(orm)
-                    for orm in await repo.list_for_org(org_id)
-                ]
+                orm.name: orm_to_domain(orm)
+                for orm in await repo.list_for_org(org_id)
             }
 
         for name, disc in discovered.items():
@@ -84,9 +88,11 @@ class ToolCatalogSynchronizer:
                                 runtime_binding=disc.runtime_binding,
                                 category=disc.category,
                                 execution_runtime=disc.execution_runtime,
-                                # Preserve: enabled, safety_level, configuration
+                                # Intentionally NOT passing: enabled, safety_level,
+                                # configuration — those are org-admin-controlled.
                             )
                         report.updated.append(name)
+                        logger.info("sync_org[%s]: updated tool '%s'", org_id, name)
                     else:
                         report.unchanged.append(name)
                 else:
@@ -106,12 +112,17 @@ class ToolCatalogSynchronizer:
                             fn=disc.fn,
                         )
                     report.created.append(name)
+                    logger.info("sync_org[%s]: created tool '%s'", org_id, name)
+
             except Exception as exc:  # noqa: BLE001
-                logger.exception("Failed to sync tool '%s' for org '%s'", name, org_id)
-                report.errors.append(f"{name}: {exc}")
+                msg = f"{name}: {exc}"
+                report.errors.append(msg)
+                logger.exception(
+                    "sync_org[%s]: failed to sync tool '%s'", org_id, name
+                )
 
         logger.info(
-            "Tool sync for org '%s': created=%d updated=%d unchanged=%d errors=%d",
+            "Tool sync complete — org=%s created=%d updated=%d unchanged=%d errors=%d",
             org_id,
             len(report.created),
             len(report.updated),
