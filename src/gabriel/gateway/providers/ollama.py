@@ -191,30 +191,48 @@ class OllamaProvider:
         )
         langchain_messages = self._to_langchain_messages(messages)
 
+        gathered: AIMessageChunk | None = None
         try:
             async for chunk in runnable.astream(langchain_messages):
                 if not isinstance(chunk, AIMessageChunk):
                     continue
 
+                # Accumulate chunks so that streamed tool-call argument
+                # fragments merge into complete tool calls. When Ollama streams
+                # a tool call, each chunk carries only a partial ``args``
+                # fragment, so ``chunk.tool_calls`` on any single chunk has
+                # empty/incomplete arguments. Complete tool calls are only
+                # available from the aggregated message.
+                gathered = chunk if gathered is None else gathered + chunk
+
+                # Stream text deltas immediately for responsive output, but do
+                # not emit partial tool calls here; they are surfaced once fully
+                # merged in the terminal chunk below.
                 yield StreamChunk(
                     delta=self._message_content(chunk),
                     done=False,
                     model=self._response_model(chunk, fallback=model),
                     usage=None,
-                    tool_calls=self._tool_calls_from_message(chunk),
+                    tool_calls=(),
                     finish_reason=None,
                 )
         except Exception as exc:  # mapped at the provider boundary
             self._raise_langchain_error(exc, model)
 
         # LangChain does not guarantee that every provider emits a distinct
-        # terminal chunk. Gabriel's stream contract does require one.
+        # terminal chunk. Gabriel's stream contract does require one. The fully
+        # merged tool calls are emitted here so callers receive complete
+        # arguments in a single, well-formed batch.
         yield StreamChunk(
             delta="",
             done=True,
             model=model,
             usage=None,
-            tool_calls=(),
+            tool_calls=(
+                self._tool_calls_from_message(gathered)
+                if gathered is not None
+                else ()
+            ),
             finish_reason="stop",
         )
 
