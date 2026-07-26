@@ -63,6 +63,8 @@ import gabriel.knowledge.chunk_orm  # noqa: F401
 import gabriel.knowledge.source_orm  # noqa: F401
 
 
+logger = get_logger(__name__)
+
 class SimpleCommandHandler(Handler):
         def __init__(self, command_type: str, event_type: str):
                 self._command_type = command_type
@@ -428,9 +430,19 @@ async def initialize_gateway_state(app) -> None:
         # Discovery is the sole source of tool registration: it populates the
         # process-wide FunctionRegistry (used by ToolExecutor to resolve
         # callables by GRN binding) and builds the LLM-facing catalog.
-        tool_indexer.register_into(function_registry)
+        # 1. Build the LLM-facing runtime tool registry (discovers + caches tools)
         app.state.runtime_tool_registry = build_default_tool_registry()
+
+        # 2. Populate fn_registry so ToolExecutor can dispatch callables by binding.
+        #    register_into skips already-registered bindings, so this is idempotent.
+        tool_indexer.register_into(function_registry)
         app.state.fn_registry = function_registry
+
+        logger.info(
+        "FunctionRegistry: %d bindings registered: %s",
+        len(function_registry),
+        function_registry.list_bindings(),
+        )
         app.state.chat_session_manager = SessionManager()
         # App-wide rendezvous for human-in-the-loop tool approvals: shared by
         # the streaming chat turn (which pauses) and the approval endpoint

@@ -44,7 +44,6 @@ from gabriel.gateway.prompt import DEFAULT_CONTEXT_WINDOW, ContextBlock, PromptA
 from gabriel.gateway.providers.base import (
     ChatMessage,
     ProviderError,
-    StreamChunk,
     TokenUsage,
     ToolCallRequest,
 )
@@ -606,6 +605,7 @@ class ChatRuntimeService:
             context_blocks=context_blocks,
             context_window=config.context_window,
         )
+        logger.info(f"Config allowed tools: {config.allowed_tools}")
         tool_specs = self.tools.llm_specs(allowed=config.allowed_tools)
 
         answer_parts: list[str] = []
@@ -617,6 +617,8 @@ class ChatRuntimeService:
             for _ in range(self.max_tool_iterations + 1):
                 pending_calls: tuple[ToolCallRequest, ...] = ()
                 iteration_text: list[str] = []
+
+                logger.info(f"Tool specs for this turn: {tool_specs}")
 
                 stream = provider.stream_chat_completion(
                     messages,
@@ -647,7 +649,11 @@ class ChatRuntimeService:
 
                 # Feed the model's tool request + results back into the loop.
                 messages.append(
-                    ChatMessage(role="assistant", content="".join(iteration_text))
+                    ChatMessage(
+                        role="assistant",
+                        content="".join(iteration_text),
+                        tool_calls=pending_calls,
+                    )
                 )
                 for call in pending_calls:
                     yield sse_event(

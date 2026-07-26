@@ -47,6 +47,15 @@ class ModelNotFoundError(ProviderError):
 # ---------------------------------------------------------------------------
 
 
+
+@dataclass(frozen=True)
+class ToolCallRequest:
+    """The model asked the runtime to execute a tool."""
+
+    id: str
+    name: str
+    arguments: dict[str, Any] = field(default_factory=dict)
+    
 @dataclass(frozen=True)
 class ChatMessage:
     """A single prompt message in the neutral chat format.
@@ -59,23 +68,34 @@ class ChatMessage:
     content: str
     name: str | None = None
     tool_call_id: str | None = None
+    tool_calls: tuple[ToolCallRequest, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
-        payload: dict[str, Any] = {"role": self.role, "content": self.content}
+        payload: dict[str, Any] = {
+            "role": self.role, 
+            "content": self.content,
+        }
+
         if self.name is not None:
             payload["name"] = self.name
+
         if self.tool_call_id is not None:
             payload["tool_call_id"] = self.tool_call_id
+
+        if self.tool_calls:
+            payload["tool_calls"] = [
+                {
+                    "id": call.id,
+                    "type": "function",
+                    "function": {
+                        "name": call.name,
+                        "arguments": call.arguments,
+                    }
+                }
+                for call in self.tool_calls
+            ]
+
         return payload
-
-
-@dataclass(frozen=True)
-class ToolCallRequest:
-    """The model asked the runtime to execute a tool."""
-
-    id: str
-    name: str
-    arguments: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

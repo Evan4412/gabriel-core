@@ -30,6 +30,7 @@ from gabriel.runtime.context import ExecutionContext
 from gabriel.tool.models import ExecutionRuntime, SafetyLevel, ToolCategory
 from gabriel.tool.repository import ToolRepository
 from gabriel.tool.service import ToolService
+from gabriel.tool.discovery import ToolLibraryIndexer
 
 router = APIRouter(prefix="/tools", tags=["Tools"])
 
@@ -198,25 +199,37 @@ async def sync_tools(
     context: ExecutionContext = Depends(get_execution_context),
     session_factory: async_sessionmaker[AsyncSession] = Depends(get_db_session_factory),
 ):
-    """Idempotent sync of the discovered tool library into this org's Tool resources.
+    """Provision all library-discovered tools as governed Tool resources for this org."""
+    indexer = ToolLibraryIndexer()
+    discovered = indexer.discover()
+    created = []
+    skipped = []
 
-    Safe to call repeatedly. Preserves org-controlled fields (enabled,
-    safety_level, configuration). Creates missing tools, updates
-    implementation-derived fields on existing ones.
+    async with session_factory() as session:
+        svc = _service(session)
+        existing_names = {
+            t.name for t in await svc.list_tools(context.organization)
+            if t.org_id == context.organization
+        }
+        for tool in discovered:
+            if tool.name in existing_names:
+                skipped.append(tool.name)
+                continue
+            try:
+                await svc.create_tool(
+                    context.organization,
+                    "system",
+                    name=tool.name,
+                    description=tool.description,
+                    category=tool.category,
+                    parameters=tool.parameters,
+                    safety_level=tool.safety_level,
+                    runtime_binding=tool.runtime_binding,
+                    execution_runtime=tool.execution_runtime,
+                    enabled=True,
+                )
+                created.append(tool.name)
+            except Exception as exc:  # noqa: BLE001
+                skipped.append(tool.name)
 
-    Returns a report of what was created, updated, unchanged, and any errors.
-    """
-    from gabriel.tool.sync import ToolCatalogSynchronizer
-
-    report = await ToolCatalogSynchronizer(session_factory).sync_org(
-        org_id=context.organization,
-        actor_id=str(context.principal.id),
-    )
-    return {
-        "org_id": report.org_id,
-        "ok": report.ok,
-        "created": report.created,
-        "updated": report.updated,
-        "unchanged": report.unchanged,
-        "errors": report.errors,
-    }
+    return {"created": created, "skipped": skipped}

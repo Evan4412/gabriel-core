@@ -134,13 +134,20 @@ class ToolService:
         org_id: str | None = None,
         category: ToolCategory | None = None,
     ) -> list[Tool]:
+        # DB-persisted tools are the source of truth for enabled state, GRN, etc.
         if org_id:
             orm_tools = await self.repo.list_for_org(org_id)
         else:
             orm_tools = await self.repo.list_all()
 
-        tools = [orm_to_domain(t) for t in orm_tools]
+        persisted = {t.name: orm_to_domain(t) for t in orm_tools}
 
+        # Fill in library tools not yet provisioned (display-only, unprovisioned)
+        for discovered in ToolLibraryIndexer().discover():
+            if discovered.name not in persisted:
+                persisted[discovered.name] = discovered
+
+        tools = list(persisted.values())
         if category is not None:
             tools = [t for t in tools if t.category == category]
         return tools

@@ -227,6 +227,7 @@ class RuntimeToolRegistry:
             allowed: Restrict to this subset (the agent's ``allowed_tools``);
                      ``None`` exports every registered tool.
         """
+        logger.info(f"Agent tool names: {self.list_tools()}")
         names = self.list_tools() if allowed is None else [
             n for n in allowed if n in self._tools
         ]

@@ -21,6 +21,9 @@ dependencies = [
     "python-multipart",
     "pgvector",
     "rich",
+    "langchain-core",
+    "langchain-ollama",
+    "langgraph",
 ]
 
 [tool.setuptools]
