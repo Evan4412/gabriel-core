@@ -11,7 +11,7 @@ from gabriel.document.content_store import DiskContentStore
 import gabriel.events.orm
 import gabriel.document.orm
 import gabriel.knowledge.chunk_orm
-import gabriel.knowledge.source_orm
+import gabriel.knowledge.source_orm  # noqa: F401 (side-effect import: ORM registration)
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

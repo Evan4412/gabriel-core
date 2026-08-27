@@ -24,7 +24,7 @@ import gabriel.events.orm
 import gabriel.agent.orm
 import gabriel.conversation.orm
 import gabriel.conversation.message_orm
-import gabriel.tool.orm
+import gabriel.tool.orm  # noqa: F401 (side-effect import: ORM registration)
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

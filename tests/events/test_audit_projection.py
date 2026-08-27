@@ -12,7 +12,7 @@ from gabriel.events.projections.audit_projection import AuditProjection
 import gabriel.organization.orm
 import gabriel.identity.orm
 import gabriel.events.orm
-import gabriel.events.projections.audit_projection
+import gabriel.events.projections.audit_projection  # noqa: F401 (side-effect import: ORM registration)
 
 
 @pytest.mark.asyncio

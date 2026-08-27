@@ -31,7 +31,7 @@ import gabriel.knowledge.source_orm  # registers KnowledgeSourceORM
 import gabriel.conversation.orm  # registers ConversationORM
 import gabriel.conversation.message_orm  # registers MessageORM
 import gabriel.notification.orm  # registers NotificationORM
-import gabriel.memory.layer_orm  # registers MemoryLayerEntryORM
+import gabriel.memory.layer_orm  # registers MemoryLayerEntryORM  # noqa: F401 (side-effect import: ORM registration)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -40,6 +40,27 @@ from gabriel.runtime.context import ExecutionContext
 from gabriel.tool.discovery import tool_indexer
 from gabriel.tool.registry import function_registry
 
+# Side-effect imports: register every ORM model on Base.metadata so
+# create_all() provisions the full schema at startup.
+import gabriel.agent.orm  # noqa: F401
+import gabriel.conversation.message_orm  # noqa: F401
+import gabriel.conversation.orm  # noqa: F401
+import gabriel.document.orm  # noqa: F401
+import gabriel.events.orm  # noqa: F401
+import gabriel.events.projections.audit_projection  # noqa: F401
+import gabriel.identity.orm  # noqa: F401
+import gabriel.identity.refresh  # noqa: F401
+import gabriel.knowledge.chunk_orm  # noqa: F401
+import gabriel.knowledge.source_orm  # noqa: F401
+import gabriel.memory.layer_orm  # noqa: F401
+import gabriel.notification.orm  # noqa: F401
+import gabriel.organization.membership_orm  # noqa: F401
+import gabriel.organization.orm  # noqa: F401
+import gabriel.policy.orm  # noqa: F401
+import gabriel.resource.read_model_orm  # noqa: F401
+import gabriel.user.orm  # noqa: F401
+
+
 logger = get_logger(__name__)
 
 

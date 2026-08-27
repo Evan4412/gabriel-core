@@ -15,7 +15,7 @@ from gabriel.policy.service import PolicyService
 import gabriel.organization.orm
 import gabriel.identity.orm
 import gabriel.events.orm
-import gabriel.policy.orm
+import gabriel.policy.orm  # noqa: F401 (side-effect import: ORM registration)
 
 
 SEED_SCRIPT_PATH = (

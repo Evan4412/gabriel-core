@@ -8,7 +8,7 @@ import gabriel.organization.orm
 import gabriel.organization.membership_orm
 import gabriel.identity.orm
 import gabriel.events.orm
-import gabriel.user.orm
+import gabriel.user.orm  # noqa: F401 (side-effect import: ORM registration)
 
 # In-memory SQLite for fast, isolated tests (no Postgres required).
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

@@ -6,7 +6,7 @@ from gabriel.database.base import Base
 # Import all ORM models to register them with Base.metadata
 import gabriel.events.orm
 import gabriel.conversation.orm
-import gabriel.conversation.message_orm
+import gabriel.conversation.message_orm  # noqa: F401 (side-effect import: ORM registration)
 
 # In-memory SQLite for fast, isolated tests
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

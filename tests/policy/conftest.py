@@ -11,7 +11,7 @@ from gabriel.database.base import Base
 import gabriel.organization.orm
 import gabriel.identity.orm
 import gabriel.events.orm
-import gabriel.policy.orm
+import gabriel.policy.orm  # noqa: F401 (side-effect import: ORM registration)
 
 from gabriel.policy.models import Policy, PolicyStatement, Effect, ResourceType
 from gabriel.policy.engine import PolicyEngine

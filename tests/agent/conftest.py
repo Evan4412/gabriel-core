@@ -7,7 +7,7 @@ from gabriel.database.base import Base
 import gabriel.organization.orm
 import gabriel.identity.orm
 import gabriel.events.orm
-import gabriel.agent.orm
+import gabriel.agent.orm  # noqa: F401 (side-effect import: ORM registration)
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
