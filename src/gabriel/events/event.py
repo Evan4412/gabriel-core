@@ -1,5 +1,5 @@
 """Event model: The immutable fact of something that happened."""
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 from uuid import uuid4
 
@@ -7,12 +7,12 @@ from pydantic import BaseModel, Field
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Event(BaseModel):
     """An immutable event that represents something that happened.
-    
+
     Events are never updated or deleted — only appended to the event store.
     They form the append-only log of everything that happens in Gabriel.
     """

@@ -8,10 +8,10 @@ from fastapi.responses import StreamingResponse
 from gabriel.runtime.context import ExecutionContext
 from gabriel.api.schema import EventListResponse, EventResponse
 from gabriel.api.dependencies import (
-    GatewayService, 
+    GatewayService,
     EventStreamer,
-    get_gateway_service, 
-    get_current_context, 
+    get_gateway_service,
+    get_current_context,
     get_event_streamer,
 )
 

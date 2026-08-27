@@ -28,7 +28,6 @@ is auditable against ``Legacy_Feature_Audit`` and the ADR compliance report.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable
 
 from gabriel.agent.capabilities import AgentCapability
 from gabriel.agent.grn_bindings import tool_grn

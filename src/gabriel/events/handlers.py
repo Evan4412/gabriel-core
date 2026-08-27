@@ -12,7 +12,7 @@ from gabriel.resource.bootstrap import register_core_resource_types
 
 class CreateOrganizationHandler(Handler):
     """Handler for CreateOrganizationCommand.
-    
+
     Creates an Organization and emits OrganizationCreated event.
     """
 
@@ -26,7 +26,7 @@ class CreateOrganizationHandler(Handler):
 
     async def handle(self, command: Command) -> list[Event]:
         """Handle CreateOrganizationCommand.
-        
+
         Payload expected:
         {
             "display_name": "Acme Corp",

@@ -38,7 +38,7 @@ class PrincipalService:
     Principals remain identity primitives keyed by PrincipalID. Each principal
     is mirrored by a GRN-addressable resource, so the service stores the link
     on the principal record and can emit a creation event for audit trails.
-    
+
     Creation is routed through ResourceFactory (ADR-009) to ensure uniform
     identifier minting and default handling.
     """
@@ -51,7 +51,7 @@ class PrincipalService:
     ) -> None:
         # Bootstrap (idempotent, safe to call multiple times)
         register_core_resource_types()
-        
+
         self.repo = repository
         self.event_repo = event_repo
         self.registry = registry_instance or registry
@@ -88,7 +88,7 @@ class PrincipalService:
             The persisted principal domain object.
         """
         created_by = created_by or "system"
-        
+
         normalized_type = self._normalize_principal_type(principal_type)
         principal_id = PrincipalID(
             org_id=org_id,

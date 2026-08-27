@@ -19,16 +19,16 @@ Changes
    HNSW cosine index; on other dialects (SQLite tests) it stays JSON and
    similarity is computed in-process.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "k1e5f7a9b3c4"
-down_revision: Union[str, Sequence[str], None] = "j0d4e6f8a2b3"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "j0d4e6f8a2b3"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 EMBEDDING_DIMENSIONS = 768  # nomic-embed-text (default Ollama embedding model)
 

@@ -27,10 +27,9 @@ from tests.gateway.test_chat_runtime import (
 async def _get_conversation(session_factory, agent_grn: str):
     async with session_factory() as session:
         service = ConversationService(session)
-        conversation = await service.create_conversation(
+        return await service.create_conversation(
             ORG, "Config test", created_by=ALICE, agent_grn=agent_grn
         )
-        return conversation
 
 
 async def _resolve(session_factory, runtime, conversation):

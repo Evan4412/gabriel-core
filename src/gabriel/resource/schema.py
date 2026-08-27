@@ -23,5 +23,5 @@ class ResourceSchema:
         schema = descriptor.model.model_json_schema()
         schema["title"] = descriptor.type_name
         schema["x-gabriel-version"] = descriptor.version
-        schema["x-gabriel-capabilities"] = sorted(list(descriptor.capabilities))
+        schema["x-gabriel-capabilities"] = sorted(descriptor.capabilities)
         return schema

@@ -13,21 +13,21 @@ import gabriel.events.orm  # noqa: F401
 import gabriel.policy.orm  # noqa: F401
 
 from gabriel.policy.models import Policy, PolicyStatement, Effect, ResourceType
-from gabriel.policy.engine import PolicyEngine, EvaluationRequest
+from gabriel.policy.engine import PolicyEngine
 from gabriel.resource.grn import GRN
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.principal import Principal
 from gabriel.identity.models import PrincipalType, Capability as IdentityCapability
 from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability as RuntimeCapability
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 @pytest_asyncio.fixture

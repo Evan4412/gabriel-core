@@ -26,7 +26,6 @@ from gabriel.identity.exceptions import AuthenticationFailedError
 from gabriel.identity.mappers import domain_to_orm as principal_domain_to_orm
 from gabriel.identity.models import PrincipalStatus, PrincipalType
 from gabriel.identity.passwords import hash_password, verify_password
-from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.roles import OrgRole, capabilities_for_role
 from gabriel.organization.membership_service import MembershipService

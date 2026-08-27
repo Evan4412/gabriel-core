@@ -15,7 +15,7 @@ from gabriel.events.event import Event
 
 class OrganizationService:
     """Business logic for Organizations.
-    
+
     This service:
     - Accepts and returns Domain objects (Organization, not OrganizationORM)
     - Uses the repository (internal persistence layer) privately
@@ -33,20 +33,20 @@ class OrganizationService:
         self, display_name: str, created_by: str, correlation_id: str | None = None
     ) -> Organization:
         """Register a new Organization.
-        
+
         Implements transactional outbox pattern (ADR-017):
         - Inserts organization row
         - Appends resource_created event
         - Both committed together
-        
+
         Args:
             display_name: Human-readable organization name.
             created_by: User ID of the creator.
             correlation_id: Optional trace ID for this operation.
-            
+
         Returns:
             Organization: The created organization domain object.
-            
+
         Raises:
             DuplicateResourceError: If an organization with the same GRN already exists.
         """
@@ -78,7 +78,7 @@ class OrganizationService:
         try:
             orm_org = domain_to_orm(domain_org)
             persisted_orm = await self.repo.create(orm_org)
-            
+
             # 5. Emit resource_created event transactionally (Step 3 + Step 4)
             # This is the outbox pattern: event appended in same transaction as resource
             if self.event_repo is not None:
@@ -103,7 +103,7 @@ class OrganizationService:
                 await self.event_repo.append(event)
                 # Commit both resource and event together
                 await self.repo.session.commit()
-            
+
             # 6. Convert back to domain before returning to caller
             return orm_to_domain(persisted_orm)
         except IntegrityError as exc:
@@ -113,13 +113,13 @@ class OrganizationService:
 
     async def get_organization(self, grn_str: str) -> Organization:
         """Retrieve an organization by its GRN string.
-        
+
         Args:
             grn_str: The GRN as a string (e.g., "grn:org:organization:acme@1").
-            
+
         Returns:
             Organization: The organization domain object.
-            
+
         Raises:
             ResourceNotFoundError: If the organization does not exist.
         """
@@ -128,7 +128,7 @@ class OrganizationService:
 
     async def list_organizations(self) -> list[Organization]:
         """List all organizations.
-        
+
         Returns:
             list[Organization]: All organizations as domain objects.
         """

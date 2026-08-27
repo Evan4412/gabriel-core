@@ -5,10 +5,10 @@ from gabriel.events.exceptions import InvalidEventError
 
 class EventStore:
     """Append-only event store.
-    
+
     In Gabriel, the event store is the source of truth.
     Events are never updated or deleted — only appended.
-    
+
     This implementation is in-process (in-memory).
     Later implementations could use Postgres, EventStoreDB, or other backends
     without changing the interface.
@@ -20,10 +20,10 @@ class EventStore:
 
     def append(self, event: Event) -> None:
         """Append an event to the store.
-        
+
         Args:
             event: The event to append.
-            
+
         Raises:
             InvalidEventError: If event is invalid.
         """
@@ -33,7 +33,7 @@ class EventStore:
 
     def append_many(self, events: list[Event]) -> None:
         """Append multiple events to the store.
-        
+
         Args:
             events: Events to append.
         """
@@ -42,7 +42,7 @@ class EventStore:
 
     def events(self) -> list[Event]:
         """Get all events in order.
-        
+
         Returns:
             list[Event]: All events, in append order.
         """
@@ -50,10 +50,10 @@ class EventStore:
 
     def events_for_organization(self, organization_id: str) -> list[Event]:
         """Get all events for an organization.
-        
+
         Args:
             organization_id: The organization ID to query.
-            
+
         Returns:
             list[Event]: All events belonging to the organization.
         """
@@ -61,10 +61,10 @@ class EventStore:
 
     def events_for_resource(self, resource_grn: str) -> list[Event]:
         """Get all events for a specific resource.
-        
+
         Args:
             resource_grn: The resource GRN to query.
-            
+
         Returns:
             list[Event]: All events for the resource.
         """
@@ -72,10 +72,10 @@ class EventStore:
 
     def events_by_type(self, event_type: str) -> list[Event]:
         """Get all events of a specific type.
-        
+
         Args:
             event_type: The event type to query.
-            
+
         Returns:
             list[Event]: All events of that type.
         """
@@ -83,10 +83,10 @@ class EventStore:
 
     def events_for_principal(self, principal_id: str) -> list[Event]:
         """Get all events triggered by a principal.
-        
+
         Args:
             principal_id: The principal ID.
-            
+
         Returns:
             list[Event]: All events from that principal.
         """
@@ -94,10 +94,10 @@ class EventStore:
 
     def events_by_correlation_id(self, correlation_id: str) -> list[Event]:
         """Get all events with a specific correlation ID (trace).
-        
+
         Args:
             correlation_id: The correlation ID.
-            
+
         Returns:
             list[Event]: All events in the trace.
         """
@@ -105,7 +105,7 @@ class EventStore:
 
     def count(self) -> int:
         """Get total number of events.
-        
+
         Returns:
             int: Number of events in store.
         """

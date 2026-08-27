@@ -102,7 +102,7 @@ def test_mark_all_read(client, make_auth_headers):
 
 def test_notifications_are_recipient_scoped(client, make_auth_headers):
     org = _unique_org()
-    alice_headers = make_auth_headers(org=org, identifier="alice")
+    make_auth_headers(org=org, identifier="alice")
     bob_headers = make_auth_headers(org=org, identifier="bob")
     grn = _seed_notification(client, org, _recipient_for(org, "alice"), "For Alice")
 

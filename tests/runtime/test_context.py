@@ -2,16 +2,15 @@
 import pytest
 import json
 from uuid import uuid4
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability as RuntimeCapability
 from gabriel.identity.principal import Principal
-from gabriel.identity.models import PrincipalType
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class TestExecutionContextImmutability:

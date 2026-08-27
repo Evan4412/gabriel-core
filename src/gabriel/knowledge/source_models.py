@@ -12,18 +12,18 @@ until multi-source membership is actually needed.
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from gabriel.resource.models import Resource, ResourceType
 
 
-class KnowledgeSourceStatus(str, Enum):
+class KnowledgeSourceStatus(StrEnum):
     ACTIVE = "active"
     ARCHIVED = "archived"
 
 
-class KnowledgeSourceType(str, Enum):
+class KnowledgeSourceType(StrEnum):
     """What kind of knowledge backs this source.
 
     Agents reference knowledge sources by GRN only — the type is an

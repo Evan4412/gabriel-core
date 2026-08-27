@@ -1,6 +1,6 @@
 """Agent specification validation for deployment."""
 
-from typing import Iterable
+from collections.abc import Iterable
 
 from gabriel.agent.exceptions import AgentValidationError
 from gabriel.agent.specification import AgentSpecification

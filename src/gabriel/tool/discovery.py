@@ -29,7 +29,8 @@ import importlib
 import inspect
 import pkgutil
 from importlib.metadata import entry_points
-from typing import Any, Awaitable, Callable
+from typing import Any
+from collections.abc import Awaitable, Callable
 
 from langchain_core.tools import BaseTool
 
@@ -193,7 +194,7 @@ class ToolLibraryIndexer:
                 continue
 
             library_pkg = importlib.import_module(pkg_info.name)
-            
+
             for mod_info in pkgutil.iter_modules(library_pkg.__path__, prefix=f"{library_pkg.__name__}."):
                 tool_name = mod_info.name.rsplit(".", 1)[-1]
 
@@ -207,7 +208,7 @@ class ToolLibraryIndexer:
                 except ImportError:
                     logger.warning(f"Skipping tool module {mod_info.name} (import failed)", exc_info=True)
                     continue
-                    
+
                 # Clean values for tool input
                 org_id = ""  # FIXME: Determine how to get the org_id
                 category = ToolCategory(namespace) if namespace in _CATEGORY_VALUES else ToolCategory.CUSTOM

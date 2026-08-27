@@ -25,7 +25,6 @@ from gabriel.api.tenancy import require_same_org
 from gabriel.identity.exceptions import AuthenticationFailedError
 from gabriel.identity.roles import OrgRole
 from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 from gabriel.user.service import UserService
 

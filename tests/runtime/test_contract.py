@@ -1,4 +1,3 @@
-import pytest
 
 from gabriel.agent.models import Agent
 from gabriel.agent.specification import AgentSpecification

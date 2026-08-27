@@ -18,7 +18,7 @@ def register_core_resource_types(target_registry: ResourceRegistry | None = None
     """Register core resource types required by Gabriel bootstrap paths.
 
     The function is idempotent and safe to call multiple times.
-    
+
     Registers:
     - Organization: Tenancy root resource
     - Principal: Universal identity (via identity.bootstrap)

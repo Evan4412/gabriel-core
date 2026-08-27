@@ -6,14 +6,14 @@ from gabriel.runtime.context import ExecutionContext
 from gabriel.api.services.chat import ChatService
 from gabriel.api.dependencies import (
     get_gateway_service,
-    get_execution_context, 
-    get_chat_service, 
-    build_command, 
+    get_execution_context,
+    get_chat_service,
+    build_command,
     GatewayService
 )
 from gabriel.api.schema import (
-    ChatSummaryResponse, 
-    ChatCreateRequest, 
+    ChatSummaryResponse,
+    ChatCreateRequest,
     ResourceResponse
 )
 

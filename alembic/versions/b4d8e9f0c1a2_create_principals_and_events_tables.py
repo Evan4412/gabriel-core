@@ -8,7 +8,7 @@ Creates:
 - principals table (identity abstractions, keyed by PrincipalID)
 - events table (append-only event log for ADR-017 transactional outbox)
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 from alembic import op
 import sqlalchemy as sa
@@ -16,14 +16,14 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = 'b4d8e9f0c1a2'
-down_revision: Union[str, Sequence[str], None] = 'ae642da113fe'
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = 'ae642da113fe'
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
     """Create principals and events tables."""
-    
+
     # Create principals table (identity abstractions)
     op.create_table(
         "principals",
@@ -60,7 +60,7 @@ def upgrade() -> None:
         ),
     )
     op.create_index("ix_principals_org_id", "principals", ["org_id"])
-    
+
     # Create events table (append-only event log, ADR-017)
     op.create_table(
         "events",
@@ -107,7 +107,7 @@ def downgrade() -> None:
     op.drop_index("ix_events_resource_occurred", table_name="events")
     op.drop_index("ix_events_org_occurred", table_name="events")
     op.drop_table("events")
-    
+
     # Drop principals table
     op.drop_index("ix_principals_org_id", table_name="principals")
     op.drop_table("principals")

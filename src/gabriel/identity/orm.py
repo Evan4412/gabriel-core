@@ -9,19 +9,19 @@ class PrincipalORM(Base):
     __tablename__ = "principals"
 
     principal_id: Mapped[str] = mapped_column(
-        String(225), 
+        String(225),
         primary_key=True
     ) # principal://...
 
     org_id: Mapped[str] = mapped_column(
-        String(128), 
-        ForeignKey("organizations.org_id"), 
+        String(128),
+        ForeignKey("organizations.org_id"),
         index=True,
         nullable=False
     )
 
     principal_type: Mapped[str] = mapped_column(
-        String(64), 
+        String(64),
         nullable=False
     )
 

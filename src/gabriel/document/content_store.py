@@ -39,7 +39,7 @@ class DiskContentStore:
     root_dir: Path
 
     @classmethod
-    def from_env(cls) -> "DiskContentStore":
+    def from_env(cls) -> DiskContentStore:
         """Build a store rooted at ``GABRIEL_CONTENT_ROOT`` (configurable)."""
         return cls(default_content_root())
 

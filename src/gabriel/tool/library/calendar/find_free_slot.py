@@ -1,7 +1,7 @@
 """find_free_slot — find the next free time slot in Google Calendar."""
 from __future__ import annotations
 from langchain_core.tools import tool
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 from typing import Any
 from gabriel.tool.library.calendar._calendar_client import build_calendar_service
 
@@ -32,7 +32,7 @@ async def find_free_slot(
         return {"error": "Google Calendar credentials not configured for this org."}
     try:
         service = build_calendar_service(_credentials)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         time_max = now + timedelta(days=search_days)
 
         body = {

@@ -1,5 +1,5 @@
 """
-orm_to_domain and domain_to_orm: parse/serialize PrincipalID. 
+orm_to_domain and domain_to_orm: parse/serialize PrincipalID.
 Convert set[Capability] to/from list[str] for ORM storage.
 """
 

@@ -2,40 +2,30 @@
 
 class GabrielError(Exception):
     """Base exception for all Gabriel errors."""
-    pass
 
 class InvalidGRNError(GabrielError):
     """Raised when a GRN is malformed or cannot be parsed."""
-    pass
 
 class ResourceNotFoundError(GabrielError):
     """Raised when a resource cannot be located."""
-    pass
 
 class InvalidLifecycleTransitionError(GabrielError):
     """Raised when a lifecycle transition is not permitted."""
-    pass
 
 class ResourceTypeNotRegisteredError(GabrielError):
     """Raised when a resource type has not been registered."""
-    pass
 
 class DuplicateResourceError(GabrielError):
     """Raised when a resource with the same GRN already exists."""
-    pass
 
 class DuplicateResourceTypeError(GabrielError):
     """Raised when a resource type is registered more than once."""
-    pass
 
 class ResourceFactoryError(GabrielError):
     """Raised when resource creation fails."""
-    pass
 
 class ResourceValidationError(GabrielError):
     """Raised when resource validation fails."""
-    pass
 
 class ResourceSerializationError(GabrielError):
     """Raised when resource serialization/deserialization fails."""
-    pass

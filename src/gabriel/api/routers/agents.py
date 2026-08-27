@@ -18,7 +18,6 @@ models expose the field through an alias (wire format stays ``model_config``).
 """
 from __future__ import annotations
 
-from typing import Any
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -33,7 +32,7 @@ from gabriel.api.dependencies import (
     get_gateway_service,
 )
 from gabriel.api.schema import (
-    AgentExecuteRequest, 
+    AgentExecuteRequest,
     AgentStateResponse,
     AgentCreateRequest,
     AgentUpdateRequest,
@@ -44,7 +43,6 @@ from gabriel.api.errors import GabrielAPIError
 from gabriel.api.tenancy import require_same_org
 from gabriel.events.repository import EventRepository
 from gabriel.resource.exceptions import ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/agents", tags=["Agents"])

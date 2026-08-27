@@ -6,7 +6,7 @@ from gabriel.resource.grn import GRN
 
 def orm_to_domain(orm: OrganizationORM) -> Organization:
     """Convert ORM object to domain object.
-    
+
     The ORM stores GRN as a string; we parse it back to the domain GRN object.
     Only the persistence layer sees VARCHAR; the domain never does.
     """
@@ -30,7 +30,7 @@ def orm_to_domain(orm: OrganizationORM) -> Organization:
 
 def domain_to_orm(domain: Organization) -> OrganizationORM:
     """Convert domain object to ORM object.
-    
+
     The domain has a GRN object; we serialize it to a string for storage.
     """
     return OrganizationORM(

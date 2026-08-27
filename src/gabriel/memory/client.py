@@ -18,7 +18,7 @@ model from gabriel.policy, matching the Dispatcher integration pattern.
 """
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any
 
 from gabriel.memory.contract import MemoryAccessInterface
 from gabriel.memory.models import MemoryEntry, MemoryLayer
@@ -158,7 +158,7 @@ class ScopedMemoryClient:
         layer: MemoryLayer = MemoryLayer.SHORT_TERM,
         query: str | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Retrieve entries from a layer with optional keyword filter.
 
         PEEL action: ``memory:read``
@@ -169,9 +169,9 @@ class ScopedMemoryClient:
     async def search(
         self,
         query: str,
-        layer: Optional[MemoryLayer] = None,
+        layer: MemoryLayer | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Semantic search across memory entries ranked by relevance.
 
         PEEL action: ``memory:search``

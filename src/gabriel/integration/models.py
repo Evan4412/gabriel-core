@@ -17,14 +17,14 @@ Design principles
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import Resource, ResourceState, ResourceType
 
 
-class IntegrationType(str, Enum):
+class IntegrationType(StrEnum):
     """Supported third-party integration backends."""
 
     GMAIL = "gmail"
@@ -67,7 +67,7 @@ class ExternalIntegration(Resource):
         is_active: bool = True,
         labels: dict[str, str] | None = None,
         metadata: dict[str, Any] | None = None,
-    ) -> "ExternalIntegration":
+    ) -> ExternalIntegration:
         return cls(
             grn=grn,
             org_id=org_id,

@@ -15,23 +15,23 @@ Changes
 4. Create indexes for tenant-scoped and agent-scoped queries.
 5. Create an HNSW index on the embedding column for efficient ANN search.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "g8b1c2d3e4f5"
-down_revision: Union[str, Sequence[str], None] = "f174bb2bb84c"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "f174bb2bb84c"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
     # Detect dialect to handle SQLite vs PostgreSQL differences
     bind = op.get_bind()
     is_postgresql = bind.dialect.name == "postgresql"
-    
+
     # 1. Enable pgvector extension (PostgreSQL only)
     if is_postgresql:
         op.execute("CREATE EXTENSION IF NOT EXISTS vector")

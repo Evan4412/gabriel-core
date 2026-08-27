@@ -15,9 +15,9 @@ class TestGRNFormat:
             resource_id="org-123",
             version=1
         )
-        
+
         grn_str = str(grn)
-        
+
         # Format: grn:<org_id>:<resource_type>/<resource_id>:<version>
         expected = "grn:acme:organization/org-123:1"
         assert grn_str == expected
@@ -31,17 +31,17 @@ class TestGRNFormat:
                 resource_id="agent-001",
                 version=version
             )
-            
+
             grn_str = str(grn)
             assert grn_str.endswith(f":{version}")
 
     def test_grn_parse_and_reformat(self):
         """Test that parsing and reformatting a GRN gives same string."""
         original_str = "grn:acme:user/alice:1"
-        
+
         grn = GRN.parse(original_str)
         reformatted = str(grn)
-        
+
         assert reformatted == original_str
 
     def test_grn_components_accessible(self):
@@ -52,7 +52,7 @@ class TestGRNFormat:
             resource_id="workflow-42",
             version=5
         )
-        
+
         assert grn.org_id == "myorg"
         assert grn.resource_type == "workflow"
         assert grn.resource_id == "workflow-42"
@@ -66,7 +66,7 @@ class TestGRNFormat:
             resource_id="123",
             version=1
         )
-        
+
         # Attempting to modify should raise AttributeError
         with pytest.raises(AttributeError):
             grn.version = 2
@@ -79,21 +79,21 @@ class TestGRNFormat:
             resource_id="bot-1",
             version=1
         )
-        
+
         grn2 = GRN(
             org_id="acme",
             resource_type="agent",
             resource_id="bot-1",
             version=1
         )
-        
+
         grn3 = GRN(
             org_id="acme",
             resource_type="agent",
             resource_id="bot-1",
             version=2
         )
-        
+
         assert grn1 == grn2
         assert grn1 != grn3
 
@@ -101,7 +101,7 @@ class TestGRNFormat:
         """Test parsing GRN in colon format."""
         grn_str = "grn:myorg:solution/sol-abc:1"
         grn = GRN.parse(grn_str)
-        
+
         assert grn.org_id == "myorg"
         assert grn.resource_type == "solution"
         assert grn.resource_id == "sol-abc"
@@ -110,14 +110,14 @@ class TestGRNFormat:
     def test_grn_parse_invalid_scheme_raises_error(self):
         """Test that invalid GRN scheme raises InvalidGRNError."""
         invalid_grn = "urn:acme:agent/bot:1"  # Should be 'grn' not 'urn'
-        
+
         with pytest.raises(InvalidGRNError):
             GRN.parse(invalid_grn)
 
     def test_grn_parse_missing_parts_raises_error(self):
         """Test that incomplete GRN format raises InvalidGRNError."""
         invalid_grn = "grn:acme:agent"  # Missing resource_id and version
-        
+
         with pytest.raises(InvalidGRNError):
             GRN.parse(invalid_grn)
 
@@ -130,7 +130,7 @@ class TestGRNFormat:
             resource_id="acme",  # Often the same as org_id
             version=1
         )
-        
+
         grn_str = str(grn)
         assert "acme" in grn_str
         assert "organization" in grn_str
@@ -146,7 +146,7 @@ class TestGRNFormat:
             resource_id="principal-alice-uuid",
             version=1
         )
-        
+
         grn_str = str(grn)
         assert grn_str.startswith("grn:acme:principal/")
         assert ":1" in grn_str
@@ -158,7 +158,7 @@ class TestGRNFormat:
             resource_type="agent",
             resource_id="test-123"
         )
-        
+
         # Should have default version 1
         assert grn.version == 1
         assert ":1" in str(grn)
@@ -170,7 +170,7 @@ class TestGRNFormat:
             "org-resource-000000000000000000000001",  # Long ID
             "abc123",  # Short ID
         ]
-        
+
         for resource_id in complex_ids:
             grn = GRN(
                 org_id="acme",
@@ -178,7 +178,7 @@ class TestGRNFormat:
                 resource_id=resource_id,
                 version=1
             )
-            
+
             grn_str = str(grn)
             assert resource_id in grn_str
 
@@ -190,7 +190,7 @@ class TestGRNFormat:
             resource_id="bot-01",
             version=1
         )
-        
+
         repr_str = repr(grn)
         # Should contain GRN indicator and the string representation
         assert "GRN" in repr_str

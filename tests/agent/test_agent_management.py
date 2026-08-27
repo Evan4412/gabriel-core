@@ -25,14 +25,14 @@ def _service(db_session) -> AgentManagementService:
 
 
 async def _create(service: AgentManagementService, name: str = "support-bot", **kw):
-    defaults = dict(
-        created_by=ACTOR,
-        description="Answers support tickets",
-        system_prompt="You are a helpful support agent.",
-        model_config={"provider": "openai", "model": "gpt-4o", "temperature": 0.2},
-        allowed_tools=["search", "kb.lookup"],
-        knowledge_sources=["grn:acme:document/d1:1"],
-    )
+    defaults = {
+        "created_by": ACTOR,
+        "description": "Answers support tickets",
+        "system_prompt": "You are a helpful support agent.",
+        "model_config": {"provider": "openai", "model": "gpt-4o", "temperature": 0.2},
+        "allowed_tools": ["search", "kb.lookup"],
+        "knowledge_sources": ["grn:acme:document/d1:1"],
+    }
     defaults.update(kw)
     return await service.create_agent(ORG, name, **defaults)
 

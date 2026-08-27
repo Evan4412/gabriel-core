@@ -6,7 +6,7 @@ to the ADR-017 transactional outbox table.
 
 from __future__ import annotations
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -56,7 +56,7 @@ class SqlAlchemyEventStore:
     async def load_from_db(
         cls,
         session_factory: async_sessionmaker[AsyncSession],
-    ) -> "SqlAlchemyEventStore":
+    ) -> SqlAlchemyEventStore:
         async with session_factory() as session:
             result = await session.execute(
                 select(EventORM).order_by(EventORM.occurred_at, EventORM.id)

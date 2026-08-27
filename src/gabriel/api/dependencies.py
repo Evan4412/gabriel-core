@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import asyncio
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import AsyncGenerator, Any
+from typing import Any
+from collections.abc import AsyncGenerator
 from uuid import uuid4
 
 from fastapi import HTTPException, Request
@@ -450,7 +450,7 @@ async def initialize_gateway_state(app) -> None:
         from gabriel.gateway.approvals import ApprovalRegistry
 
         app.state.approval_registry = ApprovalRegistry()
-        
+
 
         # Document & Knowledge (Phase 4): hot-swappable embedding providers
         # (Ollama default) and the RAG retriever used by the chat runtime.

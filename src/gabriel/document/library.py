@@ -19,7 +19,7 @@ from __future__ import annotations
 import hashlib
 import tempfile
 import time
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 from typing import Any
 
@@ -48,7 +48,7 @@ logger = get_logger(__name__)
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class UnsupportedDocumentTypeError(Exception):

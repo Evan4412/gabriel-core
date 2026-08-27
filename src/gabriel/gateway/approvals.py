@@ -81,7 +81,7 @@ class ApprovalRegistry:
             return ApprovalDecision(approved=False, deny_reason="No pending approval.")
         try:
             await asyncio.wait_for(pending.event.wait(), timeout=timeout)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning("Tool approval timed out for %s", key)
             self._pending.pop(key, None)
             return ApprovalDecision(

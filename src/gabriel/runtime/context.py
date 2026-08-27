@@ -11,7 +11,7 @@ from gabriel.identity.principal import Principal
 @dataclass(frozen=True)
 class ExecutionContext:
     """Immutable execution context.
-    
+
     An ExecutionContext is like a Process Control Block (PCB) in an OS.
     Every operation executes within a context that determines:
     - Who is executing (principal)
@@ -83,7 +83,7 @@ class ExecutionContext:
 
     def to_dict(self) -> dict:
         """Serialize context to dict for storage/transmission.
-        
+
         Returns:
             dict: Serializable representation.
         """
@@ -96,13 +96,13 @@ class ExecutionContext:
             "session_id": str(self.session_id) if self.session_id else None,
             "resource": str(self.resource) if self.resource else None,
             "started_at": self.started_at.isoformat(),
-            "capabilities": sorted(list(self.capabilities)),
+            "capabilities": sorted(self.capabilities),
             "metadata": self.metadata,
         }
 
     def to_json(self) -> str:
         """Serialize context to JSON string.
-        
+
         Returns:
             str: JSON representation.
         """
@@ -110,10 +110,10 @@ class ExecutionContext:
 
     def has_capability(self, capability: str) -> bool:
         """Check if principal has a capability.
-        
+
         Args:
             capability: The capability to check.
-            
+
         Returns:
             bool: True if principal has capability.
         """

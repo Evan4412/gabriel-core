@@ -11,7 +11,7 @@ resource (readable, auditable) but closed for new messages.
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import Field
@@ -19,7 +19,7 @@ from pydantic import Field
 from gabriel.resource.models import Resource, ResourceType
 
 
-class ConversationStatus(str, Enum):
+class ConversationStatus(StrEnum):
     ACTIVE = "active"
     ARCHIVED = "archived"
 

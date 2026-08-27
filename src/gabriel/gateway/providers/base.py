@@ -55,7 +55,7 @@ class ToolCallRequest:
     id: str
     name: str
     arguments: dict[str, Any] = field(default_factory=dict)
-    
+
 @dataclass(frozen=True)
 class ChatMessage:
     """A single prompt message in the neutral chat format.
@@ -72,7 +72,7 @@ class ChatMessage:
 
     def to_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
-            "role": self.role, 
+            "role": self.role,
             "content": self.content,
         }
 

@@ -1,6 +1,5 @@
 """Comprehensive tests for Principal and TokenService."""
 import pytest
-from datetime import datetime, timedelta
 
 from gabriel.identity import (
     PrincipalID,
@@ -13,7 +12,6 @@ from gabriel.identity import (
     KeyManager,
     TokenService,
     InvalidPrincipalIDError,
-    TokenGenerationError,
     InvalidSignatureError,
     ExpiredTokenError,
     InvalidOrgError,

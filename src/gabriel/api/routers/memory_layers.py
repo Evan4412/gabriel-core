@@ -26,7 +26,6 @@ from gabriel.api.tenancy import require_same_org
 from gabriel.memory.layer_models import MemoryScope
 from gabriel.memory.layer_service import MemoryLayerService
 from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/memory/layers", tags=["Memory Layers"])
@@ -173,4 +172,4 @@ async def delete_entry(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return None
+    return

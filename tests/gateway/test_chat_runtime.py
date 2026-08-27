@@ -90,11 +90,11 @@ async def create_agent(session_factory, **overrides) -> str:
         service = AgentManagementService(
             AgentRepository(session), EventRepository(session)
         )
-        fields = dict(
-            created_by=ALICE,
-            system_prompt="You are Gabriel.",
-            model_config={"provider": "fake", "model": "fake-model", "temperature": 0.2},
-        )
+        fields = {
+            "created_by": ALICE,
+            "system_prompt": "You are Gabriel.",
+            "model_config": {"provider": "fake", "model": "fake-model", "temperature": 0.2},
+        }
         fields.update(overrides)
         agent = await service.create_agent(ORG, "Chat agent", **fields)
         return str(agent.grn)

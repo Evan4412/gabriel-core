@@ -17,7 +17,7 @@ PRINCIPAL_SCHEME = "principal"
 @dataclass(frozen=True)
 class PrincipalID:
     """Immutable, globally unique identifier for a Principal.
-    
+
     Components:
         - org_id: The owning organization (tenant namespace).
         - principal_type: The type of principal (user, agent, system_agent, service_account).
@@ -42,7 +42,7 @@ class PrincipalID:
     def parse(cls, raw: str) -> "PrincipalID":
         """Parse a PrincipalID of the form:
         principal://org_id/principal_type/principal_identifier
-        
+
         Raises:
             InvalidPrincipalIDError: If malformed.
         """

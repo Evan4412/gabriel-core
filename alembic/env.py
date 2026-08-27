@@ -51,7 +51,7 @@ target_metadata = Base.metadata
 
 def _get_alembic_url() -> str:
     """Resolve database URL for alembic (sync driver required).
-    
+
     Alembic requires a synchronous database URL. If GABRIEL_DATABASE_URL is set
     and uses async drivers (sqlite+aiosqlite, postgresql+asyncpg), convert to sync.
     """
@@ -59,13 +59,12 @@ def _get_alembic_url() -> str:
     if not url:
         # Default to SQLite for local dev
         return "sqlite:///./.gabriel/gabriel.db"
-    
+
     # Convert async drivers to sync for alembic compatibility
     # sqlite+aiosqlite:///path -> sqlite:///path (remove "+aiosqlite" only)
     url = url.replace("sqlite+aiosqlite://", "sqlite://")
-    url = url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
-    
-    return url
+    return url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
+
 
 
 def run_migrations_offline() -> None:
@@ -81,7 +80,7 @@ def run_migrations_offline() -> None:
 
     """
     url = _get_alembic_url()
-    
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -105,7 +104,7 @@ def run_migrations_online() -> None:
     # Resolve URL (with sync driver conversion if needed)
     configuration = config.get_section(config.config_ini_section, {})
     configuration["sqlalchemy.url"] = _get_alembic_url()
-    
+
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",

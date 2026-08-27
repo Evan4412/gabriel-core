@@ -18,8 +18,8 @@ unchanged. Status maps onto the Resource lifecycle:
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import datetime, UTC
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -38,10 +38,10 @@ from gabriel.resource.models import ResourceState
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
-class AgentStatus(str, Enum):
+class AgentStatus(StrEnum):
     ACTIVE = "active"
     INACTIVE = "inactive"
     DRAFT = "draft"

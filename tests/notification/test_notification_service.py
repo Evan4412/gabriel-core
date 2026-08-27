@@ -15,7 +15,7 @@ OTHER = "grn:acme:user/u2:1"
 
 
 async def _notify(service: NotificationService, recipient: str = RECIPIENT, **kw):
-    defaults = dict(type="resource_created", title="Something happened", body="details")
+    defaults = {"type": "resource_created", "title": "Something happened", "body": "details"}
     defaults.update(kw)
     return await service.create_notification(ORG, recipient, **defaults)
 

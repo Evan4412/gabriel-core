@@ -21,7 +21,7 @@ from __future__ import annotations
 import json
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid4
 
@@ -128,7 +128,7 @@ class ChatRuntimeService:
         fn_registry: FunctionRegistry,
         peel: PEEL,
         prompt_assembler: PromptAssembler | None = None,
-        retriever: "KnowledgeRetriever | None" = None,
+        retriever: KnowledgeRetriever | None = None,
         approvals: ApprovalRegistry | None = None,
         max_tool_iterations: int = MAX_TOOL_ITERATIONS,
     ) -> None:
@@ -382,7 +382,7 @@ class ChatRuntimeService:
             causation_id=None,
             session_id=None,
             resource=None,
-            started_at=datetime.now(timezone.utc),
+            started_at=datetime.now(UTC),
             capabilities=frozenset({Capability.CALL_TOOL.value}),
             metadata={},
         )

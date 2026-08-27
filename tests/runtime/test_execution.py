@@ -1,12 +1,10 @@
 """Tests for Execution and ExecutionState."""
 import pytest
-from datetime import datetime, timezone
 
 from gabriel.runtime.execution import (
     ExecutionState,
     ExecutionContextBuilder,
     Execution,
-    utcnow,
 )
 from gabriel.runtime.exceptions import InvalidExecutionStateError
 

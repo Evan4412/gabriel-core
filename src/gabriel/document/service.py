@@ -163,14 +163,14 @@ class DocumentIngestionService:
         filename: str,
         content: bytes | None = None,
         path: str | Path | None = None,
-        memory_backend: "MemoryAccessInterface | None" = None,
+        memory_backend: MemoryAccessInterface | None = None,
         source_uri: str | None = None,
         media_type: str | None = None,
         labels: dict[str, str] | None = None,
         metadata: dict | None = None,
         chunk_size: int = 512,
         chunk_overlap: int = 64,
-    ) -> "IngestedDocument":
+    ) -> IngestedDocument:
         """Ingest a document AND store its chunks as SEMANTIC memory entries.
 
         Extends the base :meth:`ingest` pipeline with a chunking + embedding

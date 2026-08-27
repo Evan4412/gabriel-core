@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
 
 from gabriel.identity.principal import Principal
 from gabriel.api.schema import Notification
@@ -50,7 +48,7 @@ class NotificationRepository:
             resource_type="notification",
         )
         return [Notification(**resource) for resource in resources]
-    
+
     def mark_all_read(self, organization_id: str) -> None:
         # Placeholder implementation for marking all notifications as read
         pass
@@ -66,9 +64,8 @@ class NotificationService:
         self._repository = repository
 
     def get_notifications(self, principal: Principal) -> list[Notification]:
-        resources = self._repository.get_notifications(principal.organization_id)
-        return resources
-    
+        return self._repository.get_notifications(principal.organization_id)
+
     def mark_all_read(self, principal: Principal) -> None:
         self._repository.mark_all_read(principal.organization_id)
 

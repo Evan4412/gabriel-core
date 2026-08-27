@@ -6,7 +6,6 @@ router -> service -> repository/mock projection.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any
 
 from gabriel.identity.principal import Principal

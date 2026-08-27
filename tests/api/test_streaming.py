@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 import pytest
 from gabriel.events.event import Event
 from gabriel.api.dependencies import get_event_streamer

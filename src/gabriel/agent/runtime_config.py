@@ -1,6 +1,6 @@
 """Runtime execution configuration used by runtime adapters."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class RuntimeConfiguration(BaseModel):

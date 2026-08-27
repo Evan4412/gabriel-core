@@ -1,6 +1,6 @@
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
@@ -8,17 +8,17 @@ from gabriel.resource.grn import GRN
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
-class ResourceState(str, Enum):
+class ResourceState(StrEnum):
     DRAFT      = "draft"
     ACTIVE     = "active"
     SUSPENDED  = "suspended"
     DEPRECATED = "deprecated"
     DELETED    = "deleted"
 
-class ResourceType(str, Enum):
+class ResourceType(StrEnum):
     ORGANIZATION = "organization"
     USER         = "user"
     AGENT        = "agent"

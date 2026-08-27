@@ -15,11 +15,11 @@ def register_identity_resource_types(target_registry: ResourceRegistry | None = 
     """Register identity resource types required by Gabriel bootstrap paths.
 
     The function is idempotent and safe to call multiple times.
-    
+
     Registers:
     - Principal: The universal identity abstraction (keyed by PrincipalID)
       Future: User, Agent, SystemAgent, ServiceAccount extend Principal
-    
+
     Args:
         target_registry: Registry to register into. If None, uses global registry.
     """

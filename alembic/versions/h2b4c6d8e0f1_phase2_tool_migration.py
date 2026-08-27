@@ -17,16 +17,16 @@ Changes
    enforce org-level access via grn + org_id.
 """
 
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "h2b4c6d8e0f1"
-down_revision: Union[str, Sequence[str], None] = "g8b1c2d3e4f5"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "g8b1c2d3e4f5"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:

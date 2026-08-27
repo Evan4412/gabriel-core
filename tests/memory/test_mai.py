@@ -1,5 +1,5 @@
 import pytest
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from uuid import uuid4
 
 from gabriel.memory.providers.local import LocalMemoryProvider
@@ -33,7 +33,7 @@ def mock_context() -> ExecutionContext:
         causation_id=None,
         session_id=None,
         resource=None,
-        started_at=datetime.now(timezone.utc),
+        started_at=datetime.now(UTC),
         capabilities=frozenset(),
         metadata={},
     )
@@ -42,9 +42,9 @@ def mock_context() -> ExecutionContext:
 async def test_scoped_memory_usage(mock_context):
     provider = LocalMemoryProvider()
     client = ScopedMemoryClient(mock_context, provider)
-    
+
     await client.write("User likes coffee", layer=MemoryLayer.LONG_TERM)
-    
+
     memories = await client.read(layer=MemoryLayer.LONG_TERM)
     assert len(memories) == 1
     assert memories[0].content == "User likes coffee"

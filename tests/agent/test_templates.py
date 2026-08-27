@@ -6,7 +6,6 @@ from gabriel.agent.capabilities import AgentCapability
 from gabriel.agent.grn_bindings import is_tool_grn
 from gabriel.agent.specification import AgentSpecification
 from gabriel.agent.templates import (
-    AGENT_TEMPLATES,
     build_specification,
     get_template,
     list_templates,

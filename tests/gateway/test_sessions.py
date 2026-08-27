@@ -5,14 +5,14 @@ from gabriel.gateway.sessions import SessionManager
 
 
 def _create(manager: SessionManager, conversation="grn:acme:conversation/c1:1", **kw):
-    defaults = dict(
-        org_id="acme",
-        principal_id="alice",
-        conversation_grn=conversation,
-        agent_grn="grn:acme:agent/a1:1",
-        provider="ollama",
-        model="llama3",
-    )
+    defaults = {
+        "org_id": "acme",
+        "principal_id": "alice",
+        "conversation_grn": conversation,
+        "agent_grn": "grn:acme:agent/a1:1",
+        "provider": "ollama",
+        "model": "llama3",
+    }
     defaults.update(kw)
     return manager.get_or_create(**defaults)
 

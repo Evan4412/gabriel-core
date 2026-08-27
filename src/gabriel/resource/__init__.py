@@ -6,7 +6,6 @@ from gabriel.resource.registry import ResourceRegistry, registry
 from gabriel.resource.schema import ResourceSchema
 from gabriel.resource.serializer import ResourceSerializer
 from gabriel.resource.validators import ResourceValidator
-from gabriel.resource.descriptor import ResourceDescriptor
 
 __all__ = [
 	"ResourceDescriptor",

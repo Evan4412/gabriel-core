@@ -1,7 +1,7 @@
 """list_events — list upcoming calendar events."""
 from __future__ import annotations
 from langchain_core.tools import tool
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 from gabriel.tool.library.calendar._calendar_client import build_calendar_service
 
@@ -29,7 +29,7 @@ async def list_events(
     try:
         service = build_calendar_service(_credentials)
         if time_min is None:
-            time_min = datetime.now(timezone.utc).isoformat()
+            time_min = datetime.now(UTC).isoformat()
         result = (
             service.events()
             .list(

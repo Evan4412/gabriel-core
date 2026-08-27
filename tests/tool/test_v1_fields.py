@@ -7,15 +7,15 @@ from gabriel.tool.service import ToolService
 
 
 async def _create(service, **overrides):
-    fields = dict(
-        org_id="acme",
-        created_by="principal://acme/user/admin",
-        name="calculator",
-        description="Evaluates arithmetic",
-        category="math",
-        parameters={},
-        safety_level=0,
-    )
+    fields = {
+        "org_id": "acme",
+        "created_by": "principal://acme/user/admin",
+        "name": "calculator",
+        "description": "Evaluates arithmetic",
+        "category": "math",
+        "parameters": {},
+        "safety_level": 0,
+    }
     fields.update(overrides)
     return await service.create_tool(**fields)
 

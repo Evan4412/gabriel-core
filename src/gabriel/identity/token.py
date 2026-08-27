@@ -1,17 +1,17 @@
 """Token and TokenPayload: JWT-based cryptographic identity verification."""
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, UTC
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class TokenPayload(BaseModel):
     """The claims inside a signed token.
-    
+
     When a TokenService verifies a token, it decodes the JWT and validates
     the signature, returning a TokenPayload as proof.
     """

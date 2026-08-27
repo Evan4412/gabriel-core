@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
-class MemoryLayer(str, Enum):
+class MemoryLayer(StrEnum):
     SHORT_TERM = "short_term" # Context window / working memory
     LONG_TERM = "long_term" # Knowledge base / Vector store
     EPISODIC = "episodic" # Past experiences / logs

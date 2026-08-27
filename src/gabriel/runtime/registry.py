@@ -1,11 +1,10 @@
 from gabriel.runtime.contract import AgentRuntime
 from gabriel.runtime.exceptions import RuntimeNotFoundError, DuplicateRuntimeError
-from typing import Dict
 
 
 class RuntimeRegistry:
     def __init__(self):
-        self._runtimes: Dict[str, AgentRuntime] = {}
+        self._runtimes: dict[str, AgentRuntime] = {}
 
     def register(self, runtime: AgentRuntime):
         if runtime.name in self._runtimes:
@@ -19,7 +18,7 @@ class RuntimeRegistry:
             raise RuntimeNotFoundError(f"No runtime registered with name: {name}")
         return self._runtimes[name]
 
-    def all(self) -> Dict[str, AgentRuntime]:
+    def all(self) -> dict[str, AgentRuntime]:
         return dict(self._runtimes)
 
 
@@ -63,7 +62,7 @@ def register_default_runtimes(
                 "Dispatcher must be provided when registering LangGraphAdapter."
                 "Pass dispatcher=<your_dispatcher> to register_default_runtimes()."
             )
-        
+
         target.register(LangGraphAdapter(dispatcher=dispatcher))
     except DuplicateRuntimeError:
         pass

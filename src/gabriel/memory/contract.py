@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 
 from gabriel.memory.models import MemoryEntry, MemoryLayer
 
@@ -27,9 +26,9 @@ class MemoryAccessInterface(ABC):
     async def retrieve(
         self,
         layer: MemoryLayer,
-        query: Optional[str] = None,
+        query: str | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Retrieve entries from a specific layer.
 
         If *query* is provided, implementations should filter by it
@@ -41,9 +40,9 @@ class MemoryAccessInterface(ABC):
     async def recall(
         self,
         layer: MemoryLayer,
-        query: Optional[str] = None,
+        query: str | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Alias for :meth:`retrieve` (task spec naming)."""
         return await self.retrieve(layer=layer, query=query, limit=limit)
 
@@ -51,9 +50,9 @@ class MemoryAccessInterface(ABC):
     async def search(
         self,
         query: str,
-        layer: Optional[MemoryLayer] = None,
+        layer: MemoryLayer | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Semantic search across memory entries ranked by relevance.
 
         Backends that do not support vector search should fall back to

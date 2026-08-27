@@ -20,16 +20,16 @@ Changes
    (key/value, scope, tags, expiry; key unique per (org, scope, subject)
    namespace). Distinct from the runtime working-memory ``memory_entries``.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "j0d4e6f8a2b3"
-down_revision: Union[str, Sequence[str], None] = "i9c3d5e7f1a2"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "i9c3d5e7f1a2"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def _resource_columns() -> list[sa.Column]:

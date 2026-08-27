@@ -12,16 +12,15 @@ sources. All new fields default so pre-existing usage remains valid.
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
-from pydantic import Field
 
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import Resource, ResourceState, ResourceType
 
 
-class DocumentStatus(str, Enum):
+class DocumentStatus(StrEnum):
     """Processing lifecycle of a document, distinct from ResourceState."""
 
     UPLOADED = "uploaded"
@@ -110,7 +109,7 @@ class Document(Resource):
         knowledge_source_grn: str | None = None,
         labels: dict[str, str] | None = None,
         metadata: dict[str, Any] | None = None,
-    ) -> "Document":
+    ) -> Document:
         """Mint an ACTIVE Document resource."""
         return cls(
             grn=grn,

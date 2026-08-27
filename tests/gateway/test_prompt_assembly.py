@@ -1,7 +1,7 @@
 """PromptAssembler tests (Phase 3)."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 
 from gabriel.conversation.message_models import Message, MessageRole
 from gabriel.gateway.prompt import (
@@ -14,7 +14,7 @@ from gabriel.resource.grn import GRN
 
 
 def _message(role: MessageRole, content: str, i: int = 0) -> Message:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return Message(
         grn=GRN.generate("acme", "message"),
         org_id="acme",

@@ -3,8 +3,7 @@
 Core flow:
   Principal → Issue Token → Verify Token → Recover Principal (as TokenPayload)
 """
-from datetime import datetime, timedelta, timezone
-import json
+from datetime import datetime, timedelta, UTC
 
 import jwt
 
@@ -22,7 +21,7 @@ from gabriel.identity.exceptions import (
 
 class TokenService:
     """Issues and verifies JWT tokens for principals.
-    
+
     Tokens are cryptographically signed with a private key and verified
     with a corresponding public key. A valid token proves identity.
     """
@@ -36,7 +35,7 @@ class TokenService:
         token_expiry_seconds: int | None = None,
     ):
         """Initialize TokenService.
-        
+
         Args:
             key_manager: KeyManager with signing/verification keys.
             token_expiry_seconds: TTL for issued tokens (default: 1 hour).
@@ -46,18 +45,18 @@ class TokenService:
 
     def issue(self, principal: Principal) -> Token:
         """Issue a signed JWT token for a principal.
-        
+
         Args:
             principal: The principal to issue a token for.
-            
+
         Returns:
             Token: A signed JWT token.
-            
+
         Raises:
             TokenGenerationError: If token generation fails.
         """
         try:
-            now = datetime.now(timezone.utc)
+            now = datetime.now(UTC)
             expires_at = now + timedelta(seconds=self.token_expiry_seconds)
 
             payload = {
@@ -88,15 +87,15 @@ class TokenService:
 
     def verify(self, token: Token | str, organization_id: str | None = None) -> TokenPayload:
         """Verify and decode a JWT token.
-        
+
         Args:
             token: The token to verify (Token object or string).
             organization_id: Optional organization to verify token belongs to.
                 If provided and doesn't match token's org, raises InvalidOrgError.
-            
+
         Returns:
             TokenPayload: Decoded token claims.
-            
+
         Raises:
             InvalidSignatureError: If signature is invalid or tampered.
             ExpiredTokenError: If token has expired.
@@ -132,8 +131,8 @@ class TokenService:
                 principal_type=decoded["principal_type"],
                 display_name=decoded["display_name"],
                 capabilities=decoded.get("capabilities", []),
-                issued_at=datetime.fromtimestamp(decoded["iat"], tz=timezone.utc),
-                expires_at=datetime.fromtimestamp(decoded["exp"], tz=timezone.utc),
+                issued_at=datetime.fromtimestamp(decoded["iat"], tz=UTC),
+                expires_at=datetime.fromtimestamp(decoded["exp"], tz=UTC),
                 metadata=decoded.get("metadata", {}),
             )
 

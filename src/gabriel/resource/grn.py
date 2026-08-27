@@ -47,7 +47,7 @@ class GRN:
     def __repr__(self) -> str:
         # docs/learned/!r.md
         return f"GRN({str(self)!r})"
-    
+
     @classmethod
     def _parse_colon(cls, raw: str) -> "GRN":
         """Parse a GRN of the form:
@@ -65,10 +65,10 @@ class GRN:
 
             if version < 1:
                 raise ValueError
-            
+
         except(ValueError, TypeError):
             raise InvalidGRNError(f"Malformed GRN: {raw}") from None
-        
+
         return cls(
             org_id=org_id,
             resource_type=resource_type,
@@ -78,7 +78,7 @@ class GRN:
 
     @classmethod
     def parse(cls, raw: str) -> "GRN":
-        """        
+        """
         Parse a GRN of the form:
             - grn:<org_id>:<resource_type>/<resource_id>:<version>
 
@@ -87,13 +87,13 @@ class GRN:
         if raw.startswith(f"{GRN_SCHEME}:"):
             return cls._parse_colon(raw)
         raise InvalidGRNError(f"Invalid GRN scheme: {raw}")
-    
+
     @classmethod
     def generate(cls, org_id: str, resource_type: str) -> "GRN":
         """
         Generate a new GRN.
         """
-        
+
         return cls(
             org_id=org_id,
             resource_type=resource_type,

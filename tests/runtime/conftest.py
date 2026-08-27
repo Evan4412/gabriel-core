@@ -1,13 +1,11 @@
 """Fixtures for runtime tests."""
 import pytest
-from uuid import UUID, uuid4
-from datetime import datetime, timezone
-import pytest_asyncio
+from uuid import uuid4
+from datetime import datetime, UTC
 
 from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.models import PrincipalType, Capability as IdentityCapability
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability as RuntimeCapability
 from gabriel.runtime.execution import ExecutionContextBuilder, Execution, ExecutionState
@@ -15,7 +13,7 @@ from gabriel.events.event import Event
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 @pytest.fixture

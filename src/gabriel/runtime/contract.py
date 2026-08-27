@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from gabriel.runtime.execution import ExecutionRequest, ExecutionResult
@@ -20,4 +20,3 @@ class AgentRuntime(ABC):
     @abstractmethod
     def name(self) -> str:
         """Return the identifier for this runtime (e.g., 'langgraph')."""
-        pass

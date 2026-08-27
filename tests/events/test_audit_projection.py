@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -26,7 +26,7 @@ async def test_audit_projection_persists_and_queries_by_filters(tmp_path):
         await conn.run_sync(Base.metadata.create_all)
 
     projection = AuditProjection(session_factory)
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     await projection.handle_event(
         PeelEvaluationEvent(

@@ -1,8 +1,8 @@
 """Core identity models: enums and domain objects."""
-from enum import Enum
+from enum import StrEnum
 
 
-class PrincipalType(str, Enum):
+class PrincipalType(StrEnum):
     """Type of principal acting in the system."""
 
     USER = "user"
@@ -11,7 +11,7 @@ class PrincipalType(str, Enum):
     SERVICE_ACCOUNT = "service_account"
 
 
-class PrincipalStatus(str, Enum):
+class PrincipalStatus(StrEnum):
     """Status/lifecycle state of a principal."""
 
     ACTIVE = "active"
@@ -19,12 +19,12 @@ class PrincipalStatus(str, Enum):
     DELETED = "deleted"
 
 
-class Capability(str, Enum):
+class Capability(StrEnum):
     """Capabilities a principal may have.
-    
+
     Note: These are NOT permissions.
     Permissions come later through PEEL (Policy Expression Evaluation Language).
-    
+
     Capabilities describe what a principal type is *capable* of doing.
     PEEL will determine what they're *allowed* to do.
     """

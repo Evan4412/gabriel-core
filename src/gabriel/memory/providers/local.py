@@ -1,4 +1,3 @@
-from typing import Optional
 
 from gabriel.memory.contract import MemoryAccessInterface
 from gabriel.memory.models import MemoryEntry, MemoryLayer
@@ -21,11 +20,11 @@ class LocalMemoryProvider(MemoryAccessInterface):
         self._entries[memory_id] = entry
         self._order.append(memory_id)
         return memory_id
-    
+
     async def retrieve(
         self,
         layer: MemoryLayer,
-        query: Optional[str] = None,
+        query: str | None = None,
         limit: int = 10,
     ) -> list[MemoryEntry]:
         matches: list[MemoryEntry] = []
@@ -39,11 +38,11 @@ class LocalMemoryProvider(MemoryAccessInterface):
             if len(matches) >= limit:
                 break
         return matches
-    
+
     async def search(
         self,
         query: str,
-        layer: Optional[MemoryLayer] = None,
+        layer: MemoryLayer | None = None,
         limit: int = 10
     ) -> list[MemoryEntry]:
             """Keyword fallback — no vector search in local provider."""
@@ -59,7 +58,7 @@ class LocalMemoryProvider(MemoryAccessInterface):
                 if len(matches) >= limit:
                     break
             return matches
-    
+
     async def forget(self, memory_id: str) -> None:
         if memory_id in self._entries:
             del self._entries[memory_id]

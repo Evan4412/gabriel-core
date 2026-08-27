@@ -17,8 +17,7 @@ class LifecycleManager:
         # TODO: raise InvalidLifecycleTransitionError if transition is not in ALLOWED_TRANSITIONS
         if target not in ALLOWED_TRANSITIONS.get(current, set()):
             raise InvalidLifecycleTransitionError(f"Invalid transition from {current} to {target}")
-        else:
-            return None
+        return
 
     @staticmethod
     def transition(resource, target: ResourceState, updated_by: str):

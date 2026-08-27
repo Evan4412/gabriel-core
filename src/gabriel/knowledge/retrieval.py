@@ -12,7 +12,7 @@ error yields an empty result — a chat turn must never break because RAG did.
 """
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 from gabriel.gateway.prompt import ContextBlock
 from gabriel.logging_config import get_logger

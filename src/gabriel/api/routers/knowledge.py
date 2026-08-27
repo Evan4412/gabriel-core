@@ -27,7 +27,6 @@ from gabriel.knowledge.retrieval import KnowledgeRetriever
 from gabriel.knowledge.source_models import KnowledgeSourceStatus, KnowledgeSourceType
 from gabriel.knowledge.source_service import KnowledgeSourceService
 from gabriel.resource.exceptions import ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/knowledge", tags=["Knowledge"])
@@ -292,4 +291,4 @@ async def delete_source(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return None
+    return

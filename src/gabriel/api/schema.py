@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from gabriel.agent.management import AgentStatus
 
@@ -16,7 +16,7 @@ from dataclasses import dataclass
 # ---------------------------------------------------------------------------
 class OkResponse(BaseModel):
     ok: bool = True
-    detail: Optional[str] = None
+    detail: str | None = None
 
 
 # ---------------------------------------------------------------------------

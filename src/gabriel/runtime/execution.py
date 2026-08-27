@@ -1,8 +1,8 @@
 """Execution state and lifecycle management."""
 from dataclasses import asdict
-from enum import Enum
+from enum import StrEnum
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from uuid import UUID
 from typing import Any
 
@@ -14,7 +14,7 @@ from gabriel.runtime.registry import RuntimeRegistry
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 @dataclass(frozen=True)
 class ExecutionMetrics:
@@ -63,9 +63,9 @@ class ExecutionResult:
         }
 
 
-class ExecutionState(str, Enum):
+class ExecutionState(StrEnum):
     """Lifecycle state of an execution.
-    
+
     PENDING → RUNNING → COMPLETED (or FAILED, CANCELLED, WAITING)
     """
 
@@ -97,11 +97,11 @@ class ExecutionContextBuilder:
         principal,
     ) -> ExecutionContext:
         """Build an ExecutionContext from an event and principal.
-        
+
         Args:
             event: The event that triggered the execution.
             principal: The principal executing.
-            
+
         Returns:
             ExecutionContext: The built context.
         """
@@ -160,10 +160,10 @@ class Execution:
 
     def transition_to(self, new_state: ExecutionState) -> None:
         """Transition to a new state.
-        
+
         Args:
             new_state: The target state.
-            
+
         Raises:
             InvalidExecutionStateError: If transition is invalid.
         """
@@ -208,13 +208,13 @@ class Execution:
 
     def duration_seconds(self) -> float | None:
         """Get execution duration in seconds.
-        
+
         Returns:
             float | None: Duration in seconds, or None if not completed.
         """
         end = self.completed_at or utcnow()
         return (end - self.started_at).total_seconds()
-    
+
 
 class AgentExecutor:
     """Drives an Execution through a registered AgentRuntime."""

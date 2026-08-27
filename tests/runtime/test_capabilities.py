@@ -57,8 +57,6 @@ class TestScopedClientCapabilityChecking:
     def test_has_capability_with_enum(self, scoped_client: "ScopedClient"):
         """ScopedClient.has_capability works with Capability enum."""
         # Note: scoped_client needs to be a fixture
-        from gabriel.runtime.scope import ScopedClient
-        from gabriel.runtime.context import ExecutionContext
         from gabriel.runtime.capabilities import Capability
 
         scoped_client.has_capability(Capability.READ_MEMORY)
@@ -68,7 +66,6 @@ class TestScopedClientCapabilityChecking:
     ):
         """ScopedClient.has_capability works with string."""
         from gabriel.runtime.scope import ScopedClient
-        from gabriel.runtime.capabilities import Capability
 
         client = ScopedClient(execution_context)
         # execution_context has read_memory from fixture

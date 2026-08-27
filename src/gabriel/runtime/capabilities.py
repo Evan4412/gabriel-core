@@ -3,16 +3,16 @@
 Note: Capabilities describe what a principal *can* do.
 Permissions (whether they *should* do it) come from PEEL.
 """
-from enum import Enum
+from enum import StrEnum
 
 
-class Capability(str, Enum):
+class Capability(StrEnum):
     """Capabilities a principal may have.
-    
+
     A capability is a descriptor of what a principal is capable of doing.
     PEEL policies then determine whether they *should* exercise a capability
     against a specific resource.
-    
+
     Example:
     - Principal has capability READ_MEMORY
     - But PEEL policy may deny reading a specific memory object

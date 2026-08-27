@@ -25,7 +25,6 @@ import email
 import imaplib
 import smtplib
 from email.header import decode_header
-from email.message import EmailMessage
 from typing import Any
 
 

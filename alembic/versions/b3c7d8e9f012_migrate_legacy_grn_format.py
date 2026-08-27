@@ -8,7 +8,7 @@ Create Date: 2026-06-29 00:00:00.000000
 from __future__ import annotations
 
 import re
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 from alembic import op
 import sqlalchemy as sa
@@ -16,9 +16,9 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "b3c7d8e9f012"
-down_revision: Union[str, Sequence[str], None] = "ae642da113fe"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "ae642da113fe"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 _LEGACY_RE = re.compile(r"^grn://([^/]+)/([^/]+)/(.+)@(\d+)$")

@@ -5,7 +5,7 @@ attached to an Agent, and the AgentExecutor selects the runtime declared *by the
 specification* and runs it to a successful ExecutionResult.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from uuid import uuid4
 
 import pytest
@@ -46,7 +46,7 @@ def _context(org_id: str, spec) -> ExecutionContext:
         causation_id=None,
         session_id=None,
         resource=None,
-        started_at=datetime.now(timezone.utc),
+        started_at=datetime.now(UTC),
         # capabilities lowered from the spec's declared agent capabilities
         capabilities=frozenset(spec.runtime_capabilities()),
         metadata={},

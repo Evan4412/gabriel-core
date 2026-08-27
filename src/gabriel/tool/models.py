@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import Enum, StrEnum
 from typing import Any
 
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import Resource, ResourceState, ResourceType
 
-class ToolCategory(str, Enum):
+class ToolCategory(StrEnum):
     """Broad category a tool belongs to.
 
     Drives UI grouping, documentation, and future capability-based filtering.
@@ -27,7 +27,7 @@ class ToolCategory(str, Enum):
     CUSTOM = "custom"
 
 
-class ExecutionRuntime(str, Enum):
+class ExecutionRuntime(StrEnum):
     """Where a tool declares it executes (V1: declaration only).
 
     Runtime *routing* is future work — no execution engine consumes this yet.
@@ -155,7 +155,7 @@ class Tool(Resource):
         labels: dict[str, str] | None = None,
         metadata: dict[str, Any] | None = None,
         fn: Any | None = None,
-    ) -> "Tool":
+    ) -> Tool:
         return cls(
             grn=grn,
             org_id=org_id,

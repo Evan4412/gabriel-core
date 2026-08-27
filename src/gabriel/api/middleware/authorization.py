@@ -5,7 +5,7 @@ import inspect
 import json
 import logging
 import os
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 from uuid import UUID, uuid4
 
@@ -44,7 +44,7 @@ _REQUEST_LOGGER = _build_request_logger()
 
 
 def _utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _encode_request_body(body: bytes) -> tuple[str, str]:

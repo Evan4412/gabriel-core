@@ -20,7 +20,7 @@ from gabriel.identity.principal_id import PrincipalID
 from gabriel.policy.models import Policy
 from gabriel.identity.models import PrincipalType, PrincipalStatus, Capability
 from gabriel.resource.models import ResourceState
-from gabriel.resource.exceptions import ResourceTypeNotRegisteredError, DuplicateResourceTypeError
+from gabriel.resource.exceptions import ResourceTypeNotRegisteredError
 
 
 class TestCoreBootstrap:
@@ -29,12 +29,12 @@ class TestCoreBootstrap:
     def test_register_core_types_is_idempotent(self):
         """Calling register_core_resource_types multiple times should not raise."""
         test_registry = ResourceRegistry()
-        
+
         # First call should succeed
         register_core_resource_types(test_registry)
         assert test_registry.is_registered("organization")
         assert test_registry.is_registered("principal")
-        
+
         # Second call should also succeed (idempotent)
         register_core_resource_types(test_registry)
         assert test_registry.is_registered("organization")
@@ -44,7 +44,7 @@ class TestCoreBootstrap:
         """Organization should be registered with correct metadata."""
         test_registry = ResourceRegistry()
         register_core_resource_types(test_registry)
-        
+
         descriptor = test_registry.get_descriptor("organization")
         assert descriptor is not None
         assert descriptor.type_name == "organization"
@@ -57,7 +57,7 @@ class TestCoreBootstrap:
         """Principal should be registered with correct metadata."""
         test_registry = ResourceRegistry()
         register_core_resource_types(test_registry)
-        
+
         descriptor = test_registry.get_descriptor("principal")
         assert descriptor is not None
         assert descriptor.type_name == "principal"
@@ -89,7 +89,7 @@ class TestCoreBootstrap:
         """Identity bootstrap should work independently."""
         test_registry = ResourceRegistry()
         register_identity_resource_types(test_registry)
-        
+
         assert test_registry.is_registered("principal")
         descriptor = test_registry.get_descriptor("principal")
         assert descriptor.model == Principal
@@ -113,10 +113,10 @@ class TestFactoryResourceCreation:
     def test_create_organization_through_factory(self, factory):
         """Organization should be creatable through factory."""
         from gabriel.resource.grn import GRN
-        
+
         org_id = "acme"
         grn = GRN.generate(org_id, "organization")
-        
+
         org = factory.create(
             "organization",
             grn=grn,
@@ -126,7 +126,7 @@ class TestFactoryResourceCreation:
             created_by="system",
             updated_by="system",
         )
-        
+
         assert isinstance(org, Organization)
         assert org.org_id == "acme"
         assert org.display_name == "Acme Corp"
@@ -139,7 +139,7 @@ class TestFactoryResourceCreation:
             principal_type="user",
             principal_identifier="alice",
         )
-        
+
         principal = factory.create(
             "principal",
             id=principal_id,
@@ -149,7 +149,7 @@ class TestFactoryResourceCreation:
             status=PrincipalStatus.ACTIVE,
             capabilities={Capability.AUTHENTICATE, Capability.READ_RESOURCE},
         )
-        
+
         assert isinstance(principal, Principal)
         assert str(principal.id) == "principal://acme/user/alice"
         assert principal.display_name == "Alice"
@@ -185,12 +185,12 @@ class TestFactoryResourceCreation:
     def test_organization_created_uniformly(self, factory):
         """Multiple organizations created through factory should have consistent structure."""
         from gabriel.resource.grn import GRN
-        
+
         orgs = []
         for i in range(3):
             org_id = f"org-{i}"
             grn = GRN.generate(org_id, "organization")
-            
+
             org = factory.create(
                 "organization",
                 grn=grn,
@@ -201,7 +201,7 @@ class TestFactoryResourceCreation:
                 updated_by="system",
             )
             orgs.append(org)
-        
+
         # All should have consistent structure
         for org in orgs:
             assert isinstance(org, Organization)
@@ -217,7 +217,7 @@ class TestFactoryResourceCreation:
                 principal_type="agent",
                 principal_identifier=f"bot-{i}",
             )
-            
+
             principal = factory.create(
                 "principal",
                 id=pid,
@@ -227,7 +227,7 @@ class TestFactoryResourceCreation:
                 status=PrincipalStatus.ACTIVE,
             )
             principals.append(principal)
-        
+
         # All should have consistent structure
         for principal in principals:
             assert isinstance(principal, Principal)
@@ -241,14 +241,14 @@ class TestBootstrapIntegration:
     def test_full_bootstrap_and_factory_workflow(self):
         """Test complete workflow: bootstrap → registry → factory → create."""
         from gabriel.resource.grn import GRN
-        
+
         # Step 1: Bootstrap (typically done once at app startup)
         test_registry = ResourceRegistry()
         register_core_resource_types(test_registry)
-        
+
         # Step 2: Create factory
         factory = ResourceFactory(test_registry)
-        
+
         # Step 3: Create Organization
         org_grn = GRN.generate("acme", "organization")
         org = factory.create(
@@ -260,7 +260,7 @@ class TestBootstrapIntegration:
             created_by="admin",
             updated_by="admin",
         )
-        
+
         # Step 4: Create Principal
         principal_id = PrincipalID(
             org_id="acme",
@@ -276,13 +276,13 @@ class TestBootstrapIntegration:
             status=PrincipalStatus.ACTIVE,
             capabilities={Capability.AUTHENTICATE},
         )
-        
+
         # Verify both created uniformly
         assert org.org_id == "acme"
         assert org.display_name == "Acme Corporation"
         assert str(principal.id) == "principal://acme/user/alice"
         assert principal.display_name == "Alice Smith"
-        
+
         # Both are registered types
         assert test_registry.is_registered("organization")
         assert test_registry.is_registered("principal")

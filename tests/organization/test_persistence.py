@@ -15,7 +15,7 @@ async def test_create_and_retrieve_organization(db_session):
 
     # Create
     org = await service.register_organization("Cyberdyne Systems", "admin")
-    
+
     # Verify it's a domain object, not ORM
     assert isinstance(org, Organization)
     assert org.display_name == "Cyberdyne Systems"
@@ -50,8 +50,8 @@ async def test_list_organizations(db_session):
     service = OrganizationService(repo)
 
     # Create a few
-    org1 = await service.register_organization("Alpha Corp", "admin")
-    org2 = await service.register_organization("Beta Inc", "admin")
+    await service.register_organization("Alpha Corp", "admin")
+    await service.register_organization("Beta Inc", "admin")
 
     # List all
     all_orgs = await service.list_organizations()
@@ -64,22 +64,22 @@ async def test_list_organizations(db_session):
 async def test_organization_with_event_emission(db_session):
     """Test that creating an organization with event repo emits resource_created event."""
     register_core_resource_types()
-    
+
     org_repo = OrganizationRepository(db_session)
     event_repo = EventRepository(db_session)
     service = OrganizationService(org_repo, event_repo)
 
     # Create org with event emission
     org = await service.register_organization("EventOrg", "admin")
-    
+
     # Verify org created
     assert isinstance(org, Organization)
     assert org.display_name == "EventOrg"
-    
+
     # Verify event was emitted
     events = await event_repo.events_for_organization(org.org_id)
     assert len(events) == 1
-    
+
     event = events[0]
     assert event.type == "resource_created"
     assert event.organization_id == org.org_id
@@ -96,15 +96,15 @@ async def test_organization_grn_format(db_session):
     service = OrganizationService(repo)
 
     org = await service.register_organization("GRNFormatTest", "admin")
-    
+
     grn_str = str(org.grn)
-    
+
     # Verify format
     assert grn_str.startswith("grn:")
     assert org.org_id in grn_str
     assert "organization" in grn_str
     assert ":1" in grn_str  # version defaults to 1
-    
+
     # Parse format: grn:<org>:<type>/<id>:<version>
     parts = grn_str.split(":")
     assert len(parts) >= 4  # grn, org_id, type/id, version

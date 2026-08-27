@@ -57,7 +57,7 @@ class IdentitySettings:
         return self.environment.strip().lower() == "production"
 
     @classmethod
-    def from_env(cls) -> "IdentitySettings":
+    def from_env(cls) -> IdentitySettings:
         """Build settings from ``GABRIEL_*`` environment variables."""
         environment = os.getenv("GABRIEL_ENV", "development")
         is_prod = environment.strip().lower() == "production"

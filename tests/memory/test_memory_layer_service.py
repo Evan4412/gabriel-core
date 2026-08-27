@@ -1,5 +1,5 @@
 """Tests for MemoryLayerService (Phase 2 — Core Business Logic)."""
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 
 import pytest
 from sqlalchemy import select
@@ -16,7 +16,7 @@ ACTOR = "principal-1"
 
 
 async def _create(service: MemoryLayerService, key: str = "prefs.theme", **kw):
-    defaults = dict(created_by=ACTOR, scope=MemoryScope.ORG)
+    defaults = {"created_by": ACTOR, "scope": MemoryScope.ORG}
     defaults.update(kw)
     return await service.create_entry(ORG, key, {"mode": "dark"}, **defaults)
 
@@ -59,7 +59,7 @@ async def test_org_scoping_on_reads(db_session):
 
 async def test_expired_entries_hidden(db_session):
     service = MemoryLayerService(db_session)
-    past = datetime.now(timezone.utc) - timedelta(hours=1)
+    past = datetime.now(UTC) - timedelta(hours=1)
     entry = await _create(service, expires_at=past)
 
     with pytest.raises(ResourceNotFoundError):

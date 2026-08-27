@@ -28,12 +28,12 @@ into an execution context:
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class AgentCapability(str, Enum):
+class AgentCapability(StrEnum):
     """Canonical capability vocabulary declared by agent specifications.
 
     Values are stable lowercase slugs so they persist cleanly to JSON/YAML and

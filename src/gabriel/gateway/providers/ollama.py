@@ -182,7 +182,7 @@ class OllamaProvider:
         )
 
         logger.info(f"(stream_chat_completion) Tools received for Ollama: {tools}")
-        
+
 
         runnable = self._bind_runtime_options(
             llm,

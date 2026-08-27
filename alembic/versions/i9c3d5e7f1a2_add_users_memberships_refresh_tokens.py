@@ -16,20 +16,20 @@ Changes
    carrying the org role (owner/admin/member/viewer).
 4. Create ``refresh_tokens`` — hashed, single-use, rotating refresh tokens.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "i9c3d5e7f1a2"
-down_revision: Union[str, Sequence[str], None] = (
+down_revision: str | Sequence[str] | None = (
     "a1c9e4d7f2b3",
     "b3c7d8e9f012",
     "h2b4c6d8e0f1",
 )
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:

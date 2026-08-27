@@ -1,7 +1,6 @@
 """Deployment service for creating Agent resources from specifications."""
 
 from collections import defaultdict
-from uuid import uuid4
 
 from gabriel.agent.exceptions import AgentDeploymentError
 from gabriel.agent.models import Agent

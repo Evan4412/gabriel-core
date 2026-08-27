@@ -36,7 +36,6 @@ from gabriel.document.normalizer import NormalizationError
 from gabriel.document.processing import DocumentProcessingService
 from gabriel.knowledge.vector_store import ChunkVectorStore
 from gabriel.resource.exceptions import ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
@@ -280,4 +279,4 @@ async def delete_document(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return None
+    return

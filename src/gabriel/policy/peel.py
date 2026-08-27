@@ -23,20 +23,20 @@ from gabriel.runtime.context import ExecutionContext
 
 class PEEL:
     """Policy Enforcement & Evaluation Layer.
-    
+
     PEEL intercepts every command and evaluates it against policies before
     allowing execution. It is the "gatekeeper" that makes Gabriel secure.
-    
+
     Responsibilities:
     - Receive authorization requests
     - Evaluate against policies via PolicyEngine
     - Either allow or deny based on policies
     - Raise UnauthorizedError for denials
     """
-    
+
     def __init__(self, engine: PolicyEngine):
         """Initialize PEEL with a policy engine.
-        
+
         Args:
             engine: The PolicyEngine that will evaluate requests.
         """
@@ -58,7 +58,7 @@ class PEEL:
         except UnauthorizedError:
             return Effect.DENY
         return Effect.ALLOW
-    
+
     async def authorize(
         self,
         context: ExecutionContext,
@@ -66,17 +66,17 @@ class PEEL:
         resource_grn: str,
     ) -> None:
         """Authorize an action within an execution context.
-        
+
         This method is called before every command execution.
-        
+
         Args:
             context: The execution context.
             action: The action being attempted (e.g., "identity:create_user").
             resource_grn: The resource GRN being accessed.
-            
+
         Raises:
             UnauthorizedError: If the action is denied by policy.
-            
+
         Example:
             await peel.authorize(context, "organization:create", "grn:org:org/*")
         """
@@ -154,18 +154,18 @@ class PEEL:
                 f"'{context.organization}' may not {action} on resource owned "
                 f"by organization '{grn.org_id}' (cross-tenant access denied)"
             )
-    
+
     async def authorize_batch(
         self,
         context: ExecutionContext,
         requests: list[tuple[str, str]],
     ) -> None:
         """Authorize multiple actions within same context.
-        
+
         Args:
             context: The execution context.
             requests: List of (action, resource_grn) tuples.
-            
+
         Raises:
             UnauthorizedError: On first denied action.
         """

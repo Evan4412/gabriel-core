@@ -6,7 +6,6 @@ and timestamp for audit trails and replays.
 """
 
 from datetime import datetime
-from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -17,32 +16,32 @@ from gabriel.events.event import Event
 
 class EventRepository:
     """Repository for persisting and querying events.
-    
+
     This is the write-model side of CQRS: commands → handlers → events → repository.
     The repository implements the transactional outbox pattern:
     - Events are appended within the same transaction as resource creation
     - No separate "publish" step — events are durable immediately
     - Later upgrades to Kafka/NATS are transparent to callers
     """
-    
+
     def __init__(self, session: AsyncSession):
         """Initialize repository with async session.
-        
+
         Args:
             session: SQLAlchemy AsyncSession for database operations.
         """
         self.session = session
-    
+
     async def append(self, event: Event) -> EventORM:
         """Append a single event to the store (transactionally).
-        
+
         Events are appended within the caller's transaction, enabling the
         outbox pattern: insert resource + insert event in one unit of work.
         Caller is responsible for calling session.commit().
-        
+
         Args:
             event: The event domain object to persist.
-            
+
         Returns:
             EventORM: The persisted event.
         """
@@ -61,16 +60,16 @@ class EventRepository:
         self.session.add(orm)
         # Caller commits the transaction
         return orm
-    
+
     async def append_many(self, events: list[Event]) -> list[EventORM]:
         """Append multiple events to the store (transactionally).
-        
+
         All events are added within one transaction. Caller is responsible
         for calling session.commit().
-        
+
         Args:
             events: List of event domain objects.
-            
+
         Returns:
             list[EventORM]: The persisted events.
         """
@@ -92,13 +91,13 @@ class EventRepository:
             orms.append(orm)
         # Caller commits the transaction
         return orms
-    
+
     async def get_by_id(self, event_id: str) -> EventORM | None:
         """Retrieve an event by its ID.
-        
+
         Args:
             event_id: The event UUID.
-            
+
         Returns:
             EventORM: The event, or None if not found.
         """
@@ -106,13 +105,13 @@ class EventRepository:
             select(EventORM).filter_by(id=event_id)
         )
         return result.scalar_one_or_none()
-    
+
     async def events_for_organization(self, organization_id: str) -> list[EventORM]:
         """Get all events for an organization.
-        
+
         Args:
             organization_id: The organization ID.
-            
+
         Returns:
             list[EventORM]: All events for the organization, in occurred order.
         """
@@ -122,13 +121,13 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def events_for_resource(self, resource_grn: str) -> list[EventORM]:
         """Get all events for a specific resource.
-        
+
         Args:
             resource_grn: The resource GRN.
-            
+
         Returns:
             list[EventORM]: All events for the resource, in occurred order.
         """
@@ -138,13 +137,13 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def events_by_type(self, event_type: str) -> list[EventORM]:
         """Get all events of a specific type.
-        
+
         Args:
             event_type: The event type (e.g., 'resource_created').
-            
+
         Returns:
             list[EventORM]: All events of that type, in occurred order.
         """
@@ -154,13 +153,13 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def events_for_principal(self, principal_id: str) -> list[EventORM]:
         """Get all events triggered by a principal.
-        
+
         Args:
             principal_id: The principal ID.
-            
+
         Returns:
             list[EventORM]: All events from that principal, in occurred order.
         """
@@ -170,13 +169,13 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def events_by_correlation_id(self, correlation_id: str) -> list[EventORM]:
         """Get all events with a specific correlation ID (trace).
-        
+
         Args:
             correlation_id: The correlation ID.
-            
+
         Returns:
             list[EventORM]: All events with that correlation_id, in occurred order.
         """
@@ -186,15 +185,15 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def events_since(self, since: datetime) -> list[EventORM]:
         """Get all events that occurred since a given timestamp.
-        
+
         Useful for event sourcing replays or change data capture.
-        
+
         Args:
             since: The datetime cutoff (inclusive).
-            
+
         Returns:
             list[EventORM]: All events since that time, in occurred order.
         """
@@ -204,13 +203,13 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-    
+
     async def count_events(self, organization_id: str) -> int:
         """Get count of events for an organization.
-        
+
         Args:
             organization_id: The organization ID.
-            
+
         Returns:
             int: Number of events in the organization.
         """

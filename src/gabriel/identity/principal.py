@@ -1,5 +1,5 @@
 """Principal: The universal identity object in Gabriel."""
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -9,20 +9,20 @@ from gabriel.identity.models import PrincipalType, PrincipalStatus, Capability
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Principal(BaseModel):
     """Universal identity abstraction.
-    
+
     A Principal is anyone or anything that can act on Gabriel resources.
-    
+
     Later:
     - User extends Principal
     - Agent extends Principal
     - SystemAgent extends Principal
     - ServiceAccount extends Principal
-    
+
     This is the root identity object.
     """
 
@@ -61,7 +61,7 @@ class Principal(BaseModel):
 
     def can(self, capability: Capability) -> bool:
         """Check if this principal has a capability.
-        
+
         Note: This checks *capability*, not permission.
         Permissions (whether capability can be exercised) come from PEEL.
         """

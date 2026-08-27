@@ -13,8 +13,8 @@ working storage), a :class:`MemoryLayerEntry` is a **Universal Resource**
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import datetime, UTC
+from enum import StrEnum
 from typing import Any
 
 from pydantic import Field
@@ -22,7 +22,7 @@ from pydantic import Field
 from gabriel.resource.models import Resource, ResourceType
 
 
-class MemoryScope(str, Enum):
+class MemoryScope(StrEnum):
     GLOBAL = "global"
     ORG = "org"
     USER = "user"
@@ -56,10 +56,10 @@ class MemoryLayerEntry(Resource):
     def is_expired(self, now: datetime | None = None) -> bool:
         if self.expires_at is None:
             return False
-        reference = now or datetime.now(timezone.utc)
+        reference = now or datetime.now(UTC)
         expires_at = self.expires_at
         if expires_at.tzinfo is None:
-            expires_at = expires_at.replace(tzinfo=timezone.utc)
+            expires_at = expires_at.replace(tzinfo=UTC)
         return expires_at <= reference
 
     def public_view(self) -> dict[str, Any]:

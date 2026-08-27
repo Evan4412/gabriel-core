@@ -31,7 +31,6 @@ from gabriel.conversation.message_service import ConversationClosedError, Messag
 from gabriel.conversation.models import ConversationStatus
 from gabriel.conversation.service import ConversationService
 from gabriel.resource.exceptions import ResourceNotFoundError
-from gabriel.resource.grn import GRN
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/conversations", tags=["Conversations"])

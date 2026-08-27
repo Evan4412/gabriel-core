@@ -15,12 +15,12 @@ touch).
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 from gabriel.identity.models import Capability
 
 
-class OrgRole(str, Enum):
+class OrgRole(StrEnum):
     """A member's role within an organization."""
 
     OWNER = "owner"

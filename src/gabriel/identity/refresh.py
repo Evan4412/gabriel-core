@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import hashlib
 import secrets
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 
 from sqlalchemy import DateTime, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,7 +33,7 @@ DEFAULT_REFRESH_TTL_SECONDS = 30 * 24 * 3600  # 30 days
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def _hash_token(raw: str) -> str:
@@ -104,7 +104,7 @@ class RefreshTokenService:
         now = utcnow()
         expires_at = record.expires_at
         if expires_at.tzinfo is None:  # SQLite loses tz info
-            expires_at = expires_at.replace(tzinfo=timezone.utc)
+            expires_at = expires_at.replace(tzinfo=UTC)
 
         if record.revoked_at is not None:
             # Reuse of a rotated token — revoke every descendant in the chain.

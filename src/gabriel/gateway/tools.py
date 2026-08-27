@@ -28,7 +28,8 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Awaitable, Callable
+from typing import TYPE_CHECKING, Any
+from collections.abc import Awaitable, Callable
 
 from gabriel.gateway.providers.base import ToolCallRequest
 from gabriel.logging_config import get_logger
@@ -135,7 +136,7 @@ class FunctionTool(RuntimeTool):
         description: str,
         parameters: dict[str, Any] | None = None,
         name: str | None = None,
-    ) -> "FunctionTool":
+    ) -> FunctionTool:
         """Bridge a Phase-4 FunctionRegistry binding (e.g. ``"math.calculate"``)
         into a runtime tool. The library package must already be imported so
         the binding is registered."""
@@ -162,7 +163,7 @@ class LangChainTool(RuntimeTool):
     the governance layer.
     """
 
-    lc_tool: "BaseTool"
+    lc_tool: BaseTool
     safety_level: int = 0
     tool_grn: str | None = None
     _parameters_override: dict[str, Any] | None = None

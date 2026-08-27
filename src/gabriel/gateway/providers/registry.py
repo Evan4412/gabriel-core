@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 
 from gabriel.gateway.providers.base import LLMProvider, ProviderNotFoundError
+import contextlib
 
 
 class DuplicateProviderError(Exception):
@@ -92,9 +93,7 @@ def register_default_providers(
         or os.getenv("GABRIEL_OLLAMA_BASE_URL")
         or "http://localhost:11434"
     )
-    try:
+    with contextlib.suppress(DuplicateProviderError):
         target.register(OllamaProvider(base_url=base_url))
-    except DuplicateProviderError:
-        pass
 
     return target

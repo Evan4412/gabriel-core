@@ -18,16 +18,16 @@ Changes
    (``vector_collection`` / ``document_collection`` / ``external``),
    decoupling the knowledge abstraction from the vector store.
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
 import sqlalchemy as sa
 from alembic import op
 
 
 revision: str = "l3a7b9c1d5e6"
-down_revision: Union[str, Sequence[str], None] = "k1e5f7a9b3c4"
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = "k1e5f7a9b3c4"
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:

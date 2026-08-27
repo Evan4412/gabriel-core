@@ -14,9 +14,9 @@ Porting notes (from Gabriel/database/)
 """
 from __future__ import annotations
 
-import json
-from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable, List, Optional
+from datetime import datetime, UTC
+from typing import Any
+from collections.abc import Awaitable, Callable
 
 from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -27,14 +27,14 @@ from gabriel.memory.orm import MemoryEntryORM
 
 
 # Embed function signature: takes a string, returns a float list (can be async).
-EmbedFn = Callable[[str], Awaitable[List[float]]]
+EmbedFn = Callable[[str], Awaitable[list[float]]]
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
-def _vector_literal(vec: List[float]) -> str:
+def _vector_literal(vec: list[float]) -> str:
     """Render float list as pgvector string literal: '[0.1,0.2,...]'."""
     return "[" + ",".join(str(float(x)) for x in vec) + "]"
 
@@ -83,8 +83,8 @@ class PostgresMemoryBackend(MemoryAccessInterface):
         session_factory: async_sessionmaker[AsyncSession],
         *,
         org_id: str,
-        agent_id: Optional[str] = None,
-        embed_fn: Optional[EmbedFn] = None,
+        agent_id: str | None = None,
+        embed_fn: EmbedFn | None = None,
         scope: str = "agent",
     ) -> None:
         self._sessions = session_factory
@@ -108,7 +108,7 @@ class PostgresMemoryBackend(MemoryAccessInterface):
         entry_id = str(uuid7())
 
         # Generate embedding for semantic entries if embed_fn is available
-        embedding: Optional[List[float]] = None
+        embedding: list[float] | None = None
         if entry.layer == MemoryLayer.SEMANTIC and self._embed_fn is not None:
             embedding = await self._embed_fn(str(entry.content))
 
@@ -136,9 +136,9 @@ class PostgresMemoryBackend(MemoryAccessInterface):
     async def retrieve(
         self,
         layer: MemoryLayer,
-        query: Optional[str] = None,
+        query: str | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Fetch entries from a layer with optional keyword filter.
 
         Always scoped to ``org_id`` (and ``agent_id`` when set).
@@ -169,9 +169,9 @@ class PostgresMemoryBackend(MemoryAccessInterface):
     async def search(
         self,
         query: str,
-        layer: Optional[MemoryLayer] = None,
+        layer: MemoryLayer | None = None,
         limit: int = 10,
-    ) -> List[MemoryEntry]:
+    ) -> list[MemoryEntry]:
         """Semantic search using pgvector cosine distance (``<=>``).
 
         Ranks memory entries by relevance to *query*. Requires ``embed_fn``
@@ -218,7 +218,7 @@ class PostgresMemoryBackend(MemoryAccessInterface):
             )
             rows = result.mappings().all()
 
-        entries: List[MemoryEntry] = []
+        entries: list[MemoryEntry] = []
         for row in rows:
             meta = dict(row["metadata"] or {})
             meta.setdefault("_id", row["id"])

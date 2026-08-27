@@ -1,7 +1,7 @@
 """Tests for Core document ingestion (Document-as-Resource + ResourceCreated)."""
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from uuid import uuid4
 from pathlib import Path
 
@@ -38,7 +38,7 @@ def _make_context(org: str = "acme", caps=(Capability.WRITE_RESOURCE,)) -> Execu
         causation_id=None,
         session_id=None,
         resource=None,
-        started_at=datetime.now(timezone.utc),
+        started_at=datetime.now(UTC),
         capabilities=frozenset(c.value for c in caps),
         metadata={},
     )

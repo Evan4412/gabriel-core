@@ -1,5 +1,5 @@
 """Command model: The intent to do something (that may fail)."""
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from typing import Any
 from uuid import uuid4
 
@@ -7,15 +7,15 @@ from pydantic import BaseModel, Field
 
 
 def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class Command(BaseModel):
     """A command representing intent to take an action.
-    
+
     Unlike Events (which already happened and never fail),
     Commands are intent that may fail validation or execution.
-    
+
     The dispatcher routes commands to handlers, which emit events
     if successful or raise exceptions if they fail.
     """
@@ -34,13 +34,13 @@ class Command(BaseModel):
 
     action_name: str | None = None
     """The action being performed (e.g., 'identity:create_user').
-    
+
     Used by PEEL for policy evaluation. If not provided, defaults to command type.
     """
 
     target_resource_grn: str | None = None
     """The resource GRN being targeted by this command.
-    
+
     Used by PEEL for policy evaluation. If not provided, defaults to org wildcard.
     """
 
