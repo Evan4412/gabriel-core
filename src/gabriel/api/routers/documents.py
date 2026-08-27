@@ -57,7 +57,7 @@ def _resolve_embedder(request: Request):
         return None
     try:
         return registry.resolve()
-    except Exception:  # noqa: BLE001 - empty registry → degrade to no vectors
+    except Exception:
         return None
 
 
@@ -277,4 +277,3 @@ async def delete_document(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return

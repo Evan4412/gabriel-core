@@ -65,7 +65,7 @@ class ResourceFactory:
 
             # If model has a create() class method, use it
             if hasattr(descriptor.model, "create") and callable(
-                getattr(descriptor.model, "create")
+                descriptor.model.create
             ):
                 return descriptor.model.create(**kwargs)
 
@@ -116,4 +116,4 @@ class ResourceFactory:
 
 
 # Forward reference for type hints
-from gabriel.resource.registry import ResourceRegistry  # noqa: E402, F401
+from gabriel.resource.registry import ResourceRegistry

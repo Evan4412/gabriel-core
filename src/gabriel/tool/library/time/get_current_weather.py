@@ -36,7 +36,7 @@ async def get_current_weather(location: str, unit: str = "f") -> dict:
         req = request.Request(
             url=url, method="GET", headers={"User-Agent": "Gabriel/2.0"}
         )
-        with request.urlopen(req, timeout=20) as resp:  # noqa: S310
+        with request.urlopen(req, timeout=20) as resp:
             raw = resp.read(250_000).decode("utf-8", errors="replace")
             data = json.loads(raw)
 

@@ -111,14 +111,6 @@ def to_runtime_capabilities(capabilities: list[str]) -> list[str]:
     Unknown capabilities are passed through unchanged so custom capabilities
     are never silently dropped.
     """
-    lowered: list[str] = []
-    for cap in capabilities:
-        lowered.append(AGENT_TO_RUNTIME_CAPABILITY.get(cap, cap))
-    # de-duplicate while preserving order
-    seen: set[str] = set()
-    result: list[str] = []
-    for cap in lowered:
-        if cap not in seen:
-            seen.add(cap)
-            result.append(cap)
-    return result
+    lowered = (AGENT_TO_RUNTIME_CAPABILITY.get(cap, cap) for cap in capabilities)
+    # dict preserves insertion order -> de-duplicates while keeping order
+    return list(dict.fromkeys(lowered))

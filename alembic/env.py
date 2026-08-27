@@ -11,27 +11,27 @@ from alembic import context
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 # Import all ORM models so their tables are registered on Base.metadata.
-from gabriel.database.base import Base  # noqa: E402
-import gabriel.identity.orm  # noqa: E402, F401  # registers PrincipalORM
-import gabriel.organization.orm  # noqa: E402, F401  # registers OrganizationORM
-import gabriel.agent.orm  # noqa: E402, F401  # registers AgentORM
-import gabriel.policy.orm  # noqa: E402, F401  # registers PolicyORM
-import gabriel.tool.orm  # noqa: E402, F401  # registers ToolORM
-import gabriel.events.orm  # noqa: E402, F401  # registers EventORM
-import gabriel.events.projections.audit_projection  # noqa: E402, F401  # registers AuditLogORM
-import gabriel.resource.read_model_orm  # noqa: E402, F401  # registers ResourceReadModelORM
-import gabriel.memory.orm  # noqa: E402, F401  # registers MemoryEntryORM
-import gabriel.integration.orm  # noqa: E402, F401  # registers ExternalIntegrationORM
-import gabriel.user.orm  # noqa: E402, F401  # registers UserORM
-import gabriel.organization.membership_orm  # noqa: E402, F401  # registers OrgMembershipORM
-import gabriel.identity.refresh  # noqa: E402, F401  # registers RefreshTokenORM
-import gabriel.document.orm  # noqa: E402, F401  # registers DocumentORM
-import gabriel.knowledge.chunk_orm  # noqa: E402, F401  # registers DocumentChunkORM
-import gabriel.knowledge.source_orm  # noqa: E402, F401  # registers KnowledgeSourceORM
-import gabriel.conversation.orm  # noqa: E402, F401  # registers ConversationORM
-import gabriel.conversation.message_orm  # noqa: E402, F401  # registers MessageORM
-import gabriel.notification.orm  # noqa: E402, F401  # registers NotificationORM
-import gabriel.memory.layer_orm  # noqa: E402, F401  # registers MemoryLayerEntryORM
+from gabriel.database.base import Base
+import gabriel.identity.orm  # registers PrincipalORM
+import gabriel.organization.orm  # registers OrganizationORM
+import gabriel.agent.orm  # registers AgentORM
+import gabriel.policy.orm  # registers PolicyORM
+import gabriel.tool.orm  # registers ToolORM
+import gabriel.events.orm  # registers EventORM
+import gabriel.events.projections.audit_projection  # registers AuditLogORM
+import gabriel.resource.read_model_orm  # registers ResourceReadModelORM
+import gabriel.memory.orm  # registers MemoryEntryORM
+import gabriel.integration.orm  # registers ExternalIntegrationORM
+import gabriel.user.orm  # registers UserORM
+import gabriel.organization.membership_orm  # registers OrgMembershipORM
+import gabriel.identity.refresh  # registers RefreshTokenORM
+import gabriel.document.orm  # registers DocumentORM
+import gabriel.knowledge.chunk_orm  # registers DocumentChunkORM
+import gabriel.knowledge.source_orm  # registers KnowledgeSourceORM
+import gabriel.conversation.orm  # registers ConversationORM
+import gabriel.conversation.message_orm  # registers MessageORM
+import gabriel.notification.orm  # registers NotificationORM
+import gabriel.memory.layer_orm  # registers MemoryLayerEntryORM
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

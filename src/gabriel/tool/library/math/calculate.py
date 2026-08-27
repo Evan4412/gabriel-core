@@ -28,7 +28,7 @@ async def calculate(expression: str) -> dict:
     safe_globals["min"] = min
     safe_globals["max"] = max
     try:
-        result = eval(expression, {"__builtins__": {}}, safe_globals)  # noqa: S307
+        result = eval(expression, {"__builtins__": {}}, safe_globals)
         return {"expression": expression, "result": result}
     except Exception as exc:
         return {"error": str(exc)}

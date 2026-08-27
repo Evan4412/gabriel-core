@@ -50,7 +50,7 @@ class KnowledgeRetriever:
         if self._registry is not None:
             try:
                 return self._registry.resolve()
-            except Exception:  # noqa: BLE001 - registry may be empty
+            except Exception:
                 return None
         return None
 
@@ -114,7 +114,7 @@ class KnowledgeRetriever:
                 document_grns=document_grns,
                 limit=limit,
             )
-        except Exception:  # noqa: BLE001 - RAG must never break a turn
+        except Exception:
             logger.exception("knowledge retrieval failed; continuing without context")
             return []
 

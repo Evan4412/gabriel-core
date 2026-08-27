@@ -234,7 +234,7 @@ class ToolLibraryIndexer:
         for ep in eps:
             try:
                 fn = ep.load()
-            except Exception:  # noqa: BLE001 - a broken plugin must not break discovery
+            except Exception:
                 logger.warning(
                     "Failed to load tool entry point '%s'", ep.name, exc_info=True
                 )

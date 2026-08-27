@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from gabriel.api.errors import AuthenticationError  # noqa: F401  (re-exported)
+from gabriel.api.errors import AuthenticationError
 from gabriel.identity.exceptions import (
     ExpiredTokenError,
     IdentityError,

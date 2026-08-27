@@ -277,7 +277,7 @@ class ChatRuntimeService:
         allowed_catalog = catalog & enabled
         declared = set(spec.tool_names())
         disabled = set(spec.disabled_tool_names())
-        base = declared if declared else allowed_catalog
+        base = declared or allowed_catalog
         return sorted((base & allowed_catalog) - disabled)
 
     async def _org_enabled_tool_names(
@@ -292,7 +292,7 @@ class ChatRuntimeService:
         """
         try:
             orms = await ToolRepository(session).list_for_org(org_id)
-        except Exception:  # noqa: BLE001 - fail-secure: never widen access
+        except Exception:
             logger.exception(
                 "Tool enablement lookup failed for org %s; "
                 "no tools will be exposed this turn",
@@ -315,7 +315,7 @@ class ChatRuntimeService:
         """
         try:
             orms = await ToolRepository(session).list_for_org(org_id)
-        except Exception:  # noqa: BLE001 - fail-secure
+        except Exception:
             logger.exception("Tool safety lookup failed for org %s", org_id)
             return {}
         safety: dict[str, int] = {}

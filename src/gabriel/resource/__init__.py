@@ -12,6 +12,5 @@ __all__ = [
     "ResourceRegistry",
     "ResourceSerializer",
     "ResourceValidator",
-    "ResourceDescriptor",
     "registry",
 ]

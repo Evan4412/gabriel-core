@@ -175,4 +175,3 @@ async def delete_entry(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return

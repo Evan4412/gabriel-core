@@ -308,7 +308,7 @@ async def execute_tool_call(
             name=call.name,
             content=json.dumps(result, default=str),
         )
-    except Exception as exc:  # noqa: BLE001 — errors are surfaced to the LLM
+    except Exception as exc:
         logger.exception("Runtime tool '%s' failed", call.name)
         error = str(exc)
         return ToolResult(

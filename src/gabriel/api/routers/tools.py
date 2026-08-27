@@ -192,7 +192,6 @@ async def delete_tool(
             )
         except ResourceNotFoundError as exc:
             raise GabrielAPIError(str(exc), status_code=404) from exc
-    return
 
 
 @router.post("/sync", status_code=200)
@@ -231,7 +230,7 @@ async def sync_tools(
                     enabled=True,
                 )
                 created.append(tool.name)
-            except Exception:  # noqa: BLE001
+            except Exception:
                 skipped.append(tool.name)
 
     return {"created": created, "skipped": skipped}

@@ -8,10 +8,10 @@ from gabriel.database.base import Base
 from gabriel.document.content_store import DiskContentStore
 
 # Import all ORM models to register them with Base.metadata
-import gabriel.events.orm  # noqa: F401
-import gabriel.document.orm  # noqa: F401
-import gabriel.knowledge.chunk_orm  # noqa: F401
-import gabriel.knowledge.source_orm  # noqa: F401
+import gabriel.events.orm
+import gabriel.document.orm
+import gabriel.knowledge.chunk_orm
+import gabriel.knowledge.source_orm
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

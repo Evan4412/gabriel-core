@@ -144,7 +144,7 @@ def decline_invitation(
                 "Run: pip install google-api-python-client google-auth"
             ),
         }
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {
             "success": False,
             "event_id": event_id,

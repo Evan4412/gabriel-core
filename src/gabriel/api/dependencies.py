@@ -10,23 +10,23 @@ from fastapi import HTTPException, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-import gabriel.agent.orm  # noqa: F401
-import gabriel.conversation.message_orm  # noqa: F401
-import gabriel.conversation.orm  # noqa: F401
-import gabriel.document.orm  # noqa: F401
-import gabriel.events.orm  # noqa: F401
-import gabriel.events.projections.audit_projection  # noqa: F401
-import gabriel.identity.orm  # noqa: F401
-import gabriel.identity.refresh  # noqa: F401
-import gabriel.knowledge.chunk_orm  # noqa: F401
-import gabriel.knowledge.source_orm  # noqa: F401
-import gabriel.memory.layer_orm  # noqa: F401
-import gabriel.notification.orm  # noqa: F401
-import gabriel.organization.membership_orm  # noqa: F401
-import gabriel.organization.orm  # noqa: F401
-import gabriel.policy.orm  # noqa: F401
-import gabriel.resource.read_model_orm  # noqa: F401
-import gabriel.user.orm  # noqa: F401
+import gabriel.agent.orm
+import gabriel.conversation.message_orm
+import gabriel.conversation.orm
+import gabriel.document.orm
+import gabriel.events.orm
+import gabriel.events.projections.audit_projection
+import gabriel.identity.orm
+import gabriel.identity.refresh
+import gabriel.knowledge.chunk_orm
+import gabriel.knowledge.source_orm
+import gabriel.memory.layer_orm
+import gabriel.notification.orm
+import gabriel.organization.membership_orm
+import gabriel.organization.orm
+import gabriel.policy.orm
+import gabriel.resource.read_model_orm
+import gabriel.user.orm
 from gabriel.api.services.chat import ChatRepository, ChatService
 from gabriel.database.base import Base
 from gabriel.database.session import async_session, engine

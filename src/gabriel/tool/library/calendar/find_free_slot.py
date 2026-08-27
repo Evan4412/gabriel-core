@@ -52,8 +52,8 @@ async def find_free_slot(
         # Normalise busy periods to datetime objects
         busy: list[tuple[datetime, datetime]] = []
         for period in busy_periods:
-            s = datetime.fromisoformat(period["start"].replace("Z", "+00:00"))
-            e = datetime.fromisoformat(period["end"].replace("Z", "+00:00"))
+            s = datetime.fromisoformat(period["start"])
+            e = datetime.fromisoformat(period["end"])
             busy.append((s, e))
 
         duration = timedelta(minutes=duration_minutes)

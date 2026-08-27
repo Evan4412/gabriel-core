@@ -26,9 +26,9 @@ from gabriel.identity.identity_service import (
 )
 from gabriel.identity.repository import PrincipalRepository
 
-import gabriel.organization.orm  # noqa: F401
-import gabriel.identity.orm  # noqa: F401
-import gabriel.events.orm  # noqa: F401
+import gabriel.organization.orm
+import gabriel.identity.orm
+import gabriel.events.orm
 
 
 def _build_production_identity_service(

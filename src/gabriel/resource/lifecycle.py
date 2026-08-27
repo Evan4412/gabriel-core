@@ -23,7 +23,6 @@ class LifecycleManager:
             raise InvalidLifecycleTransitionError(
                 f"Invalid transition from {current} to {target}"
             )
-        return
 
     @staticmethod
     def transition(resource, target: ResourceState, updated_by: str):

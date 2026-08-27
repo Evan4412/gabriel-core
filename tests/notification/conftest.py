@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from gabriel.database.base import Base
 
 # Import all ORM models to register them with Base.metadata
-import gabriel.events.orm  # noqa: F401
-import gabriel.notification.orm  # noqa: F401
+import gabriel.events.orm
+import gabriel.notification.orm
 
 # In-memory SQLite for fast, isolated tests
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

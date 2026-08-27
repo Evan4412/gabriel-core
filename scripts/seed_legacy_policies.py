@@ -53,43 +53,24 @@ def _coerce_tools(value: Any) -> list[str]:
 
 
 def _parse_decision_block(decision: str, payload: Any) -> list[LegacyToolDecision]:
-    rows: list[LegacyToolDecision] = []
     normalized = _normalize_decision(decision)
 
-    if isinstance(payload, dict):
-        for key, value in payload.items():
-            key_str = str(key)
-            if _looks_like_principal(key_str):
-                for tool in _coerce_tools(value):
-                    rows.append(
-                        LegacyToolDecision(
-                            decision=normalized,
-                            principal_match=key_str,
-                            tool_match=tool,
-                        )
-                    )
-                continue
-
-            # Fallback: treat as tool -> principal(s) shape.
-            principals = _coerce_tools(value)
-            for principal in principals:
-                rows.append(
-                    LegacyToolDecision(
-                        decision=normalized,
-                        principal_match=principal,
-                        tool_match=key_str,
-                    )
-                )
-        return rows
-
-    for tool in _coerce_tools(payload):
-        rows.append(
-            LegacyToolDecision(
-                decision=normalized,
-                principal_match="*",
-                tool_match=tool,
-            )
+    def row(principal: str, tool: str) -> LegacyToolDecision:
+        return LegacyToolDecision(
+            decision=normalized, principal_match=principal, tool_match=tool
         )
+
+    if not isinstance(payload, dict):
+        return [row("*", tool) for tool in _coerce_tools(payload)]
+
+    rows: list[LegacyToolDecision] = []
+    for key, value in payload.items():
+        key_str = str(key)
+        if _looks_like_principal(key_str):
+            rows.extend(row(key_str, tool) for tool in _coerce_tools(value))
+        else:
+            # Fallback: treat as tool -> principal(s) shape.
+            rows.extend(row(principal, key_str) for principal in _coerce_tools(value))
     return rows
 
 

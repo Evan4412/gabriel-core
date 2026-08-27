@@ -9,10 +9,10 @@ from gabriel.database.base import Base
 from gabriel.events.audit import PeelEvaluationEvent
 from gabriel.events.projections.audit_projection import AuditProjection
 
-import gabriel.organization.orm  # noqa: F401
-import gabriel.identity.orm  # noqa: F401
-import gabriel.events.orm  # noqa: F401
-import gabriel.events.projections.audit_projection  # noqa: F401
+import gabriel.organization.orm
+import gabriel.identity.orm
+import gabriel.events.orm
+import gabriel.events.projections.audit_projection
 
 
 @pytest.mark.asyncio

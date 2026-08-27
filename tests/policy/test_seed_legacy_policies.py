@@ -12,10 +12,10 @@ from gabriel.policy.engine import EvaluationRequest, PolicyEngine
 from gabriel.policy.repository import PolicyRepository
 from gabriel.policy.service import PolicyService
 
-import gabriel.organization.orm  # noqa: F401
-import gabriel.identity.orm  # noqa: F401
-import gabriel.events.orm  # noqa: F401
-import gabriel.policy.orm  # noqa: F401
+import gabriel.organization.orm
+import gabriel.identity.orm
+import gabriel.events.orm
+import gabriel.policy.orm
 
 
 SEED_SCRIPT_PATH = (
