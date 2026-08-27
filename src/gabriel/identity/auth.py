@@ -4,20 +4,20 @@ Core flow:
   Principal → Issue Token → Verify Token → Recover Principal (as TokenPayload)
 """
 
-from datetime import datetime, timedelta, UTC
+from datetime import UTC, datetime, timedelta
 
 import jwt
 
-from gabriel.identity.principal import Principal
-from gabriel.identity.token import Token, TokenPayload
-from gabriel.identity.keys import KeyManager
 from gabriel.identity.exceptions import (
-    TokenGenerationError,
-    TokenVerificationError,
-    InvalidSignatureError,
     ExpiredTokenError,
     InvalidOrgError,
+    InvalidSignatureError,
+    TokenGenerationError,
+    TokenVerificationError,
 )
+from gabriel.identity.keys import KeyManager
+from gabriel.identity.principal import Principal
+from gabriel.identity.token import Token, TokenPayload
 
 
 class TokenService:

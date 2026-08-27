@@ -21,10 +21,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from gabriel.document.library import DocumentLibraryService
 from gabriel.document.models import Document, DocumentStatus
-from gabriel.logging_config import get_logger
 from gabriel.knowledge.chunking import TextChunker
 from gabriel.knowledge.embeddings import EmbeddingError, EmbeddingProvider
 from gabriel.knowledge.vector_store import ChunkVectorStore
+from gabriel.logging_config import get_logger
 
 logger = get_logger(__name__)
 

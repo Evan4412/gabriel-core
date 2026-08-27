@@ -2,7 +2,6 @@
 
 from gabriel.agent.capabilities import (
     AGENT_TO_RUNTIME_CAPABILITY,
-    AgentCapabilities,
     AgentCapability,
     to_runtime_capabilities,
 )
@@ -43,7 +42,6 @@ from gabriel.agent.validator import AgentValidator
 __all__ = [
     "Agent",
     "AgentORM",
-    "AgentCapabilities",
     "AgentCapability",
     "AGENT_TO_RUNTIME_CAPABILITY",
     "to_runtime_capabilities",

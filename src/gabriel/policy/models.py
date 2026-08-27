@@ -2,10 +2,11 @@
 
 from enum import StrEnum
 from typing import Any
+
 from pydantic import BaseModel, Field
 
-from gabriel.resource.models import Resource, ResourceState, ResourceType
 from gabriel.resource.grn import GRN
+from gabriel.resource.models import Resource, ResourceState, ResourceType
 
 
 class Effect(StrEnum):

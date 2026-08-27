@@ -21,13 +21,13 @@ from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from gabriel.api.dependencies import get_db_session_factory, get_execution_context
-from gabriel.api.schema import DocumentAllowedTypesResponse
 from gabriel.api.errors import GabrielAPIError
+from gabriel.api.schema import DocumentAllowedTypesResponse
 from gabriel.api.tenancy import require_same_org
 from gabriel.document.library import (
+    SUPPORTED_UPLOAD_EXTENSIONS,
     DocumentLibraryService,
     UnsupportedDocumentTypeError,
-    SUPPORTED_UPLOAD_EXTENSIONS,
 )
 from gabriel.document.models import DocumentStatus
 from gabriel.document.normalizer import NormalizationError

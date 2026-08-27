@@ -9,7 +9,7 @@ upgrade to Kafka/NATS without changing callers.
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, JSON, String, Index, text
+from sqlalchemy import JSON, DateTime, Index, String, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from gabriel.database.base import Base

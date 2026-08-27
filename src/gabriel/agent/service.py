@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 from sqlalchemy.exc import IntegrityError
 
 from gabriel.agent.mappers import domain_to_orm, orm_to_domain

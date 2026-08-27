@@ -1,7 +1,7 @@
 """Scoped client: Access to resources within an execution context."""
 
-from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability
+from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.exceptions import CapabilityError
 
 

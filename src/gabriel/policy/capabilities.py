@@ -20,7 +20,6 @@ from __future__ import annotations
 
 from gabriel.identity.models import Capability
 
-
 # Canonical mapping of action verbs to the capability required to perform them.
 # Actions are namespaced as "<domain>:<verb>" and align with the
 # ``action_name`` values dispatched by the API routers.

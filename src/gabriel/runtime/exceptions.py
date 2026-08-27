@@ -5,10 +5,6 @@ class RuntimeError(Exception):
     """Base exception for Gabriel runtime."""
 
 
-class ExecutionContextError(RuntimeError):
-    """Raised when execution context is invalid."""
-
-
 class CapabilityError(RuntimeError):
     """Raised when a capability is missing or invalid."""
 

@@ -14,7 +14,7 @@ working storage), a :class:`MemoryLayerEntry` is a **Universal Resource**
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Any
 

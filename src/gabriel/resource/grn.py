@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from uuid_extensions import uuid7
 
 from gabriel.resource.exceptions import InvalidGRNError

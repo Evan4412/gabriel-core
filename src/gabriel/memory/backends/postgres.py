@@ -15,8 +15,8 @@ Porting notes (from Gabriel/database/)
 
 from __future__ import annotations
 
-from typing import Any
 from collections.abc import Awaitable, Callable
+from typing import Any
 
 from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -24,7 +24,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from gabriel.memory.contract import MemoryAccessInterface
 from gabriel.memory.models import MemoryEntry, MemoryLayer
 from gabriel.memory.orm import MemoryEntryORM
-
 
 # Embed function signature: takes a string, returns a float list (can be async).
 EmbedFn = Callable[[str], Awaitable[list[float]]]

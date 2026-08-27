@@ -23,7 +23,6 @@ from gabriel.policy.engine import Effect
 from gabriel.runtime.context import ExecutionContext
 from gabriel.utils import utcnow as _utcnow
 
-
 _REQUEST_LOG_PATH_ENV = "GABRIEL_REQUEST_LOG_PATH"
 _DEFAULT_REQUEST_LOG_PATH = Path(".gabriel") / "requests.log"
 

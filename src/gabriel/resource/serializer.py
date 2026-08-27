@@ -6,8 +6,8 @@ The serialization path:
 Serializers are pluggable per resource type via descriptor.
 """
 
-from typing import Any
 import json
+from typing import Any
 
 from gabriel.resource.descriptor import ResourceDescriptor
 from gabriel.resource.exceptions import ResourceSerializationError

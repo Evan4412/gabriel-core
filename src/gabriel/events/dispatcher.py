@@ -4,6 +4,7 @@
 
 import asyncio
 import inspect
+from typing import TYPE_CHECKING
 
 from gabriel.events.command import Command
 from gabriel.events.event import Event
@@ -11,7 +12,9 @@ from gabriel.events.event_store import EventStore
 from gabriel.events.exceptions import HandlerNotFoundError
 from gabriel.events.handler import Handler
 from gabriel.events.projection import Projection
-from gabriel.runtime.context import ExecutionContext
+
+if TYPE_CHECKING:
+    from gabriel.runtime.context import ExecutionContext
 
 
 class Dispatcher:
@@ -100,7 +103,7 @@ class Dispatcher:
     # -------------------------------------------------------------------------
 
     async def dispatch(
-        self, command: Command, context: ExecutionContext | None = None
+        self, command: Command, context: "ExecutionContext | None" = None
     ) -> list[Event]:
         """Dispatch a command through the full CQRS pipeline.
 

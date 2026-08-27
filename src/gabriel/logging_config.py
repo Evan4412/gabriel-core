@@ -6,7 +6,6 @@ import os
 from rich.console import Console
 from rich.logging import RichHandler
 
-
 _DEFAULT_LOG_LEVEL = "INFO"
 _DEFAULT_SQL_LOG_LEVEL = "WARNING"
 _LOG_LEVEL_ENV = "GABRIEL_LOG_LEVEL"

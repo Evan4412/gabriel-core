@@ -1,9 +1,10 @@
 """count_words — count words, characters, and sentences in a block of text."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import re
+
+from langchain_core.tools import tool
 
 
 @tool

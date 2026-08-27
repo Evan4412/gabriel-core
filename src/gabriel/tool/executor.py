@@ -33,15 +33,15 @@ from gabriel.events.repository import EventRepository
 from gabriel.logging_config import get_logger
 from gabriel.policy.peel import PEEL
 from gabriel.runtime.context import ExecutionContext
-from gabriel.tool.models import SafetyLevel, Tool
-from gabriel.tool.registry import FunctionRegistry
-from gabriel.tool.service import ToolService
 from gabriel.tool.exceptions import (
     ConfirmationRequiredError,
     SchemaValidationError,
     ToolInvocationError,
     ToolNotFoundError,
 )
+from gabriel.tool.models import SafetyLevel, Tool
+from gabriel.tool.registry import FunctionRegistry
+from gabriel.tool.service import ToolService
 
 logger = get_logger(__name__)
 

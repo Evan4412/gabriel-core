@@ -17,9 +17,5 @@ class HandlerExecutionError(EventsError):
     """Raised when a handler fails during execution."""
 
 
-class ProjectionError(EventsError):
-    """Raised when a projection fails to update."""
-
-
 class InvalidEventError(EventsError):
     """Raised when an event is malformed or invalid."""

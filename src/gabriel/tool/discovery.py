@@ -26,16 +26,16 @@ from __future__ import annotations
 import importlib
 import inspect
 import pkgutil
+from collections.abc import Awaitable, Callable
 from importlib.metadata import entry_points
 from typing import Any
-from collections.abc import Awaitable, Callable
 
 from langchain_core.tools import BaseTool
 
 from gabriel.logging_config import get_logger
 from gabriel.resource.grn import GRN
+from gabriel.tool.models import ExecutionRuntime, SafetyLevel, Tool, ToolCategory
 from gabriel.tool.registry import FunctionRegistry
-from gabriel.tool.models import Tool, ToolCategory, SafetyLevel, ExecutionRuntime
 
 logger = get_logger(__name__)
 

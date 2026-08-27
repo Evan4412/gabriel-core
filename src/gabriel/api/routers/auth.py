@@ -21,8 +21,8 @@ from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from gabriel.api.auth import authenticate_token, extract_bearer_token
-from gabriel.api.errors import AuthenticationError, GabrielAPIError
 from gabriel.api.dependencies import get_db_session_factory, get_identity_service
+from gabriel.api.errors import AuthenticationError, GabrielAPIError
 from gabriel.identity.exceptions import (
     AuthenticationFailedError,
     ProviderNotFoundError,

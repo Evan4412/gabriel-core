@@ -1,9 +1,10 @@
 """encode_base64 — encode a UTF-8 string to Base64."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import base64
+
+from langchain_core.tools import tool
 
 
 @tool

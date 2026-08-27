@@ -1,9 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from gabriel.identity.principal import Principal
+from gabriel.identity.mappers import domain_to_orm, orm_to_domain
 from gabriel.identity.orm import PrincipalORM
-from gabriel.identity.mappers import orm_to_domain, domain_to_orm
+from gabriel.identity.principal import Principal
 
 
 # NOTE: Must always be org-scoped and enforce isolation at the query layer

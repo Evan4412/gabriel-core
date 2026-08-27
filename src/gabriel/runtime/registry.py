@@ -1,5 +1,5 @@
 from gabriel.runtime.contract import AgentRuntime
-from gabriel.runtime.exceptions import RuntimeNotFoundError, DuplicateRuntimeError
+from gabriel.runtime.exceptions import DuplicateRuntimeError, RuntimeNotFoundError
 
 
 class RuntimeRegistry:

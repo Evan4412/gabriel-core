@@ -18,20 +18,20 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from gabriel.api.dependencies import get_db_session_factory, get_execution_context
+from gabriel.api.errors import GabrielAPIError
 from gabriel.api.schema import (
     ToolCreateRequest,
     ToolUpdateRequest,
 )
-from gabriel.api.dependencies import get_db_session_factory, get_execution_context
-from gabriel.api.errors import GabrielAPIError
 from gabriel.api.tenancy import require_same_org
 from gabriel.events.repository import EventRepository
 from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFoundError
 from gabriel.runtime.context import ExecutionContext
+from gabriel.tool.discovery import ToolLibraryIndexer
 from gabriel.tool.models import ExecutionRuntime, SafetyLevel, ToolCategory
 from gabriel.tool.repository import ToolRepository
 from gabriel.tool.service import ToolService
-from gabriel.tool.discovery import ToolLibraryIndexer
 
 router = APIRouter(prefix="/tools", tags=["Tools"])
 

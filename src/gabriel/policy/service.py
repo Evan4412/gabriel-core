@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 from sqlalchemy.exc import IntegrityError
 
 from gabriel.events.event import Event

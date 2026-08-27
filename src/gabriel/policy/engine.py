@@ -1,9 +1,10 @@
 """Policy evaluation engine: Determines if a request is allowed or denied."""
 
 import fnmatch
+
 from pydantic import BaseModel
 
-from gabriel.policy.models import Policy, PolicyStatement, Effect
+from gabriel.policy.models import Effect, Policy, PolicyStatement
 
 
 class EvaluationRequest(BaseModel):

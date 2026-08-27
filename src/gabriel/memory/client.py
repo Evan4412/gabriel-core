@@ -109,8 +109,10 @@ class ScopedMemoryClient:
             return
         try:
             import asyncio
-            from gabriel.events.event import Event
+
             from uuid_extensions import uuid7
+
+            from gabriel.events.event import Event
 
             event = Event(
                 id=str(uuid7()),

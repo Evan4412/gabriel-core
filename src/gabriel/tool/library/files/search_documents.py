@@ -5,9 +5,10 @@ principal's organization.  ``_org_id`` is injected by the ToolExecutor.
 """
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 from pathlib import Path
+
+from langchain_core.tools import tool
 
 
 @tool

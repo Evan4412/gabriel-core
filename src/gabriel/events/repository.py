@@ -5,11 +5,11 @@ Events are append-only and queried by organization, resource, correlation_id,
 and timestamp for audit trails and replays.
 """
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from gabriel.events.orm import EventORM
 from gabriel.events.event import Event
+from gabriel.events.orm import EventORM
 
 
 class EventRepository:

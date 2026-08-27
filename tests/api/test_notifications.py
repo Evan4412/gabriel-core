@@ -115,13 +115,3 @@ def test_notifications_are_recipient_scoped(client, make_auth_headers):
         ).status_code
         == 404
     )
-
-
-def test_legacy_patch_alias_marks_read(client, make_auth_headers):
-    org = _unique_org()
-    headers = make_auth_headers(org=org, identifier="alice")
-    grn = _seed_notification(client, org, _recipient_for(org, "alice"), "Legacy patch")
-
-    response = client.patch(f"/api/v1/notifications/{grn}", headers=headers)
-    assert response.status_code == 200, response.text
-    assert response.json()["read"] is True

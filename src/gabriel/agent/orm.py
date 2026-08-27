@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, JSON
+from sqlalchemy import JSON, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
 from gabriel.database import Base, GabrielResourceMixin

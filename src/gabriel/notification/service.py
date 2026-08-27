@@ -25,7 +25,6 @@ from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
 from gabriel.utils import utcnow
 
-
 # Default headline templates for well-known domain event types. Anything not
 # listed falls back to a generic title derived from the event type.
 _EVENT_TITLES: dict[str, str] = {

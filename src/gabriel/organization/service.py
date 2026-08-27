@@ -1,16 +1,16 @@
 from sqlalchemy.exc import IntegrityError
 
-from gabriel.organization.repository import OrganizationRepository
-from gabriel.organization.models import Organization
+from gabriel.events.event import Event
+from gabriel.events.repository import EventRepository
 from gabriel.organization.mappers import domain_to_orm, orm_to_domain
-from gabriel.resource.models import ResourceState
-from gabriel.resource.grn import GRN
+from gabriel.organization.models import Organization
+from gabriel.organization.repository import OrganizationRepository
+from gabriel.resource.bootstrap import register_core_resource_types
 from gabriel.resource.exceptions import DuplicateResourceError
 from gabriel.resource.factory import ResourceFactory
+from gabriel.resource.grn import GRN
+from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
-from gabriel.resource.bootstrap import register_core_resource_types
-from gabriel.events.repository import EventRepository
-from gabriel.events.event import Event
 
 
 class OrganizationService:

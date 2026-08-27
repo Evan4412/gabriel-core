@@ -1,11 +1,10 @@
 """Execution state and lifecycle management."""
 
-from dataclasses import asdict
-from enum import StrEnum
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from uuid import UUID
+from enum import StrEnum
 from typing import Any
+from uuid import UUID
 
 from gabriel.agent.models import Agent
 from gabriel.events.event import Event

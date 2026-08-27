@@ -15,7 +15,7 @@ This module lives in **Core (Platform Layer)**.
 """
 
 from gabriel.policy.capabilities import required_capability_for_action
-from gabriel.policy.engine import PolicyEngine, EvaluationRequest, Effect
+from gabriel.policy.engine import Effect, EvaluationRequest, PolicyEngine
 from gabriel.policy.exceptions import UnauthorizedError
 from gabriel.resource.exceptions import InvalidGRNError
 from gabriel.resource.grn import GRN

@@ -3,9 +3,9 @@ orm_to_domain and domain_to_orm: parse/serialize PrincipalID.
 Convert set[Capability] to/from list[str] for ORM storage.
 """
 
+from gabriel.identity.orm import PrincipalORM
 from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
-from gabriel.identity.orm import PrincipalORM
 
 
 def orm_to_domain(orm: PrincipalORM) -> Principal:

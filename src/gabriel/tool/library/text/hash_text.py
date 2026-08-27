@@ -1,9 +1,10 @@
 """hash_text — hash a string using a standard algorithm."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import hashlib
+
+from langchain_core.tools import tool
 
 
 @tool

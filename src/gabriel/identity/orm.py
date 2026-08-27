@@ -1,7 +1,7 @@
+from datetime import datetime
+
 from sqlalchemy import JSON, DateTime, ForeignKey, String, text
 from sqlalchemy.orm import Mapped, mapped_column
-
-from datetime import datetime
 
 from gabriel.database.base import Base
 

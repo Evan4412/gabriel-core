@@ -2,29 +2,27 @@
 
 The runtime subsystem implements the execution pipeline:
 
-    command → dispatcher → event → ExecutionContext → Execution → Scheduler
+    command → dispatcher → event → ExecutionContext → Execution →
 
 ExecutionContext is the immutable "process block" that determines what
 a principal can do. Execution tracks the mutable state of a running context.
 """
 
-from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability
-from gabriel.runtime.execution import (
-    ExecutionState,
-    ExecutionContextBuilder,
-    Execution,
-)
-from gabriel.runtime.scheduler import Scheduler
-from gabriel.runtime.scope import ScopedClient
+from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.exceptions import (
-    RuntimeError,
-    ExecutionContextError,
     CapabilityError,
     ExecutionError,
-    SchedulerError,
     InvalidExecutionStateError,
+    RuntimeError,
+    SchedulerError,
 )
+from gabriel.runtime.execution import (
+    Execution,
+    ExecutionContextBuilder,
+    ExecutionState,
+)
+from gabriel.runtime.scope import ScopedClient
 
 __all__ = [
     # Context
@@ -36,12 +34,10 @@ __all__ = [
     "ExecutionContextBuilder",
     "Execution",
     # Scheduling
-    "Scheduler",
     # Scoped access
     "ScopedClient",
     # Exceptions
     "RuntimeError",
-    "ExecutionContextError",
     "CapabilityError",
     "ExecutionError",
     "SchedulerError",

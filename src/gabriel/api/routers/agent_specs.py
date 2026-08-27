@@ -24,8 +24,8 @@ from pydantic import BaseModel, Field
 
 from gabriel.agent.exceptions import AgentValidationError
 from gabriel.api.schema import (
-    AgentSpecTemplate,
     AgentSpecResponse,
+    AgentSpecTemplate,
 )
 from gabriel.api.services.agent_specs import (
     AgentSpecService,

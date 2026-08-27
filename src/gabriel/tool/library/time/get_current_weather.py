@@ -1,10 +1,11 @@
 """get_current_weather — fetch current weather via the free wttr.in JSON API."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import json
 from urllib import error, parse, request
+
+from langchain_core.tools import tool
 
 
 @tool

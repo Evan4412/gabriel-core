@@ -5,8 +5,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from gabriel.identity.models import Capability, PrincipalStatus, PrincipalType
 from gabriel.identity.principal_id import PrincipalID
-from gabriel.identity.models import PrincipalType, PrincipalStatus, Capability
 from gabriel.utils import utcnow
 
 

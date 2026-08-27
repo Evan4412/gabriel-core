@@ -1,9 +1,10 @@
 """roll_dice — roll one or more dice."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import random
+
+from langchain_core.tools import tool
 
 
 @tool

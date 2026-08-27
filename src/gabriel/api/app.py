@@ -3,8 +3,8 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import APIRouter, FastAPI
 from dotenv import load_dotenv
+from fastapi import APIRouter, FastAPI
 
 
 def _load_repo_dotenv() -> None:
@@ -23,24 +23,24 @@ from gabriel.api.dependencies import initialize_gateway_state
 from gabriel.api.errors import register_exception_handlers
 from gabriel.api.middleware import register_middleware
 from gabriel.api.routers import (
-    agents,
     agent_specs,
+    agents,
+    auth,
+    chat,
     conversations,
-    memory_layers,
     documents,
-    knowledge,
     events,
     executions,
     gateway,
     health,
-    auth,
+    knowledge,
     memory,
+    memory_layers,
+    notifications,
     organizations,
     resources,
-    users,
-    chat,
-    notifications,
     tools,
+    users,
 )
 
 

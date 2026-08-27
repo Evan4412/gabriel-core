@@ -1,9 +1,12 @@
 """reply_email — reply to an existing email."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
+
 from email.message import EmailMessage
 from typing import Any
+
+from langchain_core.tools import tool
+
 from gabriel.tool.library.email._email_client import EmailClient
 
 

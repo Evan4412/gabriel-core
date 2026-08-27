@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-
-from gabriel.identity.principal import Principal
 from gabriel.api.schema import ChatSummary
+from gabriel.identity.principal import Principal
 
 
 class ChatRepository:

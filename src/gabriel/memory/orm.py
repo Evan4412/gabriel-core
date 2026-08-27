@@ -16,7 +16,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, Float, Index, JSON, String, Text, text
+from sqlalchemy import JSON, DateTime, Float, Index, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from gabriel.database.base import Base

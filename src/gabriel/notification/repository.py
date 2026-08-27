@@ -6,7 +6,6 @@ recipient privacy: a user only ever sees their own notifications).
 
 from __future__ import annotations
 
-
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 

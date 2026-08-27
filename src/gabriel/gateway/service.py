@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid4
 
@@ -33,8 +33,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from gabriel.agent.mappers import orm_to_domain as agent_orm_to_domain
 from gabriel.agent.models import Agent
-from gabriel.agent.specification import AgentSpecification
 from gabriel.agent.repository import AgentRepository
+from gabriel.agent.specification import AgentSpecification
 from gabriel.conversation.message_models import Message, MessageRole
 from gabriel.conversation.message_service import ConversationClosedError, MessageService
 from gabriel.conversation.models import Conversation

@@ -1,9 +1,12 @@
 """draft_email — save an email to the Drafts folder."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
+
 from email.message import EmailMessage
 from typing import Any
+
+from langchain_core.tools import tool
+
 from gabriel.tool.library.email._email_client import EmailClient
 
 

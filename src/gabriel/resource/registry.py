@@ -12,11 +12,11 @@ This registry is the single source of truth for resource metadata.
 """
 
 from gabriel.resource.descriptor import ResourceDescriptor
-from gabriel.resource.validators import ResourceValidator
-from gabriel.resource.serializer import ResourceSerializer
 from gabriel.resource.exceptions import (
     DuplicateResourceTypeError,
 )
+from gabriel.resource.serializer import ResourceSerializer
+from gabriel.resource.validators import ResourceValidator
 
 
 class ResourceRegistry:

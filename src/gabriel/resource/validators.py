@@ -1,6 +1,7 @@
 """Resource validators that enforce rules on resource creation/updates."""
 
 from typing import Any
+
 from pydantic import ValidationError
 
 from gabriel.resource.descriptor import ResourceDescriptor

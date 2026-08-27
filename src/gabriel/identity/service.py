@@ -14,10 +14,10 @@ from gabriel.identity.exceptions import PrincipalNotFoundError
 from gabriel.identity.models import Capability, PrincipalStatus, PrincipalType
 from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
-from gabriel.resource.grn import GRN
-from gabriel.resource.factory import ResourceFactory
-from gabriel.resource.registry import ResourceRegistry, registry
 from gabriel.resource.bootstrap import register_core_resource_types
+from gabriel.resource.factory import ResourceFactory
+from gabriel.resource.grn import GRN
+from gabriel.resource.registry import ResourceRegistry, registry
 
 
 class PrincipalRepositoryProtocol(Protocol):

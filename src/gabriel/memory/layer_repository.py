@@ -6,7 +6,6 @@ filtered out of reads at the query layer.
 
 from __future__ import annotations
 
-
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 

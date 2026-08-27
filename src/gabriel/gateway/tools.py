@@ -28,9 +28,9 @@ from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
-from collections.abc import Awaitable, Callable
 
 from gabriel.gateway.providers.base import ToolCallRequest
 from gabriel.logging_config import get_logger

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, Enum, Integer, JSON, String
+from sqlalchemy import JSON, DateTime, Enum, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from gabriel.resource.models import ResourceState, ResourceType

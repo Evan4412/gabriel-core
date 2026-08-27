@@ -1,9 +1,10 @@
 """decode_base64 — decode a Base64 string back to UTF-8 text."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import base64
+
+from langchain_core.tools import tool
 
 
 @tool

@@ -5,6 +5,7 @@ from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
+
 from gabriel.utils import utcnow
 
 

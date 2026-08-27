@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from gabriel.identity.principal import Principal
 from gabriel.api.schema import AgentSummary
+from gabriel.identity.principal import Principal
 
 
 class AgentRepository:

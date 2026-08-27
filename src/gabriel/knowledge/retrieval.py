@@ -16,13 +16,13 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from gabriel.gateway.prompt import ContextBlock
-from gabriel.logging_config import get_logger
 from gabriel.knowledge.embeddings import (
     EmbeddingError,
     EmbeddingProvider,
     EmbeddingProviderRegistry,
 )
 from gabriel.knowledge.vector_store import ChunkSearchResult, ChunkVectorStore
+from gabriel.logging_config import get_logger
 
 logger = get_logger("gabriel.knowledge.retrieval")
 

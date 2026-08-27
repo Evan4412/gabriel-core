@@ -1,9 +1,10 @@
 """generate_uuid — generate a random UUID v4."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import uuid
+
+from langchain_core.tools import tool
 
 
 @tool

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-
-from gabriel.identity.principal import Principal
 from gabriel.api.schema import Notification
+from gabriel.identity.principal import Principal
 
 # grn:organization:notification/source:int
 MOCK_NOTIFICATIONS = [

@@ -30,8 +30,6 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
-
 
 class AgentCapability(StrEnum):
     """Canonical capability vocabulary declared by agent specifications.
@@ -124,11 +122,3 @@ def to_runtime_capabilities(capabilities: list[str]) -> list[str]:
             seen.add(cap)
             result.append(cap)
     return result
-
-
-class AgentCapabilities(BaseModel):
-    """Requested capabilities. PEEL determines what is granted."""
-
-    requested: set[str] = Field(default_factory=set)
-
-    model_config = {"frozen": True}

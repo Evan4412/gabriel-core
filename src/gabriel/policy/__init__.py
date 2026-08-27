@@ -8,17 +8,16 @@ Implements:
 - PEEL (enforces policies before command dispatch)
 """
 
-from gabriel.policy.models import Effect, PolicyStatement, Policy
-from gabriel.policy.engine import PolicyEngine, EvaluationRequest
-from gabriel.policy.peel import PEEL
-from gabriel.policy.orm import PolicyORM
-from gabriel.policy.repository import PolicyRepository
-from gabriel.policy.service import PolicyService
+from gabriel.policy.engine import EvaluationRequest, PolicyEngine
 from gabriel.policy.exceptions import (
     PolicyError,
     UnauthorizedError,
-    PolicyEvaluationError,
 )
+from gabriel.policy.models import Effect, Policy, PolicyStatement
+from gabriel.policy.orm import PolicyORM
+from gabriel.policy.peel import PEEL
+from gabriel.policy.repository import PolicyRepository
+from gabriel.policy.service import PolicyService
 
 __all__ = [
     # Models
@@ -36,5 +35,4 @@ __all__ = [
     # Exceptions
     "PolicyError",
     "UnauthorizedError",
-    "PolicyEvaluationError",
 ]

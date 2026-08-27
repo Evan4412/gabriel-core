@@ -12,10 +12,10 @@ provider the registry's ``default_provider`` is used.
 
 from __future__ import annotations
 
+import contextlib
 import os
 
 from gabriel.gateway.providers.base import LLMProvider, ProviderNotFoundError
-import contextlib
 
 
 class DuplicateProviderError(Exception):

@@ -14,10 +14,10 @@ from gabriel.resource.factory import ResourceFactory
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
+from gabriel.tool.discovery import ToolLibraryIndexer
 from gabriel.tool.mappers import domain_to_orm, orm_to_domain
 from gabriel.tool.models import ExecutionRuntime, SafetyLevel, Tool, ToolCategory
 from gabriel.tool.repository import ToolRepository
-from gabriel.tool.discovery import ToolLibraryIndexer
 from gabriel.utils import utcnow as _utcnow
 
 

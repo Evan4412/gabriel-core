@@ -28,7 +28,6 @@ from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.providers.base import AuthenticationResult, IdentityProvider
 
-
 ORGANIZATIONS = [
     {"id": "org_harbor", "name": "Harbor Mutual Insurance", "plan": "Pilot"},
     {"id": "org_thread", "name": "Thread & Needle Custom Clothing", "plan": "Pilot"},

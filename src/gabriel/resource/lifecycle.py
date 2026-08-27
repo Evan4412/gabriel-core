@@ -1,5 +1,5 @@
-from gabriel.resource.models import ResourceState
 from gabriel.resource.exceptions import InvalidLifecycleTransitionError
+from gabriel.resource.models import ResourceState
 
 # Define which transitions are permitted
 ALLOWED_TRANSITIONS: dict[ResourceState, set[ResourceState]] = {

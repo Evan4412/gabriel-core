@@ -16,7 +16,6 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Any
 
-
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import Resource, ResourceState, ResourceType
 

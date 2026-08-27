@@ -1,6 +1,7 @@
 """list_tools — enumerate registered tool bindings from the FunctionRegistry."""
 
 from __future__ import annotations
+
 from langchain_core.tools import tool
 
 

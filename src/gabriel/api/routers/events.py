@@ -5,15 +5,15 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 
-from gabriel.runtime.context import ExecutionContext
-from gabriel.api.schema import EventListResponse, EventResponse
 from gabriel.api.dependencies import (
-    GatewayService,
     EventStreamer,
-    get_gateway_service,
-    get_current_context,
+    GatewayService,
     get_event_streamer,
+    get_execution_context,
+    get_gateway_service,
 )
+from gabriel.api.schema import EventListResponse, EventResponse
+from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/events", tags=["Events"])
 
@@ -31,7 +31,7 @@ async def get_events(
 
 @router.get("/stream")
 async def stream_events(
-    context: ExecutionContext = Depends(get_current_context),
+    context: ExecutionContext = Depends(get_execution_context),
     streamer: EventStreamer = Depends(get_event_streamer),
 ) -> StreamingResponse:
     return StreamingResponse(
@@ -47,7 +47,7 @@ async def query_audit_log(
     principal_id: str | None = Query(default=None),
     decision: str | None = Query(default=None, pattern="^(allow|deny)$"),
     limit: int = Query(default=200, ge=1, le=1000),
-    context: ExecutionContext = Depends(get_current_context),
+    context: ExecutionContext = Depends(get_execution_context),
     service: GatewayService = Depends(get_gateway_service),
 ) -> EventListResponse:
     events = await service.query_audit_log(

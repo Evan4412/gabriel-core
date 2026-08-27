@@ -1,9 +1,10 @@
 """random_number — generate a random float in a range."""
 
 from __future__ import annotations
-from langchain_core.tools import tool
 
 import random
+
+from langchain_core.tools import tool
 
 
 @tool

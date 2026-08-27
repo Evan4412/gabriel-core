@@ -19,9 +19,9 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
+from gabriel.database.session import async_session
 from gabriel.identity.auth import TokenService
 from gabriel.identity.config import IdentitySettings
-from gabriel.database.session import async_session
 from gabriel.identity.exceptions import IdentityConfigurationError
 from gabriel.identity.keys import KeyManager
 from gabriel.identity.models import Capability, PrincipalStatus, PrincipalType

@@ -1,64 +1,61 @@
 from __future__ import annotations
 
-from pathlib import Path
-from dataclasses import dataclass, field
-from typing import Any
 from collections.abc import AsyncGenerator
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from fastapi import HTTPException, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from gabriel.events import Command, Dispatcher, EventStore, Handler
-from gabriel.events.exceptions import CommandValidationError
-from gabriel.events.event import Event
-from gabriel.events.resource_projection import ResourceReadModelProjection
-from gabriel.events.projections.audit_projection import AuditProjection
-from gabriel.events.sql_event_store import SqlAlchemyEventStore
+import gabriel.agent.orm  # noqa: F401
+import gabriel.conversation.message_orm  # noqa: F401
+import gabriel.conversation.orm  # noqa: F401
+import gabriel.document.orm  # noqa: F401
+import gabriel.events.orm  # noqa: F401
+import gabriel.events.projections.audit_projection  # noqa: F401
+import gabriel.identity.orm  # noqa: F401
+import gabriel.identity.refresh  # noqa: F401
+import gabriel.knowledge.chunk_orm  # noqa: F401
+import gabriel.knowledge.source_orm  # noqa: F401
+import gabriel.memory.layer_orm  # noqa: F401
+import gabriel.notification.orm  # noqa: F401
+import gabriel.organization.membership_orm  # noqa: F401
+import gabriel.organization.orm  # noqa: F401
+import gabriel.policy.orm  # noqa: F401
+import gabriel.resource.read_model_orm  # noqa: F401
+import gabriel.user.orm  # noqa: F401
+from gabriel.api.services.chat import ChatRepository, ChatService
 from gabriel.database.base import Base
 from gabriel.database.session import async_session, engine
-
-from gabriel.api.services.chat import ChatService, ChatRepository
-
-from gabriel.identity.identity_service import (
-    IdentityService,
-    build_default_identity_service,
-)
+from gabriel.events import Command, Dispatcher, EventStore, Handler
+from gabriel.events.event import Event
+from gabriel.events.exceptions import CommandValidationError
+from gabriel.events.projections.audit_projection import AuditProjection
+from gabriel.events.resource_projection import ResourceReadModelProjection
+from gabriel.events.sql_event_store import SqlAlchemyEventStore
 from gabriel.gateway.providers.registry import (
     ProviderRegistry,
     register_default_providers,
 )
 from gabriel.gateway.sessions import SessionManager
 from gabriel.gateway.tools import build_default_tool_registry
+from gabriel.identity.identity_service import (
+    IdentityService,
+    build_default_identity_service,
+)
+from gabriel.logging_config import get_logger
 from gabriel.policy.engine import PolicyEngine
 from gabriel.policy.models import PolicyStatement
 from gabriel.policy.peel import PEEL
 from gabriel.policy.repository import PolicyRepository
+from gabriel.policy.service import PolicyService
+from gabriel.resource.grn import GRN
+from gabriel.runtime.context import ExecutionContext
 from gabriel.tool.discovery import tool_indexer
 from gabriel.tool.registry import function_registry
-from gabriel.policy.service import PolicyService
-from gabriel.runtime.context import ExecutionContext
-from gabriel.resource.grn import GRN
-from gabriel.logging_config import get_logger
-import gabriel.events.orm  # noqa: F401
-import gabriel.resource.read_model_orm  # noqa: F401
-import gabriel.events.projections.audit_projection  # noqa: F401
-import gabriel.policy.orm  # noqa: F401
-import gabriel.organization.orm  # noqa: F401
-import gabriel.organization.membership_orm  # noqa: F401
-import gabriel.identity.orm  # noqa: F401
-import gabriel.identity.refresh  # noqa: F401
-import gabriel.user.orm  # noqa: F401
-import gabriel.agent.orm  # noqa: F401
-import gabriel.conversation.orm  # noqa: F401
-import gabriel.conversation.message_orm  # noqa: F401
-import gabriel.notification.orm  # noqa: F401
-import gabriel.memory.layer_orm  # noqa: F401
-import gabriel.document.orm  # noqa: F401
-import gabriel.knowledge.chunk_orm  # noqa: F401
-import gabriel.knowledge.source_orm  # noqa: F401
-
 
 logger = get_logger(__name__)
 
@@ -206,21 +203,18 @@ class GatewayService:
         return self.state.event_store.events()
 
     def get_event(self, event_id: str) -> Event | None:
-        for event in self.state.event_store.events():
-            if event.id == event_id:
-                return event
-        return None
+        return next(
+            (e for e in self.state.event_store.events() if e.id == event_id), None
+        )
 
     def get_resource(self, grn: str) -> dict[str, Any] | None:
         return self.state.resource_projection.get_resource(grn)
 
     def get_agent(self, grn: str) -> dict[str, Any] | None:
         resource = self.state.resource_projection.get_resource(grn)
-        if not resource:
-            return None
-        if resource.get("resource_type") != "agent":
-            return None
-        return resource
+        return (
+            resource if resource and resource.get("resource_type") == "agent" else None
+        )
 
     def list_resources(
         self,
@@ -292,11 +286,6 @@ class EventStreamer:
                     yield f"data: {event.model_dump_json()}\n\n"
         finally:
             self.dispatcher.unsubscribe(queue)
-
-
-def get_current_context(request: Request) -> ExecutionContext:
-    """Alias for get_execution_context — used by streaming endpoints."""
-    return get_execution_context(request)
 
 
 def get_event_streamer(request: Request) -> EventStreamer:

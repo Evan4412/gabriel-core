@@ -1,12 +1,12 @@
 """Execution context: The immutable "process" of Gabriel."""
 
+import json
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
-import json
 
-from gabriel.resource.grn import GRN
 from gabriel.identity.principal import Principal
+from gabriel.resource.grn import GRN
 
 
 @dataclass(frozen=True)

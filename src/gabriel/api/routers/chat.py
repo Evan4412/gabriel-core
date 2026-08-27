@@ -2,16 +2,16 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, status
 
-from gabriel.runtime.context import ExecutionContext
-from gabriel.api.services.chat import ChatService
 from gabriel.api.dependencies import (
-    get_gateway_service,
-    get_execution_context,
-    get_chat_service,
-    build_command,
     GatewayService,
+    build_command,
+    get_chat_service,
+    get_execution_context,
+    get_gateway_service,
 )
-from gabriel.api.schema import ChatSummaryResponse, ChatCreateRequest, ResourceResponse
+from gabriel.api.schema import ChatCreateRequest, ChatSummaryResponse, ResourceResponse
+from gabriel.api.services.chat import ChatService
+from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 

@@ -3,7 +3,6 @@
     GET   /notifications                  — paginated listing (?unread_only=&limit=&offset=)
     POST  /notifications/read-all         — mark all of the caller's notifications read
     POST  /notifications/{grn}/read       — mark a single notification read
-    PATCH /notifications/{grn}            — legacy alias for marking read
 
 The caller's recipient identity resolves to their User GRN when a user record
 exists for the authenticated principal, falling back to the principal id
@@ -104,14 +103,4 @@ async def mark_read(
     context: ExecutionContext = Depends(get_execution_context),
     session_factory: async_sessionmaker[AsyncSession] = Depends(get_db_session_factory),
 ):
-    return await _mark_one_read(grn, context, session_factory)
-
-
-@router.patch("/{grn:path}")
-async def mark_read_legacy(
-    grn: str,
-    context: ExecutionContext = Depends(get_execution_context),
-    session_factory: async_sessionmaker[AsyncSession] = Depends(get_db_session_factory),
-):
-    """Legacy alias kept for backwards compatibility with earlier clients."""
     return await _mark_one_read(grn, context, session_factory)

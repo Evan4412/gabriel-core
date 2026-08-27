@@ -10,7 +10,3 @@ class UnauthorizedError(PolicyError):
 
     This is the result of PEEL evaluation returning DENY.
     """
-
-
-class PolicyEvaluationError(PolicyError):
-    """Raised when policy evaluation itself fails (not authorization failure)."""
