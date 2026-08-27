@@ -9,7 +9,6 @@ never themselves turned into notifications).
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,10 +23,7 @@ from gabriel.resource.factory import ResourceFactory
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 # Default headline templates for well-known domain event types. Anything not

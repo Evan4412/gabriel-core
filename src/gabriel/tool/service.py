@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from typing import Any
 
 from sqlalchemy.exc import IntegrityError
@@ -19,10 +18,7 @@ from gabriel.tool.mappers import domain_to_orm, orm_to_domain
 from gabriel.tool.models import ExecutionRuntime, SafetyLevel, Tool, ToolCategory
 from gabriel.tool.repository import ToolRepository
 from gabriel.tool.discovery import ToolLibraryIndexer
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow as _utcnow
 
 
 class ToolService:

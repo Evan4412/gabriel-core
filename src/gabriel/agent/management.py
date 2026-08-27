@@ -19,7 +19,6 @@ unchanged. Status maps onto the Resource lifecycle:
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from enum import StrEnum
 from typing import Any
 
@@ -36,10 +35,7 @@ from gabriel.events.repository import EventRepository
 from gabriel.resource.exceptions import DuplicateResourceError
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class AgentStatus(StrEnum):

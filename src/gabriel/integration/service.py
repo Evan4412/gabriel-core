@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from typing import Any
 
 from sqlalchemy.exc import IntegrityError
@@ -15,10 +14,7 @@ from gabriel.integration.repository import ExternalIntegrationRepository
 from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFoundError
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow as _utcnow
 
 
 class ExternalIntegrationService:

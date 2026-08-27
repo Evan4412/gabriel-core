@@ -1,14 +1,11 @@
 """Command model: The intent to do something (that may fail)."""
 
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class Command(BaseModel):

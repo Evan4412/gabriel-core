@@ -5,7 +5,6 @@ import inspect
 import json
 import logging
 import os
-from datetime import datetime, UTC
 from pathlib import Path
 from uuid import UUID, uuid4
 
@@ -22,6 +21,7 @@ from gabriel.events.audit import PeelEvaluationEvent
 from gabriel.logging_config import get_logger
 from gabriel.policy.engine import Effect
 from gabriel.runtime.context import ExecutionContext
+from gabriel.utils import utcnow as _utcnow
 
 
 _REQUEST_LOG_PATH_ENV = "GABRIEL_REQUEST_LOG_PATH"
@@ -45,10 +45,6 @@ def _build_request_logger() -> logging.Logger:
 
 
 _REQUEST_LOGGER = _build_request_logger()
-
-
-def _utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 def _encode_request_body(body: bytes) -> tuple[str, str]:

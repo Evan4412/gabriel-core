@@ -1,16 +1,13 @@
 """Principal: The universal identity object in Gabriel."""
 
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.models import PrincipalType, PrincipalStatus, Capability
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class Principal(BaseModel):

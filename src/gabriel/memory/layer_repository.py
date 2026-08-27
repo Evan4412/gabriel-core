@@ -6,17 +6,13 @@ filtered out of reads at the query layer.
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gabriel.memory.layer_orm import MemoryLayerEntryORM
 from gabriel.resource.exceptions import ResourceNotFoundError
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 def _not_expired():

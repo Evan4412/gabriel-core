@@ -1,13 +1,10 @@
 """Token and TokenPayload: JWT-based cryptographic identity verification."""
 
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class TokenPayload(BaseModel):

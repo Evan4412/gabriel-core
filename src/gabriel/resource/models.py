@@ -1,14 +1,11 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import Any
 from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 from gabriel.resource.grn import GRN
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class ResourceState(StrEnum):

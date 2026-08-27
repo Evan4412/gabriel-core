@@ -20,7 +20,6 @@ from __future__ import annotations
 import hashlib
 import tempfile
 import time
-from datetime import datetime, UTC
 from pathlib import Path
 from typing import Any
 
@@ -46,10 +45,6 @@ SUPPORTED_UPLOAD_EXTENSIONS = {".pdf", ".txt", ".md", ".markdown", ".docx"}
 _TEMPFILE_UNLINK_RETRIES = 5
 _TEMPFILE_UNLINK_BACKOFF_SECONDS = 0.05
 logger = get_logger(__name__)
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 class UnsupportedDocumentTypeError(Exception):

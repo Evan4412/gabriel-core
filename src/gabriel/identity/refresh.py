@@ -29,12 +29,9 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from gabriel.database.base import Base
 from gabriel.identity.exceptions import AuthenticationFailedError
+from gabriel.utils import utcnow
 
 DEFAULT_REFRESH_TTL_SECONDS = 30 * 24 * 3600  # 30 days
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
 
 
 def _hash_token(raw: str) -> str:

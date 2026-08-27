@@ -6,17 +6,13 @@ recipient privacy: a user only ever sees their own notifications).
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gabriel.notification.orm import NotificationORM
 from gabriel.resource.exceptions import ResourceNotFoundError
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class NotificationRepository:

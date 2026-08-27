@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, UTC
 
 from sqlalchemy.exc import IntegrityError
 
@@ -18,10 +17,7 @@ from gabriel.resource.factory import ResourceFactory
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 class AgentService:

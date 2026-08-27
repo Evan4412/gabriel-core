@@ -3,7 +3,7 @@
 from dataclasses import asdict
 from enum import StrEnum
 from dataclasses import dataclass, field
-from datetime import datetime, UTC
+from datetime import datetime
 from uuid import UUID
 from typing import Any
 
@@ -12,10 +12,7 @@ from gabriel.events.event import Event
 from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.exceptions import InvalidExecutionStateError
 from gabriel.runtime.registry import RuntimeRegistry
-
-
-def utcnow() -> datetime:
-    return datetime.now(UTC)
+from gabriel.utils import utcnow
 
 
 @dataclass(frozen=True)
