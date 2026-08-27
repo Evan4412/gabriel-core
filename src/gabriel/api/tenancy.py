@@ -4,6 +4,7 @@ Previously every router carried its own copy of ``_require_same_org`` (eight
 duplicates). This module is the single source of truth (ADR-011 module
 boundary hygiene; F-001 tenant isolation at the API edge).
 """
+
 from __future__ import annotations
 
 from gabriel.api.errors import GabrielAPIError
@@ -25,7 +26,5 @@ def require_same_org(context: ExecutionContext, grn_str: str) -> GRN:
     except Exception as exc:
         raise GabrielAPIError(f"Invalid GRN '{grn_str}'", status_code=422) from exc
     if grn.org_id != context.organization:
-        raise GabrielAPIError(
-            "Cross-organization access is forbidden", status_code=403
-        )
+        raise GabrielAPIError("Cross-organization access is forbidden", status_code=403)
     return grn

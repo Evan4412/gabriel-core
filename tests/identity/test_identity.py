@@ -1,4 +1,5 @@
 """Comprehensive tests for Principal and TokenService."""
+
 import pytest
 
 from gabriel.identity import (
@@ -64,7 +65,9 @@ class TestPrincipal:
 
     def test_principal_creation(self):
         """Test creating a Principal."""
-        pid = PrincipalID(org_id="acme", principal_type="user", principal_identifier="alice")
+        pid = PrincipalID(
+            org_id="acme", principal_type="user", principal_identifier="alice"
+        )
         principal = Principal(
             id=pid,
             organization_id="acme",
@@ -78,7 +81,9 @@ class TestPrincipal:
 
     def test_principal_capabilities_check(self):
         """Test capability checking."""
-        pid = PrincipalID(org_id="acme", principal_type="agent", principal_identifier="bot")
+        pid = PrincipalID(
+            org_id="acme", principal_type="agent", principal_identifier="bot"
+        )
         principal = Principal(
             id=pid,
             organization_id="acme",
@@ -91,7 +96,9 @@ class TestPrincipal:
 
     def test_principal_status(self):
         """Test principal status checking."""
-        pid = PrincipalID(org_id="acme", principal_type="user", principal_identifier="bob")
+        pid = PrincipalID(
+            org_id="acme", principal_type="user", principal_identifier="bob"
+        )
         principal = Principal(
             id=pid,
             organization_id="acme",
@@ -104,7 +111,9 @@ class TestPrincipal:
 
     def test_principal_immutable(self):
         """Test Principal is immutable."""
-        pid = PrincipalID(org_id="acme", principal_type="user", principal_identifier="alice")
+        pid = PrincipalID(
+            org_id="acme", principal_type="user", principal_identifier="alice"
+        )
         principal = Principal(
             id=pid,
             organization_id="acme",
@@ -131,7 +140,9 @@ class TestTokenService:
     @pytest.fixture
     def principal(self):
         """Fixture: A sample principal."""
-        pid = PrincipalID(org_id="acme", principal_type="user", principal_identifier="alice")
+        pid = PrincipalID(
+            org_id="acme", principal_type="user", principal_identifier="alice"
+        )
         return Principal(
             id=pid,
             organization_id="acme",

@@ -3,6 +3,7 @@
 Messages are append-only; there is no update or delete path. Listing is
 paginated per conversation in chronological order.
 """
+
 from __future__ import annotations
 
 from sqlalchemy import func, select

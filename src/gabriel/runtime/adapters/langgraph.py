@@ -7,7 +7,11 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.graph import END, StateGraph
 
 from gabriel.runtime.contract import AgentRuntime
-from gabriel.runtime.execution import ExecutionMetrics, ExecutionRequest, ExecutionResult
+from gabriel.runtime.execution import (
+    ExecutionMetrics,
+    ExecutionRequest,
+    ExecutionResult,
+)
 from gabriel.events.dispatcher import Dispatcher
 from gabriel.events.event import Event
 

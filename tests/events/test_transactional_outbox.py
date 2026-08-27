@@ -1,4 +1,5 @@
 """Tests for transactional outbox pattern (ADR-017): event emission atomicity."""
+
 import pytest
 from gabriel.organization.repository import OrganizationRepository
 from gabriel.organization.service import OrganizationService
@@ -42,7 +43,6 @@ async def test_org_creation_emits_resource_created_event(db_session):
 async def test_principal_creation_emits_resource_created_event(db_session):
     """Test that creating a principal emits exactly one resource_created event."""
     register_core_resource_types()
-
 
     principal_repo = PrincipalRepository(db_session)
     event_repo = EventRepository(db_session)
@@ -109,7 +109,6 @@ async def test_multiple_creates_emit_multiple_events(db_session):
     """Test that multiple resource creates emit corresponding events."""
     register_core_resource_types()
 
-
     org_repo = OrganizationRepository(db_session)
     principal_repo = PrincipalRepository(db_session)
     event_repo = EventRepository(db_session)
@@ -143,7 +142,6 @@ async def test_multiple_creates_emit_multiple_events(db_session):
 async def test_events_by_resource_grn(db_session):
     """Test that we can efficiently query events by resource GRN."""
     register_core_resource_types()
-
 
     org_repo = OrganizationRepository(db_session)
     principal_repo = PrincipalRepository(db_session)
@@ -216,7 +214,6 @@ async def test_event_payload_contains_resource_info(db_session):
 async def test_event_grn_matches_resource_grn(db_session):
     """Test that event.resource_grn exactly matches the created resource's GRN."""
     register_core_resource_types()
-
 
     org_repo = OrganizationRepository(db_session)
     principal_repo = PrincipalRepository(db_session)

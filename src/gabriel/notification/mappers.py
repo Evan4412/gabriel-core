@@ -1,4 +1,5 @@
 """Mappers between Domain (Notification) and Persistence (NotificationORM)."""
+
 from gabriel.notification.models import Notification
 from gabriel.notification.orm import NotificationORM
 from gabriel.resource.grn import GRN

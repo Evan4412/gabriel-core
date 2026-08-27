@@ -1,4 +1,5 @@
 """get_thread — retrieve all emails in a thread by matching subject."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any
@@ -34,7 +35,10 @@ async def get_thread(
         subject = client.decode_header_value(original["Subject"])
         # Strip Re:/Fwd: prefixes for better matching
         import re
-        clean_subject = re.sub(r"^(Re:|Fwd:)\s*", "", subject, flags=re.IGNORECASE).strip()
+
+        clean_subject = re.sub(
+            r"^(Re:|Fwd:)\s*", "", subject, flags=re.IGNORECASE
+        ).strip()
 
         imap = client.select_folder()
         _, data = imap.search(None, f'(SUBJECT "{clean_subject}")')
@@ -43,12 +47,14 @@ async def get_thread(
             msg = client.fetch_email(item)
             if msg is None:
                 continue
-            thread_emails.append({
-                "id": item.decode() if isinstance(item, bytes) else item,
-                "from": msg["From"],
-                "subject": client.decode_header_value(msg["Subject"]),
-                "date": msg["Date"],
-            })
+            thread_emails.append(
+                {
+                    "id": item.decode() if isinstance(item, bytes) else item,
+                    "from": msg["From"],
+                    "subject": client.decode_header_value(msg["Subject"]),
+                    "date": msg["Date"],
+                }
+            )
         client.close()
         return {"thread": thread_emails, "count": len(thread_emails)}
     except Exception as exc:

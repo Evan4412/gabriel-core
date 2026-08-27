@@ -99,7 +99,9 @@ class AgentSpecService:
         self._validator.validate(spec.model_copy(update={"tools": spec.tool_names()}))
         return spec
 
-    def resolve_tool_grns(self, spec: AgentSpecification, version: int = 1) -> list[str]:
+    def resolve_tool_grns(
+        self, spec: AgentSpecification, version: int = 1
+    ) -> list[str]:
         """Resolve a spec's (wildcard) tool bindings to concrete org-scoped GRNs."""
         return spec.resolved_tools(self.org_id, version)
 

@@ -28,14 +28,18 @@ class ToolORM(Base, GabrielResourceMixin):
     category: Mapped[str] = mapped_column(String(64), nullable=False)
 
     # Input schema for the function in each python script.
-    parameters: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
+    parameters: Mapped[dict[str, Any]] = mapped_column(
+        JSON, nullable=False, default=dict
+    )
 
     # Stored as int (0 = SAFE, 1 = REQUIRES_CONFIRMATION, 2 = RESTRICTED)
     safety_level: Mapped[int] = mapped_column(nullable=False, default=0)
 
     # Dot-path key resolved by FunctionRegistry / ToolExecutor at runtime.
     # e.g. "math.calculate", "integration.gmail.send_email"
-    runtime_binding: Mapped[str] = mapped_column(String(255), nullable=False, default="")
+    runtime_binding: Mapped[str] = mapped_column(
+        String(255), nullable=False, default=""
+    )
 
     # Declared execution location (enum string value: local/enterprise/cloud/edge).
     # V1 is declaration-only — no runtime routing consumes this yet.

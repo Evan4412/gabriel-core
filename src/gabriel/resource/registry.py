@@ -227,9 +227,9 @@ class ResourceRegistry:
         result = []
         for i, char in enumerate(name):
             if char.isupper() and i > 0:
-                result.append('_')
+                result.append("_")
             result.append(char.lower())
-        return ''.join(result)
+        return "".join(result)
 
 
 # Global registry instance

@@ -11,6 +11,7 @@ working storage), a :class:`MemoryLayerEntry` is a **Universal Resource**
 * ``tags`` — free-form labels for retrieval;
 * ``expires_at`` — optional TTL after which the entry is treated as gone.
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC

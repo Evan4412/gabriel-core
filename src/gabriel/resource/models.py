@@ -12,29 +12,31 @@ def utcnow() -> datetime:
 
 
 class ResourceState(StrEnum):
-    DRAFT      = "draft"
-    ACTIVE     = "active"
-    SUSPENDED  = "suspended"
+    DRAFT = "draft"
+    ACTIVE = "active"
+    SUSPENDED = "suspended"
     DEPRECATED = "deprecated"
-    DELETED    = "deleted"
+    DELETED = "deleted"
+
 
 class ResourceType(StrEnum):
     ORGANIZATION = "organization"
-    USER         = "user"
-    AGENT        = "agent"
-    TOOL         = "tool"
-    POLICY       = "policy"
-    MEMORY       = "memory"
-    MODEL        = "model"
-    SOLUTION     = "solution"
-    WORKFLOW     = "workflow"
-    CONNECTOR    = "connector"
-    DOCUMENT     = "document"
-    FILE         = "file"
+    USER = "user"
+    AGENT = "agent"
+    TOOL = "tool"
+    POLICY = "policy"
+    MEMORY = "memory"
+    MODEL = "model"
+    SOLUTION = "solution"
+    WORKFLOW = "workflow"
+    CONNECTOR = "connector"
+    DOCUMENT = "document"
+    FILE = "file"
     CONVERSATION = "conversation"
-    MESSAGE      = "message"
+    MESSAGE = "message"
     NOTIFICATION = "notification"
     KNOWLEDGE_SOURCE = "knowledge_source"
+
 
 class Resource(BaseModel):
     grn: GRN
@@ -52,7 +54,7 @@ class Resource(BaseModel):
     model_config = {"frozen": True}
 
     def with_state(self, new_state: ResourceState, updated_by: str) -> "Resource":
-        """ Returns a new Resource with updated state, updated_at, updated_by"""
+        """Returns a new Resource with updated state, updated_at, updated_by"""
         return self.model_copy(
             update={
                 "state": new_state,

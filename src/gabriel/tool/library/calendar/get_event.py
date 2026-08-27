@@ -1,4 +1,5 @@
 """get_event — retrieve a single calendar event by ID."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any
@@ -31,8 +32,10 @@ async def get_event(
             "summary": event.get("summary"),
             "description": event.get("description"),
             "location": event.get("location"),
-            "start": event.get("start", {}).get("dateTime") or event.get("start", {}).get("date"),
-            "end": event.get("end", {}).get("dateTime") or event.get("end", {}).get("date"),
+            "start": event.get("start", {}).get("dateTime")
+            or event.get("start", {}).get("date"),
+            "end": event.get("end", {}).get("dateTime")
+            or event.get("end", {}).get("date"),
             "attendees": [a.get("email") for a in event.get("attendees", [])],
             "status": event.get("status"),
             "html_link": event.get("htmlLink"),

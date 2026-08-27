@@ -15,6 +15,7 @@ Changes
 4. Create indexes for tenant-scoped and agent-scoped queries.
 5. Create an HNSW index on the embedding column for efficient ANN search.
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -52,7 +53,9 @@ def upgrade() -> None:
             "created_at",
             sa.DateTime(timezone=True),
             nullable=False,
-            server_default=sa.text("now()") if is_postgresql else sa.text("CURRENT_TIMESTAMP"),
+            server_default=sa.text("now()")
+            if is_postgresql
+            else sa.text("CURRENT_TIMESTAMP"),
         ),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
     )
@@ -60,19 +63,17 @@ def upgrade() -> None:
     # 3. Add embedding column as pgvector type (PostgreSQL) or JSON fallback (SQLite)
     #    Using raw DDL because SQLAlchemy doesn't know the vector type without pgvector lib.
     if is_postgresql:
-        op.execute(
-            "ALTER TABLE memory_entries ADD COLUMN embedding vector(1536)"
-        )
+        op.execute("ALTER TABLE memory_entries ADD COLUMN embedding vector(1536)")
     else:
         # SQLite: store embedding as JSON array (no vector similarity index support)
-        op.execute(
-            "ALTER TABLE memory_entries ADD COLUMN embedding TEXT"
-        )
+        op.execute("ALTER TABLE memory_entries ADD COLUMN embedding TEXT")
 
     # 4. Standard indexes for tenant-scoped lookups
     op.create_index("ix_memory_entries_org_id", "memory_entries", ["org_id"])
     op.create_index("ix_memory_entries_agent_id", "memory_entries", ["agent_id"])
-    op.create_index("ix_memory_entries_org_layer", "memory_entries", ["org_id", "layer"])
+    op.create_index(
+        "ix_memory_entries_org_layer", "memory_entries", ["org_id", "layer"]
+    )
     op.create_index(
         "ix_memory_entries_agent_layer", "memory_entries", ["agent_id", "layer"]
     )

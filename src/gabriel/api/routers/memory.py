@@ -2,8 +2,17 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends
 
-from gabriel.api.dependencies import GatewayService, build_command, get_execution_context, get_gateway_service
-from gabriel.api.schema import MemoryCreateRequest, MemoryDeleteResponse, MemoryListResponse
+from gabriel.api.dependencies import (
+    GatewayService,
+    build_command,
+    get_execution_context,
+    get_gateway_service,
+)
+from gabriel.api.schema import (
+    MemoryCreateRequest,
+    MemoryDeleteResponse,
+    MemoryListResponse,
+)
 from gabriel.runtime.context import ExecutionContext
 
 router = APIRouter(prefix="/memory", tags=["Memory"])
@@ -31,7 +40,11 @@ async def create_memory(
     command = build_command(
         context,
         "write_memory",
-        {"memory_id": entry["id"], "content": payload.content, "metadata": payload.metadata},
+        {
+            "memory_id": entry["id"],
+            "content": payload.content,
+            "metadata": payload.metadata,
+        },
         action_name="memory:write",
     )
     await service.dispatch_command(command, context)

@@ -1,4 +1,5 @@
 """Tests for multi-tenant isolation (Phase-0 Readiness Review gate)."""
+
 import pytest
 from gabriel.identity.models import PrincipalType, Capability
 from gabriel.identity.service import PrincipalService
@@ -15,7 +16,6 @@ async def test_list_for_org_returns_only_org_principals(db_session):
     Cross-org query returns 0 rows.
     """
     register_core_resource_types()
-
 
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
@@ -79,7 +79,6 @@ async def test_cross_org_isolation_no_leakage(db_session):
     """
     register_core_resource_types()
 
-
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
 
@@ -121,7 +120,6 @@ async def test_cross_org_isolation_no_leakage(db_session):
 async def test_empty_org_returns_zero(db_session):
     """Test that querying an org with no principals returns empty list."""
     register_core_resource_types()
-
 
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)

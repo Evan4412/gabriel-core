@@ -9,6 +9,7 @@ Archiving is a first-class domain state (``ConversationStatus``) distinct from
 the generic Resource lifecycle: an archived conversation is still ACTIVE as a
 resource (readable, auditable) but closed for new messages.
 """
+
 from __future__ import annotations
 
 from enum import StrEnum

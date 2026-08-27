@@ -1,4 +1,5 @@
 """API tests for /api/v1/documents (Phase 4 — Document & Knowledge)."""
+
 from __future__ import annotations
 
 from uuid import uuid4
@@ -17,7 +18,9 @@ def _tmp_content_root(tmp_path, monkeypatch):
     monkeypatch.setenv("GABRIEL_CONTENT_ROOT", str(tmp_path / "content"))
 
 
-def _upload(client, headers, filename="notes.txt", text=b"gabriel loves pgvector", **form):
+def _upload(
+    client, headers, filename="notes.txt", text=b"gabriel loves pgvector", **form
+):
     response = client.post(
         "/api/v1/documents",
         files={"file": (filename, text, "text/plain")},
@@ -85,9 +88,7 @@ def test_list_get_content_and_chunks(client, make_auth_headers):
     assert content.status_code == 200
     assert "alpha beta" in content.json()["content"]
 
-    chunks = client.get(
-        f"/api/v1/documents/{document['grn']}/chunks", headers=headers
-    )
+    chunks = client.get(f"/api/v1/documents/{document['grn']}/chunks", headers=headers)
     assert chunks.status_code == 200
     chunk_body = chunks.json()
     assert chunk_body["total"] == document["chunk_count"]

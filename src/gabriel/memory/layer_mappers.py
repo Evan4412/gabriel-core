@@ -1,4 +1,5 @@
 """Mappers between Domain (MemoryLayerEntry) and Persistence (MemoryLayerEntryORM)."""
+
 from gabriel.memory.layer_models import MemoryLayerEntry, MemoryScope
 from gabriel.memory.layer_orm import MemoryLayerEntryORM
 from gabriel.resource.grn import GRN

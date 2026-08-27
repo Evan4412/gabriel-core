@@ -6,6 +6,7 @@ recipient, and manages read state. Notification writes emit their own
 trail complete without recursive notification fan-out (notification events are
 never themselves turned into notifications).
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC
@@ -54,7 +55,9 @@ def _title_for_event(event: Event) -> str:
 class NotificationService:
     """Business logic for notifications (org- and recipient-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = NotificationRepository(session)
@@ -109,7 +112,10 @@ class NotificationService:
                     "notification_type": type,
                     "source_event_id": source_event_id,
                 },
-                metadata={"service": "NotificationService", "operation": "create_notification"},
+                metadata={
+                    "service": "NotificationService",
+                    "operation": "create_notification",
+                },
             )
         )
         if commit:
@@ -178,7 +184,10 @@ class NotificationService:
                     resource_grn=grn_str,
                     correlation_id=correlation_id,
                     payload={"grn": grn_str},
-                    metadata={"service": "NotificationService", "operation": "mark_read"},
+                    metadata={
+                        "service": "NotificationService",
+                        "operation": "mark_read",
+                    },
                 )
             )
         await self.session.commit()
@@ -202,7 +211,10 @@ class NotificationService:
                     organization_id=org_id,
                     correlation_id=correlation_id,
                     payload={"recipient": recipient, "count": count},
-                    metadata={"service": "NotificationService", "operation": "mark_all_read"},
+                    metadata={
+                        "service": "NotificationService",
+                        "operation": "mark_all_read",
+                    },
                 )
             )
         await self.session.commit()

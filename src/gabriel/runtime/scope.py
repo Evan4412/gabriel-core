@@ -1,4 +1,5 @@
 """Scoped client: Access to resources within an execution context."""
+
 from gabriel.runtime.context import ExecutionContext
 from gabriel.runtime.capabilities import Capability
 from gabriel.runtime.exceptions import CapabilityError
@@ -84,7 +85,9 @@ class ScopedClient:
             CapabilityError: If principal lacks the capability.
         """
         if not self.has_capability(capability):
-            cap_str = capability.value if isinstance(capability, Capability) else capability
+            cap_str = (
+                capability.value if isinstance(capability, Capability) else capability
+            )
             raise CapabilityError(
                 f"Principal {self.principal.id} lacks capability: {cap_str}"
             )
@@ -101,4 +104,6 @@ class ScopedClient:
         return self.context.metadata.get(key)
 
     def __repr__(self) -> str:
-        return f"ScopedClient(principal={self.principal.id}, org={self.organization_id})"
+        return (
+            f"ScopedClient(principal={self.principal.id}, org={self.organization_id})"
+        )

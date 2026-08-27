@@ -19,7 +19,9 @@ def orm_to_domain(orm: PolicyORM) -> Policy:
         updated_by=orm.updated_by,
         metadata=orm.resource_metadata,
         labels=orm.labels,
-        statements=[PolicyStatement.model_validate(item) for item in (orm.statements or [])],
+        statements=[
+            PolicyStatement.model_validate(item) for item in (orm.statements or [])
+        ],
     )
 
 
@@ -37,5 +39,7 @@ def domain_to_orm(domain: Policy) -> PolicyORM:
         updated_by=domain.updated_by,
         resource_metadata=domain.metadata,
         labels=domain.labels,
-        statements=[statement.model_dump(mode="json") for statement in domain.statements],
+        statements=[
+            statement.model_dump(mode="json") for statement in domain.statements
+        ],
     )

@@ -1,4 +1,5 @@
 """Event model: The immutable fact of something that happened."""
+
 from datetime import datetime, UTC
 from typing import Any
 from uuid import uuid4

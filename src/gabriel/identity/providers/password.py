@@ -9,6 +9,7 @@ Hot-swappable by design (ADR-007): this is just another
 ``"password"`` method — swapping to OAuth/SAML/passkeys later means registering
 a different provider, with zero changes to the Identity Service or API layer.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -41,7 +42,9 @@ class PasswordIdentityProvider(IdentityProvider):
     def __init__(self, session_factory: async_sessionmaker[AsyncSession]) -> None:
         self._session_factory = session_factory
 
-    async def authenticate(self, credentials: Mapping[str, Any]) -> AuthenticationResult:
+    async def authenticate(
+        self, credentials: Mapping[str, Any]
+    ) -> AuthenticationResult:
         email = credentials.get("email")
         password = credentials.get("password")
         org_id = credentials.get("org_id") or credentials.get("organization_id")

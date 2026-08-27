@@ -11,7 +11,9 @@ from gabriel.identity.principal import Principal
 from gabriel.resource.registry import ResourceRegistry
 
 
-def register_identity_resource_types(target_registry: ResourceRegistry | None = None) -> None:
+def register_identity_resource_types(
+    target_registry: ResourceRegistry | None = None,
+) -> None:
     """Register identity resource types required by Gabriel bootstrap paths.
 
     The function is idempotent and safe to call multiple times.

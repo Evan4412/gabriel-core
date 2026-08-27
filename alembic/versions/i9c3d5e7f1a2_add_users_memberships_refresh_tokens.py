@@ -16,6 +16,7 @@ Changes
    carrying the org role (owner/admin/member/viewer).
 4. Create ``refresh_tokens`` — hashed, single-use, rotating refresh tokens.
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -49,7 +50,9 @@ def upgrade() -> None:
         sa.Column("labels", sa.JSON, nullable=False),
         sa.Column("email", sa.String(320), nullable=False, index=True),
         sa.Column("display_name", sa.String(255), nullable=False),
-        sa.Column("principal_id", sa.String(225), nullable=False, unique=True, index=True),
+        sa.Column(
+            "principal_id", sa.String(225), nullable=False, unique=True, index=True
+        ),
         sa.Column("password_hash", sa.String(512), nullable=True),
         sa.UniqueConstraint("org_id", "email", name="uq_users_org_email"),
     )

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from gabriel.api.dependencies import GatewayService, build_command, get_execution_context, get_gateway_service
+from gabriel.api.dependencies import (
+    GatewayService,
+    build_command,
+    get_execution_context,
+    get_gateway_service,
+)
 from gabriel.api.schema import (
     ResourceCreateRequest,
     ResourceDeleteResponse,

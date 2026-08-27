@@ -17,7 +17,9 @@ async def test_policies_survive_restart(tmp_path):
     database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"
 
     engine = create_async_engine(database_url, echo=False)
-    session_factory = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    session_factory = async_sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -41,7 +43,9 @@ async def test_policies_survive_restart(tmp_path):
     await engine.dispose()
 
     restart_engine = create_async_engine(database_url, echo=False)
-    restart_factory = async_sessionmaker(restart_engine, expire_on_commit=False, class_=AsyncSession)
+    restart_factory = async_sessionmaker(
+        restart_engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with restart_factory() as session:
         service = PolicyService(PolicyRepository(session))
@@ -91,7 +95,9 @@ async def test_policy_create_update_delete_commands_work_through_dispatcher(tmp_
     database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"
 
     engine = create_async_engine(database_url, echo=False)
-    session_factory = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    session_factory = async_sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

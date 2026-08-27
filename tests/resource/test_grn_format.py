@@ -1,4 +1,5 @@
 """Tests for GRN (Gabriel Resource Name) format consistency (Step-0 decision)."""
+
 import pytest
 from gabriel.resource.grn import GRN
 from gabriel.resource.exceptions import InvalidGRNError
@@ -13,7 +14,7 @@ class TestGRNFormat:
             org_id="acme",
             resource_type="organization",
             resource_id="org-123",
-            version=1
+            version=1,
         )
 
         grn_str = str(grn)
@@ -29,7 +30,7 @@ class TestGRNFormat:
                 org_id="tenant-a",
                 resource_type="agent",
                 resource_id="agent-001",
-                version=version
+                version=version,
             )
 
             grn_str = str(grn)
@@ -50,7 +51,7 @@ class TestGRNFormat:
             org_id="myorg",
             resource_type="workflow",
             resource_id="workflow-42",
-            version=5
+            version=5,
         )
 
         assert grn.org_id == "myorg"
@@ -60,12 +61,7 @@ class TestGRNFormat:
 
     def test_grn_immutable(self):
         """Test that GRN is immutable (frozen dataclass)."""
-        grn = GRN(
-            org_id="test",
-            resource_type="resource",
-            resource_id="123",
-            version=1
-        )
+        grn = GRN(org_id="test", resource_type="resource", resource_id="123", version=1)
 
         # Attempting to modify should raise AttributeError
         with pytest.raises(AttributeError):
@@ -73,26 +69,11 @@ class TestGRNFormat:
 
     def test_grn_equality(self):
         """Test GRN equality comparison."""
-        grn1 = GRN(
-            org_id="acme",
-            resource_type="agent",
-            resource_id="bot-1",
-            version=1
-        )
+        grn1 = GRN(org_id="acme", resource_type="agent", resource_id="bot-1", version=1)
 
-        grn2 = GRN(
-            org_id="acme",
-            resource_type="agent",
-            resource_id="bot-1",
-            version=1
-        )
+        grn2 = GRN(org_id="acme", resource_type="agent", resource_id="bot-1", version=1)
 
-        grn3 = GRN(
-            org_id="acme",
-            resource_type="agent",
-            resource_id="bot-1",
-            version=2
-        )
+        grn3 = GRN(org_id="acme", resource_type="agent", resource_id="bot-1", version=2)
 
         assert grn1 == grn2
         assert grn1 != grn3
@@ -128,7 +109,7 @@ class TestGRNFormat:
             org_id="acme",
             resource_type="organization",
             resource_id="acme",  # Often the same as org_id
-            version=1
+            version=1,
         )
 
         grn_str = str(grn)
@@ -144,7 +125,7 @@ class TestGRNFormat:
             org_id="acme",
             resource_type="principal",
             resource_id="principal-alice-uuid",
-            version=1
+            version=1,
         )
 
         grn_str = str(grn)
@@ -153,11 +134,7 @@ class TestGRNFormat:
 
     def test_grn_version_defaults_to_one(self):
         """Test that GRN version defaults to 1."""
-        grn = GRN(
-            org_id="test",
-            resource_type="agent",
-            resource_id="test-123"
-        )
+        grn = GRN(org_id="test", resource_type="agent", resource_id="test-123")
 
         # Should have default version 1
         assert grn.version == 1
@@ -176,7 +153,7 @@ class TestGRNFormat:
                 org_id="acme",
                 resource_type="resource",
                 resource_id=resource_id,
-                version=1
+                version=1,
             )
 
             grn_str = str(grn)
@@ -184,12 +161,7 @@ class TestGRNFormat:
 
     def test_grn_repr_format(self):
         """Test GRN repr format is useful for debugging."""
-        grn = GRN(
-            org_id="acme",
-            resource_type="agent",
-            resource_id="bot-01",
-            version=1
-        )
+        grn = GRN(org_id="acme", resource_type="agent", resource_id="bot-01", version=1)
 
         repr_str = repr(grn)
         # Should contain GRN indicator and the string representation

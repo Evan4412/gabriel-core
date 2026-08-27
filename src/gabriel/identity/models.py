@@ -1,4 +1,5 @@
 """Core identity models: enums and domain objects."""
+
 from enum import StrEnum
 
 

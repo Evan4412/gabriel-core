@@ -12,9 +12,13 @@ Future code becomes:
 
 No if/else chains — everything is data-driven from the registry.
 """
+
 from typing import Any
 
-from gabriel.resource.exceptions import ResourceFactoryError, ResourceTypeNotRegisteredError
+from gabriel.resource.exceptions import (
+    ResourceFactoryError,
+    ResourceTypeNotRegisteredError,
+)
 
 
 class ResourceFactory:
@@ -60,15 +64,15 @@ class ResourceFactory:
                 return descriptor.factory_fn(**kwargs)
 
             # If model has a create() class method, use it
-            if hasattr(descriptor.model, "create") and callable(getattr(descriptor.model, "create")):
+            if hasattr(descriptor.model, "create") and callable(
+                getattr(descriptor.model, "create")
+            ):
                 return descriptor.model.create(**kwargs)
 
             # Otherwise, instantiate directly
             return descriptor.model(**kwargs)
         except Exception as e:
-            raise ResourceFactoryError(
-                f"Failed to create {resource_type}: {e}"
-            ) from e
+            raise ResourceFactoryError(f"Failed to create {resource_type}: {e}") from e
 
     def create_from_dict(
         self,

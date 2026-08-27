@@ -4,6 +4,7 @@ All queries are org-scoped (P-2: isolation by default). Listing is paginated
 (limit/offset) and returns the total count so API responses can expose paging
 metadata. Soft-deleted documents are hidden unless explicitly requested.
 """
+
 from __future__ import annotations
 
 from sqlalchemy import func, select
@@ -66,11 +67,7 @@ class DocumentRepository:
             count_stmt = count_stmt.filter(DocumentORM.state != ResourceState.DELETED)
 
         total = (await self.session.execute(count_stmt)).scalar_one()
-        stmt = (
-            stmt.order_by(DocumentORM.created_at.desc())
-            .limit(limit)
-            .offset(offset)
-        )
+        stmt = stmt.order_by(DocumentORM.created_at.desc()).limit(limit).offset(offset)
         result = await self.session.execute(stmt)
         return list(result.scalars().all()), int(total)
 

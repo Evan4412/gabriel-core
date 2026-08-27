@@ -1,4 +1,5 @@
 """V1 agent configuration — disabled tools & document collections."""
+
 from gabriel.agent.specification import AgentSpecification
 
 

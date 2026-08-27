@@ -1,4 +1,5 @@
 """Command model: The intent to do something (that may fail)."""
+
 from datetime import datetime, UTC
 from typing import Any
 from uuid import uuid4

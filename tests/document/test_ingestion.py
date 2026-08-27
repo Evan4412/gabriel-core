@@ -1,4 +1,5 @@
 """Tests for Core document ingestion (Document-as-Resource + ResourceCreated)."""
+
 from __future__ import annotations
 
 from datetime import datetime, UTC
@@ -21,7 +22,9 @@ from gabriel.resource.models import ResourceType
 from gabriel.runtime.context import ExecutionContext
 
 
-def _make_context(org: str = "acme", caps=(Capability.WRITE_RESOURCE,)) -> ExecutionContext:
+def _make_context(
+    org: str = "acme", caps=(Capability.WRITE_RESOURCE,)
+) -> ExecutionContext:
     principal = Principal(
         id=PrincipalID(org_id=org, principal_type="user", principal_identifier="alice"),
         organization_id=org,
@@ -44,14 +47,18 @@ def _make_context(org: str = "acme", caps=(Capability.WRITE_RESOURCE,)) -> Execu
     )
 
 
-def _make_service(content_root: Path | None = None) -> tuple[DocumentIngestionService, EventStore]:
+def _make_service(
+    content_root: Path | None = None,
+) -> tuple[DocumentIngestionService, EventStore]:
     from gabriel.api.dependencies import _register_handlers
 
     store = EventStore()
     dispatcher = Dispatcher(event_store=store, peel=PEEL(PolicyEngine()))
     _register_handlers(dispatcher)
     content_store = DiskContentStore(content_root or Path(".gabriel/test-content"))
-    return DocumentIngestionService(dispatcher=dispatcher, content_store=content_store), store
+    return DocumentIngestionService(
+        dispatcher=dispatcher, content_store=content_store
+    ), store
 
 
 # --- Normalizer -----------------------------------------------------------

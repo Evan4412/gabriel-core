@@ -12,6 +12,7 @@ Porting notes (from Gabriel/database/)
   (exactly as in Gabriel/db/repositories.py::VectorRepository.search).
 - All queries are tenant-scoped: ``org_id`` is the first WHERE clause.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -42,7 +43,9 @@ def _orm_to_entry(row: MemoryEntryORM) -> MemoryEntry:
     meta.setdefault("_org_id", row.org_id)
     meta.setdefault("_agent_id", row.agent_id)
     meta.setdefault("_scope", row.scope)
-    meta.setdefault("_created_at", row.created_at.isoformat() if row.created_at else None)
+    meta.setdefault(
+        "_created_at", row.created_at.isoformat() if row.created_at else None
+    )
     return MemoryEntry(
         layer=MemoryLayer(row.layer),
         content=row.content,

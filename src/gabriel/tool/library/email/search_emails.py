@@ -1,4 +1,5 @@
 """search_emails — search the inbox using an IMAP TEXT query."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any

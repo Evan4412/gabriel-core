@@ -11,6 +11,7 @@ Backwards-compatible development aliases (``/auth/dev/login``,
 ``/auth/dev/principals``, ``/auth/session``) are preserved for the existing
 frontend and are only functional while the dev provider is enabled.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -71,7 +72,10 @@ class LogoutRequest(BaseModel):
 
 
 def _set_session_cookie(
-    response: Response, identity_service: IdentityService, token_value: str, max_age: int
+    response: Response,
+    identity_service: IdentityService,
+    token_value: str,
+    max_age: int,
 ) -> None:
     response.set_cookie(
         key=identity_service.settings.session_cookie_name,
@@ -328,7 +332,9 @@ async def get_current_session(
             "principal": str(principal.id),
             "displayName": principal.display_name,
             "email": meta.get("email"),
-            "initials": principal.display_name[0].upper() if principal.display_name else "?",
+            "initials": principal.display_name[0].upper()
+            if principal.display_name
+            else "?",
             "avatarUrl": None,
             "roles": meta.get("roles", []),
         },

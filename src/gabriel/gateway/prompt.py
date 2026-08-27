@@ -10,6 +10,7 @@ The assembly algorithm is a pluggable *strategy* so alternative prompting
 schemes (e.g. summarising long histories instead of truncating) can be
 swapped in without touching the runtime.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -48,8 +49,7 @@ class PromptRequest:
 class PromptStrategy(Protocol):
     """Turns a :class:`PromptRequest` into provider-ready chat messages."""
 
-    def build(self, request: PromptRequest) -> list[ChatMessage]:
-        ...
+    def build(self, request: PromptRequest) -> list[ChatMessage]: ...
 
 
 class DefaultPromptStrategy:
@@ -70,14 +70,20 @@ class DefaultPromptStrategy:
                 if block.content.strip()
             )
             if rendered:
-                system_text = f"{system_text}\n\n{rendered}" if system_text else rendered
+                system_text = (
+                    f"{system_text}\n\n{rendered}" if system_text else rendered
+                )
         if system_text:
             messages.append(ChatMessage(role="system", content=system_text))
 
         window = max(request.context_window, 0)
         history = request.history[-window:] if window else []
         for item in history:
-            role = item.role.value if isinstance(item.role, MessageRole) else str(item.role)
+            role = (
+                item.role.value
+                if isinstance(item.role, MessageRole)
+                else str(item.role)
+            )
             # History system turns are dropped: the agent's system prompt is
             # authoritative and duplicated system messages confuse models.
             if role == MessageRole.SYSTEM.value:

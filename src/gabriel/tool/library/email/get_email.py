@@ -1,4 +1,5 @@
 """get_email — retrieve the full contents of a single email."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any

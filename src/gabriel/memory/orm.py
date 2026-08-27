@@ -53,11 +53,15 @@ class MemoryEntryORM(Base):
 
     # Layer and scope (ADR-012)
     layer: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
-    scope: Mapped[str] = mapped_column(String(64), nullable=False, server_default="agent")
+    scope: Mapped[str] = mapped_column(
+        String(64), nullable=False, server_default="agent"
+    )
 
     # Payload
     content: Mapped[str] = mapped_column(Text, nullable=False)
-    importance: Mapped[float] = mapped_column(Float, nullable=False, server_default="1.0")
+    importance: Mapped[float] = mapped_column(
+        Float, nullable=False, server_default="1.0"
+    )
 
     # Stored as JSON list in ORM; migration converts to vector(1536) in Postgres
     # for pgvector cosine similarity. NULL for non-semantic layers.
@@ -72,7 +76,9 @@ class MemoryEntryORM(Base):
         DateTime(timezone=True), nullable=False, server_default=text("now()")
     )
     # Nullable — set by MGE or caller for TTL enforcement
-    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    expires_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
     __table_args__ = (
         # Fast lookup: org + layer (most common retrieval pattern)

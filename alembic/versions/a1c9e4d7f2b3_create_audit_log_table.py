@@ -5,6 +5,7 @@ Revises: f174bb2bb84c
 Create Date: 2026-07-07 10:00:00.000000
 
 """
+
 from collections.abc import Sequence
 
 from alembic import op
@@ -36,13 +37,33 @@ def upgrade() -> None:
     )
 
     op.create_index(op.f("ix_audit_log_action"), "audit_log", ["action"], unique=False)
-    op.create_index(op.f("ix_audit_log_correlation_id"), "audit_log", ["correlation_id"], unique=False)
-    op.create_index(op.f("ix_audit_log_decision"), "audit_log", ["decision"], unique=False)
-    op.create_index(op.f("ix_audit_log_event_type"), "audit_log", ["event_type"], unique=False)
-    op.create_index(op.f("ix_audit_log_occurred_at"), "audit_log", ["occurred_at"], unique=False)
-    op.create_index(op.f("ix_audit_log_organization_id"), "audit_log", ["organization_id"], unique=False)
-    op.create_index(op.f("ix_audit_log_principal_id"), "audit_log", ["principal_id"], unique=False)
-    op.create_index(op.f("ix_audit_log_resource_grn"), "audit_log", ["resource_grn"], unique=False)
+    op.create_index(
+        op.f("ix_audit_log_correlation_id"),
+        "audit_log",
+        ["correlation_id"],
+        unique=False,
+    )
+    op.create_index(
+        op.f("ix_audit_log_decision"), "audit_log", ["decision"], unique=False
+    )
+    op.create_index(
+        op.f("ix_audit_log_event_type"), "audit_log", ["event_type"], unique=False
+    )
+    op.create_index(
+        op.f("ix_audit_log_occurred_at"), "audit_log", ["occurred_at"], unique=False
+    )
+    op.create_index(
+        op.f("ix_audit_log_organization_id"),
+        "audit_log",
+        ["organization_id"],
+        unique=False,
+    )
+    op.create_index(
+        op.f("ix_audit_log_principal_id"), "audit_log", ["principal_id"], unique=False
+    )
+    op.create_index(
+        op.f("ix_audit_log_resource_grn"), "audit_log", ["resource_grn"], unique=False
+    )
     op.create_index(
         "ix_audit_log_time_principal_decision",
         "audit_log",

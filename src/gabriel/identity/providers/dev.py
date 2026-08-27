@@ -12,6 +12,7 @@ production. It fails loudly at construction time when ``settings.is_production``
 is true (or when explicitly disabled), so a misconfigured deployment crashes on
 startup rather than silently accepting fake identities.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -156,7 +157,9 @@ class DevIdentityProvider(IdentityProvider):
         """Return the catalogue of dev principals (for the login picker UI)."""
         return DEV_PRINCIPALS
 
-    async def authenticate(self, credentials: Mapping[str, Any]) -> AuthenticationResult:
+    async def authenticate(
+        self, credentials: Mapping[str, Any]
+    ) -> AuthenticationResult:
         user_id = credentials.get("userId") or credentials.get("user_id")
         if not user_id:
             raise AuthenticationFailedError("Missing 'userId' credential for dev login")

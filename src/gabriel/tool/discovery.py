@@ -155,30 +155,43 @@ class ToolLibraryIndexer:
     def _discover_library(self, tools: dict[str, Tool]) -> None:
         library = importlib.import_module(LIBRARY_PACKAGE)
 
-        for pkg_info in pkgutil.iter_modules(library.__path__, prefix=f"{LIBRARY_PACKAGE}."):
+        for pkg_info in pkgutil.iter_modules(
+            library.__path__, prefix=f"{LIBRARY_PACKAGE}."
+        ):
             namespace = pkg_info.name.rsplit(".", 1)[-1]
             if not pkg_info.ispkg or namespace.startswith("_"):
                 continue
 
             library_pkg = importlib.import_module(pkg_info.name)
 
-            for mod_info in pkgutil.iter_modules(library_pkg.__path__, prefix=f"{library_pkg.__name__}."):
+            for mod_info in pkgutil.iter_modules(
+                library_pkg.__path__, prefix=f"{library_pkg.__name__}."
+            ):
                 tool_name = mod_info.name.rsplit(".", 1)[-1]
 
                 if mod_info.ispkg or tool_name.startswith("_"):
                     continue
 
-                logger.debug(f"Discovered module: {mod_info.name} under category: {namespace}")
+                logger.debug(
+                    f"Discovered module: {mod_info.name} under category: {namespace}"
+                )
 
                 try:
                     module = importlib.import_module(mod_info.name)
                 except ImportError:
-                    logger.warning(f"Skipping tool module {mod_info.name} (import failed)", exc_info=True)
+                    logger.warning(
+                        f"Skipping tool module {mod_info.name} (import failed)",
+                        exc_info=True,
+                    )
                     continue
 
                 # Clean values for tool input
                 org_id = ""  # FIXME: Determine how to get the org_id
-                category = ToolCategory(namespace) if namespace in _CATEGORY_VALUES else ToolCategory.CUSTOM
+                category = (
+                    ToolCategory(namespace)
+                    if namespace in _CATEGORY_VALUES
+                    else ToolCategory.CUSTOM
+                )
                 binding = f"{namespace}.{tool_name}"
                 grn = GRN(org_id=org_id, resource_id=tool_name, resource_type="tool")
 
@@ -212,7 +225,11 @@ class ToolLibraryIndexer:
             elif isinstance(eps_all, dict):
                 eps = eps_all.get(ENTRY_POINT_GROUP, [])
             else:
-                eps = [ep for ep in eps_all if getattr(ep, "group", "") == ENTRY_POINT_GROUP]
+                eps = [
+                    ep
+                    for ep in eps_all
+                    if getattr(ep, "group", "") == ENTRY_POINT_GROUP
+                ]
 
         for ep in eps:
             try:
@@ -254,7 +271,6 @@ class ToolLibraryIndexer:
                 created_by="system",
                 updated_by="system",
             )
-
 
 
 tool_indexer = ToolLibraryIndexer()

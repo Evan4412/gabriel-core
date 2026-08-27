@@ -3,6 +3,7 @@
 Core flow:
   Principal → Issue Token → Verify Token → Recover Principal (as TokenPayload)
 """
+
 from datetime import datetime, timedelta, UTC
 
 import jwt
@@ -85,7 +86,9 @@ class TokenService:
         except Exception as exc:
             raise TokenGenerationError(f"Failed to generate token: {exc}") from exc
 
-    def verify(self, token: Token | str, organization_id: str | None = None) -> TokenPayload:
+    def verify(
+        self, token: Token | str, organization_id: str | None = None
+    ) -> TokenPayload:
         """Verify and decode a JWT token.
 
         Args:
@@ -148,7 +151,9 @@ class TokenService:
         except jwt.ExpiredSignatureError as exc:
             raise ExpiredTokenError("Token has expired") from exc
         except jwt.InvalidSignatureError as exc:
-            raise InvalidSignatureError("Token signature is invalid or tampered") from exc
+            raise InvalidSignatureError(
+                "Token signature is invalid or tampered"
+            ) from exc
         except (InvalidOrgError, ExpiredTokenError, InvalidSignatureError):
             raise
         except Exception as exc:

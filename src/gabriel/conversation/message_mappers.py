@@ -1,4 +1,5 @@
 """Mappers between Domain (Message) and Persistence (MessageORM)."""
+
 from gabriel.conversation.message_models import Message, MessageRole
 from gabriel.conversation.message_orm import MessageORM
 from gabriel.resource.grn import GRN

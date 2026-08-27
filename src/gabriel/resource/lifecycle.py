@@ -3,20 +3,26 @@ from gabriel.resource.exceptions import InvalidLifecycleTransitionError
 
 # Define which transitions are permitted
 ALLOWED_TRANSITIONS: dict[ResourceState, set[ResourceState]] = {
-    ResourceState.DRAFT:      {ResourceState.ACTIVE, ResourceState.DELETED},
-    ResourceState.ACTIVE:     {ResourceState.SUSPENDED, ResourceState.DEPRECATED, ResourceState.DELETED},
-    ResourceState.SUSPENDED:  {ResourceState.ACTIVE, ResourceState.DELETED},
+    ResourceState.DRAFT: {ResourceState.ACTIVE, ResourceState.DELETED},
+    ResourceState.ACTIVE: {
+        ResourceState.SUSPENDED,
+        ResourceState.DEPRECATED,
+        ResourceState.DELETED,
+    },
+    ResourceState.SUSPENDED: {ResourceState.ACTIVE, ResourceState.DELETED},
     ResourceState.DEPRECATED: {ResourceState.DELETED},
-    ResourceState.DELETED:    set(),
+    ResourceState.DELETED: set(),
 }
 
-class LifecycleManager:
 
+class LifecycleManager:
     @staticmethod
     def validate_transition(current: ResourceState, target: ResourceState) -> None:
         # TODO: raise InvalidLifecycleTransitionError if transition is not in ALLOWED_TRANSITIONS
         if target not in ALLOWED_TRANSITIONS.get(current, set()):
-            raise InvalidLifecycleTransitionError(f"Invalid transition from {current} to {target}")
+            raise InvalidLifecycleTransitionError(
+                f"Invalid transition from {current} to {target}"
+            )
         return
 
     @staticmethod

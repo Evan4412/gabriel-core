@@ -19,8 +19,13 @@ router = APIRouter(prefix="/events", tags=["Events"])
 
 
 @router.get("", response_model=EventListResponse)
-async def get_events(service: GatewayService = Depends(get_gateway_service)) -> EventListResponse:
-    events = [EventResponse(**event.model_dump(mode="json")) for event in service.list_events()]
+async def get_events(
+    service: GatewayService = Depends(get_gateway_service),
+) -> EventListResponse:
+    events = [
+        EventResponse(**event.model_dump(mode="json"))
+        for event in service.list_events()
+    ]
     return EventListResponse(items=events)
 
 
@@ -58,7 +63,9 @@ async def query_audit_log(
 
 
 @router.get("/{event_id}", response_model=EventResponse)
-async def get_event(event_id: str, service: GatewayService = Depends(get_gateway_service)) -> EventResponse:
+async def get_event(
+    event_id: str, service: GatewayService = Depends(get_gateway_service)
+) -> EventResponse:
     event = service.get_event(event_id)
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")

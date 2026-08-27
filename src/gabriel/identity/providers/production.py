@@ -1,4 +1,5 @@
 """Production JWT identity provider."""
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -25,7 +26,9 @@ class ProductionIdentityProvider(IdentityProvider):
         self._token_service = token_service
         self._session_factory = session_factory
 
-    async def authenticate(self, credentials: Mapping[str, Any]) -> AuthenticationResult:
+    async def authenticate(
+        self, credentials: Mapping[str, Any]
+    ) -> AuthenticationResult:
         token = credentials.get("token")
         if not token or not isinstance(token, str):
             raise AuthenticationFailedError("Missing bearer token")
@@ -46,4 +49,6 @@ class ProductionIdentityProvider(IdentityProvider):
                 "Token organization does not match persisted principal organization"
             )
 
-        return AuthenticationResult(principal=principal, session={"authMethod": self.name})
+        return AuthenticationResult(
+            principal=principal, session={"authMethod": self.name}
+        )

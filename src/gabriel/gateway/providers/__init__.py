@@ -1,4 +1,5 @@
 """LLM provider abstraction: protocol, neutral wire types, registry, Ollama."""
+
 from gabriel.gateway.providers.base import (
     ChatCompletionResult,
     ChatMessage,

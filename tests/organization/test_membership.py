@@ -1,4 +1,5 @@
 """Org membership: add, change role, remove, last-owner guard."""
+
 from __future__ import annotations
 
 import pytest
@@ -35,7 +36,9 @@ async def test_duplicate_membership_rejected(db_session):
 async def test_change_role(db_session):
     service = MembershipService(db_session)
     await service.add_member(ORG, ALICE, OrgRole.MEMBER, added_by="system")
-    membership = await service.change_role(ORG, ALICE, OrgRole.ADMIN, changed_by="system")
+    membership = await service.change_role(
+        ORG, ALICE, OrgRole.ADMIN, changed_by="system"
+    )
     assert membership.role == OrgRole.ADMIN.value
 
 
@@ -61,7 +64,9 @@ async def test_cannot_remove_last_owner(db_session):
 async def test_unknown_membership_raises(db_session):
     service = MembershipService(db_session)
     with pytest.raises(ResourceNotFoundError):
-        await service.change_role(ORG, "principal://acme/user/ghost", OrgRole.ADMIN, changed_by="x")
+        await service.change_role(
+            ORG, "principal://acme/user/ghost", OrgRole.ADMIN, changed_by="x"
+        )
 
 
 @pytest.mark.asyncio

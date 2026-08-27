@@ -10,6 +10,7 @@ PEEL evaluation). The split follows ADR-001 (principal/resource mirroring):
 The password hash is stored on the user record but must never be serialized
 out through the API — use :meth:`User.public_view`.
 """
+
 from __future__ import annotations
 
 from typing import Any

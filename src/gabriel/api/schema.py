@@ -57,6 +57,7 @@ class ResourceListResponse(BaseModel):
 # Agent Specifications
 # ---------------------------------------------------------------------------
 
+
 class AgentSpecTemplate(BaseModel):
     templates: list[dict[str, Any]] = Field(default_factory=list)
 
@@ -64,9 +65,11 @@ class AgentSpecTemplate(BaseModel):
 class AgentSpecResponse(BaseModel):
     specs: list[str] = Field(default_factory=list)
 
+
 # ---------------------------------------------------------------------------
 # Agents
 # ---------------------------------------------------------------------------
+
 
 @dataclass(frozen=True)
 class AgentSummary:
@@ -177,15 +180,18 @@ class EventListResponse(BaseModel):
 # Documents
 # ---------------------------------------------------------------------------
 
+
 class DocumentAllowedTypesResponse(BaseModel):
     allowed_types: set[str] = Field(
         default_factory=set,
-        description="List of document types that can be uploaded to this tenant."
+        description="List of document types that can be uploaded to this tenant.",
     )
+
 
 # ---------------------------------------------------------------------------
 # Chat
 # ---------------------------------------------------------------------------
+
 
 @dataclass(frozen=True)
 class ChatSummary:
@@ -197,30 +203,28 @@ class ChatSummary:
     messageCount: int | None
     lastMessagePreview: str | None
 
+
 class ChatSummaryResponse(BaseModel):
     id: str | None = None
     title: str | None = None
     agentGRN: str | None = None
-    createdAt: datetime | str |None = None
+    createdAt: datetime | str | None = None
     updatedAt: datetime | str | None = None
     messageCount: int | None = None
     lastMessagePreview: str | None = None
 
+
 class ChatCreateRequest(BaseModel):
     title: str | None = Field(
-        default=None,
-        max_length=200,
-        description="Optional user-defined title."
+        default=None, max_length=200, description="Optional user-defined title."
     )
 
     agentGRN: str | None = Field(
-        default=None,
-        description="Default agent assigned to the conversation."
+        default=None, description="Default agent assigned to the conversation."
     )
 
     metadata: dict[str, Any] = Field(
-        default_factory=dict,
-        description="Application-defined metadata."
+        default_factory=dict, description="Application-defined metadata."
     )
 
     # project_grn: str | None = Field(
@@ -233,9 +237,11 @@ class ChatCreateRequest(BaseModel):
     #     description="Resources initially attached to the conversation."
     # )
 
+
 # ---------------------------------------------------------------------------
 # Notifications
 # ---------------------------------------------------------------------------
+
 
 class Notification(BaseModel):
     grn: str
@@ -250,9 +256,11 @@ class Notification(BaseModel):
     created_at: datetime
     read: bool = False
 
+
 # ---------------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------------
+
 
 class ToolCreateRequest(BaseModel):
     name: str = Field(min_length=1, max_length=500)

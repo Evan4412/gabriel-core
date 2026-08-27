@@ -1,4 +1,5 @@
 """Comprehensive tests for CQRS + Event Sourcing."""
+
 import pytest
 
 from gabriel.events import (
@@ -386,4 +387,8 @@ class TestDispatcher:
 
         orgs = projection.list_organizations()
         assert len(orgs) == 3
-        assert {org["display_name"] for org in orgs} == {"Alpha Corp", "Beta Inc", "Gamma LLC"}
+        assert {org["display_name"] for org in orgs} == {
+            "Alpha Corp",
+            "Beta Inc",
+            "Gamma LLC",
+        }

@@ -8,6 +8,7 @@ record of a chat is the conversation + messages owned by the Phase-2 slices).
 Sessions expire after ``idle_ttl_seconds`` without activity; expired entries
 are lazily evicted on access.
 """
+
 from __future__ import annotations
 
 import time

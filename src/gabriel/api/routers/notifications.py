@@ -10,6 +10,7 @@ exists for the authenticated principal, falling back to the principal id
 (service accounts / API keys). Capability enforcement comes from
 ``notification:*`` actions in ``gabriel.policy.capabilities``.
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query

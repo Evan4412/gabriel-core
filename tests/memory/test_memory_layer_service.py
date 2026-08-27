@@ -1,4 +1,5 @@
 """Tests for MemoryLayerService (Phase 2 — Core Business Logic)."""
+
 from datetime import datetime, timedelta, UTC
 
 import pytest
@@ -115,7 +116,10 @@ async def test_delete_is_hard_but_audited(db_session):
     await service.delete_entry(str(entry.grn), deleted_by=ACTOR, org_id=ORG)
 
     with pytest.raises(ResourceNotFoundError):
-        await service.get_entry(str(entry.grn), org_id=ORG, )
+        await service.get_entry(
+            str(entry.grn),
+            org_id=ORG,
+        )
 
     result = await db_session.execute(
         select(EventORM).filter_by(type="resource_deleted", resource_grn=str(entry.grn))

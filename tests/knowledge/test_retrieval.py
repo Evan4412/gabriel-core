@@ -1,4 +1,5 @@
 """KnowledgeRetriever: vector retrieval, keyword fallback, graceful failure."""
+
 import pytest
 
 from gabriel.gateway.prompt import ContextBlock
@@ -21,9 +22,14 @@ async def _seed_chunks(session, embedder):
     vectors = await embedder.embed(texts)
     for i, (text, vec) in enumerate(zip(texts, vectors)):
         await store.add_chunk(
-            org_id=ORG, document_grn=DOC, knowledge_source_grn=SOURCE,
-            chunk_index=i, content=text, token_count=len(text.split()),
-            embedding=vec, embedding_model=embedder.model,
+            org_id=ORG,
+            document_grn=DOC,
+            knowledge_source_grn=SOURCE,
+            chunk_index=i,
+            content=text,
+            token_count=len(text.split()),
+            embedding=vec,
+            embedding_model=embedder.model,
             metadata={"filename": "handbook.txt"},
         )
     await session.commit()
@@ -76,8 +82,12 @@ async def test_retrieve_respects_max_chars(session_factory, fake_embedder):
         vec = (await fake_embedder.embed(["long text"]))[0]
         for i in range(3):
             await store.add_chunk(
-                org_id=ORG, document_grn=DOC, knowledge_source_grn=None,
-                chunk_index=i, content="long text " * 50, token_count=100,
+                org_id=ORG,
+                document_grn=DOC,
+                knowledge_source_grn=None,
+                chunk_index=i,
+                content="long text " * 50,
+                token_count=100,
                 embedding=vec,
             )
         await session.commit()

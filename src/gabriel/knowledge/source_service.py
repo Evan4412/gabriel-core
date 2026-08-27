@@ -10,6 +10,7 @@ Attachment model (V1): a document belongs to at most one knowledge source.
 Attaching sets ``Document.knowledge_source_grn`` and re-labels the document's
 chunks so vector search can filter by source; detaching clears both.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -39,7 +40,9 @@ from gabriel.resource.registry import registry
 class KnowledgeSourceService:
     """Business logic for knowledge sources (org-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = KnowledgeSourceRepository(session)

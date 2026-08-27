@@ -7,6 +7,7 @@ Format: principal://<org_id>/<principal_type>/<principal_identifier>
 
 Example: principal://acme/user/alice@v1
 """
+
 from dataclasses import dataclass
 
 from gabriel.identity.exceptions import InvalidPrincipalIDError
@@ -60,7 +61,9 @@ class PrincipalID:
         org_id, principal_type, principal_identifier = parts
 
         if not org_id or not principal_type or not principal_identifier:
-            raise InvalidPrincipalIDError(f"PrincipalID contains empty components: {raw}")
+            raise InvalidPrincipalIDError(
+                f"PrincipalID contains empty components: {raw}"
+            )
 
         return cls(
             org_id=org_id,

@@ -1,4 +1,5 @@
 """label_email — add a label (Gmail-specific) to an email."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any

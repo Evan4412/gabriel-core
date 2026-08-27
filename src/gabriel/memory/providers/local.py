@@ -1,6 +1,6 @@
-
 from gabriel.memory.contract import MemoryAccessInterface
 from gabriel.memory.models import MemoryEntry, MemoryLayer
+
 
 class LocalMemoryProvider(MemoryAccessInterface):
     """In-process memory provider for testing and development.
@@ -40,24 +40,21 @@ class LocalMemoryProvider(MemoryAccessInterface):
         return matches
 
     async def search(
-        self,
-        query: str,
-        layer: MemoryLayer | None = None,
-        limit: int = 10
+        self, query: str, layer: MemoryLayer | None = None, limit: int = 10
     ) -> list[MemoryEntry]:
-            """Keyword fallback — no vector search in local provider."""
-            matches: list[MemoryEntry] = []
-            for memory_id in self._order:
-                entry = self._entries.get(memory_id)
-                if entry is None:
-                    continue
-                if layer is not None and entry.layer != layer:
-                    continue
-                if query.lower() in str(entry.content).lower():
-                    matches.append(entry)
-                if len(matches) >= limit:
-                    break
-            return matches
+        """Keyword fallback — no vector search in local provider."""
+        matches: list[MemoryEntry] = []
+        for memory_id in self._order:
+            entry = self._entries.get(memory_id)
+            if entry is None:
+                continue
+            if layer is not None and entry.layer != layer:
+                continue
+            if query.lower() in str(entry.content).lower():
+                matches.append(entry)
+            if len(matches) >= limit:
+                break
+        return matches
 
     async def forget(self, memory_id: str) -> None:
         if memory_id in self._entries:

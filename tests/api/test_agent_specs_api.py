@@ -39,9 +39,7 @@ def test_instantiate_returns_validated_spec_with_resolved_grns(client):
 
 
 def test_instantiate_unknown_template_returns_404(client):
-    resp = client.post(
-        "/api/v1/agent-specs/instantiate", json={"template": "nope"}
-    )
+    resp = client.post("/api/v1/agent-specs/instantiate", json={"template": "nope"})
     assert resp.status_code == 404
 
 

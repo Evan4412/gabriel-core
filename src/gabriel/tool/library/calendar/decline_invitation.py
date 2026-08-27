@@ -79,7 +79,9 @@ def decline_invitation(
         }
 
     try:
-        from gabriel.tool.library.calendar._calendar_client import build_calendar_service
+        from gabriel.tool.library.calendar._calendar_client import (
+            build_calendar_service,
+        )
 
         service = build_calendar_service(_credentials)
 

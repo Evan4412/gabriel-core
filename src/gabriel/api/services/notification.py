@@ -7,30 +7,31 @@ from gabriel.api.schema import Notification
 # grn:organization:notification/source:int
 MOCK_NOTIFICATIONS = [
     {
-    'grn': 'grn:organization:notification/chat:1',
-    'level': 'info',
-    'title': 'Claim assigned to you',
-    'body': 'Water damage claim — 428 Elm St was routed to M. Reyes.',
-    'created_at': '2026-06-30T02:11:00Z',
-    'read': False,
+        "grn": "grn:organization:notification/chat:1",
+        "level": "info",
+        "title": "Claim assigned to you",
+        "body": "Water damage claim — 428 Elm St was routed to M. Reyes.",
+        "created_at": "2026-06-30T02:11:00Z",
+        "read": False,
     },
     {
-    'grn': 'grn:organization:notification/chat:2',
-    'level': 'warning',
-    'title': 'Underwriting review needed',
-    'body': '90 Harbor Blvd flagged 3 risk factors.',
-    'created_at': '2026-06-29T16:46:00Z',
-    'read': False,
+        "grn": "grn:organization:notification/chat:2",
+        "level": "warning",
+        "title": "Underwriting review needed",
+        "body": "90 Harbor Blvd flagged 3 risk factors.",
+        "created_at": "2026-06-29T16:46:00Z",
+        "read": False,
     },
     {
-    'grn': 'grn:organization:notification/documents:1',
-    'level': 'success',
-    'title': 'Document ready',
-    'body': 'HO-3 Master Form finished processing.',
-    'created_at': '2026-06-30T00:11:00Z',
-    'read': True,
+        "grn": "grn:organization:notification/documents:1",
+        "level": "success",
+        "title": "Document ready",
+        "body": "HO-3 Master Form finished processing.",
+        "created_at": "2026-06-30T00:11:00Z",
+        "read": True,
     },
 ]
+
 
 class NotificationRepository:
     """Repository over the gateway's in-memory resource projection."""
@@ -49,6 +50,7 @@ class NotificationRepository:
     def change_read_status(self, organization_id: str, notification_grn: str) -> None:
         # Placeholder implementation for changing the read status of a notification
         pass
+
 
 class NotificationService:
     """Application service for notification listing and future policy-backed access checks."""

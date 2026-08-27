@@ -70,7 +70,9 @@ async def test_agent_list_get_update_delete_crud(db_session):
     assert updated.enabled is False
     assert updated.version == 2
 
-    await service.delete_agent(str(original.grn), deleted_by="principal://acme/user/admin")
+    await service.delete_agent(
+        str(original.grn), deleted_by="principal://acme/user/admin"
+    )
 
     with pytest.raises(ResourceNotFoundError):
         await service.get_agent(str(original.grn))

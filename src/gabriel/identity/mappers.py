@@ -7,6 +7,7 @@ from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
 from gabriel.identity.orm import PrincipalORM
 
+
 def orm_to_domain(orm: PrincipalORM) -> Principal:
     """Convert a PrincipalORM to a Principal domain object."""
     return Principal(
@@ -19,8 +20,9 @@ def orm_to_domain(orm: PrincipalORM) -> Principal:
         capabilities=set(orm.capabilities),
         metadata=orm.resource_metadata,
         created_at=orm.created_at,
-        updated_at=orm.updated_at
+        updated_at=orm.updated_at,
     )
+
 
 def domain_to_orm(domain: Principal) -> PrincipalORM:
     """Convert a Principal domain object to a PrincipalORM."""
@@ -34,5 +36,5 @@ def domain_to_orm(domain: Principal) -> PrincipalORM:
         resource_grn=domain.resource_grn,
         resource_metadata=domain.metadata,
         created_at=domain.created_at,
-        updated_at=domain.updated_at
+        updated_at=domain.updated_at,
     )

@@ -1,4 +1,5 @@
 """ProviderRegistry + Ollama provider tests (Phase 3)."""
+
 from __future__ import annotations
 
 import json

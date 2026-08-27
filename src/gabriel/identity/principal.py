@@ -1,4 +1,5 @@
 """Principal: The universal identity object in Gabriel."""
+
 from datetime import datetime, UTC
 from typing import Any
 

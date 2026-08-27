@@ -66,7 +66,6 @@ def _get_alembic_url() -> str:
     return url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
 
 
-
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 

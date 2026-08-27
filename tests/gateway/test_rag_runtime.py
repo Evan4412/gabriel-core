@@ -1,4 +1,5 @@
 """RAG in the chat runtime: retrieved chunks are injected into the prompt."""
+
 from __future__ import annotations
 
 import json
@@ -31,9 +32,9 @@ def parse_frames(frames: list[str]) -> list[tuple[str, dict]]:
         event, data = "", {}
         for line in frame.strip().splitlines():
             if line.startswith("event: "):
-                event = line[len("event: "):]
+                event = line[len("event: ") :]
             elif line.startswith("data: "):
-                data = json.loads(line[len("data: "):])
+                data = json.loads(line[len("data: ") :])
         parsed.append((event, data))
     return parsed
 

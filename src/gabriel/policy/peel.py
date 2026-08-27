@@ -13,6 +13,7 @@ PEEL combines two layers of enforcement, applied in order (fail-secure):
 
 This module lives in **Core (Platform Layer)**.
 """
+
 from gabriel.policy.capabilities import required_capability_for_action
 from gabriel.policy.engine import PolicyEngine, EvaluationRequest, Effect
 from gabriel.policy.exceptions import UnauthorizedError

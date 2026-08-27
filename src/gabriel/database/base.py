@@ -24,7 +24,9 @@ class GabrielResourceMixin:
         Enum(ResourceType, native_enum=False), nullable=False
     )
     state: Mapped[ResourceState] = mapped_column(
-        Enum(ResourceState, native_enum=False), nullable=False, default=ResourceState.DRAFT
+        Enum(ResourceState, native_enum=False),
+        nullable=False,
+        default=ResourceState.DRAFT,
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     created_at: Mapped[datetime] = mapped_column(

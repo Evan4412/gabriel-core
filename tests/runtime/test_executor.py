@@ -3,7 +3,12 @@ import pytest
 from gabriel.agent.models import Agent
 from gabriel.agent.specification import AgentSpecification
 from gabriel.resource.grn import GRN
-from gabriel.runtime.execution import AgentExecutor, ExecutionMetrics, ExecutionRequest, ExecutionResult
+from gabriel.runtime.execution import (
+    AgentExecutor,
+    ExecutionMetrics,
+    ExecutionRequest,
+    ExecutionResult,
+)
 from gabriel.runtime.mock_runtime import MockRuntime
 from gabriel.runtime.registry import RuntimeRegistry
 

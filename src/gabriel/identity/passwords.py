@@ -16,6 +16,7 @@ Design notes
   the stored format keeps old hashes verifiable during the transition
   (hot-swappable, mirroring the identity-provider strategy pattern).
 """
+
 from __future__ import annotations
 
 import base64

@@ -1,4 +1,5 @@
 """Tests for PEEL (Policy Enforcement & Evaluation Layer)."""
+
 import pytest
 
 from gabriel.policy.models import Policy, PolicyStatement, Effect
@@ -21,7 +22,9 @@ class TestPolicyEngine:
         )
         assert policy_engine.evaluate(request) == Effect.DENY
 
-    def test_explicit_allow(self, policy_engine: PolicyEngine, allow_all_policy: Policy):
+    def test_explicit_allow(
+        self, policy_engine: PolicyEngine, allow_all_policy: Policy
+    ):
         """Explicit allow: policy with ALLOW statement allows action."""
         policy_engine.add_policy(allow_all_policy)
         request = EvaluationRequest(
@@ -41,7 +44,9 @@ class TestPolicyEngine:
             resource_match="*",
         )
         allow_policy = Policy.create(
-            grn=GRN(org_id="org", resource_type=ResourceType.POLICY, resource_id="allow"),
+            grn=GRN(
+                org_id="org", resource_type=ResourceType.POLICY, resource_id="allow"
+            ),
             org_id="org",
             created_by="admin",
             statements=[allow_stmt],
@@ -56,7 +61,9 @@ class TestPolicyEngine:
             resource_match="*",
         )
         deny_policy = Policy.create(
-            grn=GRN(org_id="org", resource_type=ResourceType.POLICY, resource_id="deny"),
+            grn=GRN(
+                org_id="org", resource_type=ResourceType.POLICY, resource_id="deny"
+            ),
             org_id="org",
             created_by="admin",
             statements=[deny_stmt],
@@ -71,11 +78,15 @@ class TestPolicyEngine:
         )
         assert policy_engine.evaluate(request) == Effect.DENY
 
-    def test_wildcard_principal_match(self, policy_engine: PolicyEngine, allow_all_policy: Policy):
+    def test_wildcard_principal_match(
+        self, policy_engine: PolicyEngine, allow_all_policy: Policy
+    ):
         """Wildcard matching: * matches any principal."""
         policy_engine.add_policy(allow_all_policy)
         for principal in ["alice", "bob", "principal://org/agent/robot"]:
-            request = EvaluationRequest(principal=principal, action="read", resource="r1")
+            request = EvaluationRequest(
+                principal=principal, action="read", resource="r1"
+            )
             assert policy_engine.evaluate(request) == Effect.ALLOW
 
     def test_glob_principal_match(self, policy_engine: PolicyEngine):
@@ -127,14 +138,24 @@ class TestPolicyEngine:
         policy_engine.add_policy(policy)
 
         # Should allow identity actions
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="u1", action="identity:create", resource="r1")
-        ) == Effect.ALLOW
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(
+                    principal="u1", action="identity:create", resource="r1"
+                )
+            )
+            == Effect.ALLOW
+        )
 
         # Should deny non-identity actions
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="u1", action="resource:delete", resource="r1")
-        ) == Effect.DENY
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(
+                    principal="u1", action="resource:delete", resource="r1"
+                )
+            )
+            == Effect.DENY
+        )
 
     def test_glob_resource_match(self, policy_engine: PolicyEngine):
         """Glob pattern matching: grn:org:agent/*:* matches agents."""
@@ -153,16 +174,28 @@ class TestPolicyEngine:
         policy_engine.add_policy(policy)
 
         # Should allow agent resources
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="u1", action="write", resource="grn:org:agent/bot1:1")
-        ) == Effect.ALLOW
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(
+                    principal="u1", action="write", resource="grn:org:agent/bot1:1"
+                )
+            )
+            == Effect.ALLOW
+        )
 
         # Should deny other resources
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="u1", action="write", resource="grn:org:user/alice:1")
-        ) == Effect.DENY
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(
+                    principal="u1", action="write", resource="grn:org:user/alice:1"
+                )
+            )
+            == Effect.DENY
+        )
 
-    def test_evaluate_batch(self, policy_engine: PolicyEngine, allow_all_policy: Policy):
+    def test_evaluate_batch(
+        self, policy_engine: PolicyEngine, allow_all_policy: Policy
+    ):
         """Batch evaluation: evaluate multiple requests at once."""
         policy_engine.add_policy(allow_all_policy)
         requests = [
@@ -172,7 +205,9 @@ class TestPolicyEngine:
         results = policy_engine.evaluate_batch(requests)
         assert all(r == Effect.ALLOW for r in results)
 
-    def test_add_remove_policy(self, policy_engine: PolicyEngine, allow_all_policy: Policy):
+    def test_add_remove_policy(
+        self, policy_engine: PolicyEngine, allow_all_policy: Policy
+    ):
         """Add/remove policies from engine."""
         assert len(policy_engine.policies) == 0
 
@@ -218,9 +253,12 @@ class TestMultipleStatements:
         policy_engine.add_policy(policy)
 
         # User1 should be allowed (first statement matches)
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="user1", action="read", resource="doc")
-        ) == Effect.ALLOW
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(principal="user1", action="read", resource="doc")
+            )
+            == Effect.ALLOW
+        )
 
     def test_deny_short_circuits_evaluation(self, policy_engine: PolicyEngine):
         """DENY returns immediately without checking other policies."""
@@ -248,9 +286,14 @@ class TestMultipleStatements:
 
         # ALLOW matches first, but DENY is more specific
         # Since both match, the engine should return DENY (it's checked after ALLOW)
-        assert policy_engine.evaluate(
-            EvaluationRequest(principal="admin", action="sensitive:delete", resource="secret")
-        ) == Effect.DENY
+        assert (
+            policy_engine.evaluate(
+                EvaluationRequest(
+                    principal="admin", action="sensitive:delete", resource="secret"
+                )
+            )
+            == Effect.DENY
+        )
 
 
 class TestPEEL:
@@ -283,7 +326,9 @@ class TestPEEL:
             )
 
     @pytest.mark.asyncio
-    async def test_authorize_batch_allowed(self, execution_context, allow_all_policy: Policy):
+    async def test_authorize_batch_allowed(
+        self, execution_context, allow_all_policy: Policy
+    ):
         """PEEL batch authorize all allowed."""
         engine = PolicyEngine([allow_all_policy])
         peel = PEEL(engine)

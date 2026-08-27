@@ -5,6 +5,7 @@ The serialization path:
 
 Serializers are pluggable per resource type via descriptor.
 """
+
 from typing import Any
 import json
 

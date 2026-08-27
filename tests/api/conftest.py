@@ -46,6 +46,7 @@ def _shared_signing_keys(tmp_path_factory) -> None:
     os.environ.pop("GABRIEL_JWT_PRIVATE_KEY_PATH", None)
     os.environ.pop("GABRIEL_JWT_PUBLIC_KEY_PATH", None)
 
+
 # Capability set mirroring a workspace admin — broad enough for API tests.
 ADMIN_CAPABILITIES = (
     "authenticate",
@@ -83,7 +84,9 @@ def issue_token_headers(
     """
     identity_service = client.app.state.identity_service
     principal = Principal(
-        id=PrincipalID(org_id=org, principal_type=principal_type, principal_identifier=identifier),
+        id=PrincipalID(
+            org_id=org, principal_type=principal_type, principal_identifier=identifier
+        ),
         organization_id=org,
         principal_type=PrincipalType(principal_type),
         display_name=identifier,

@@ -1,4 +1,5 @@
 """Tests for AgentManagementService (Phase 2 — Core Business Logic)."""
+
 import pytest
 from sqlalchemy import select
 
@@ -21,7 +22,9 @@ ACTOR = "principal-1"
 
 
 def _service(db_session) -> AgentManagementService:
-    return AgentManagementService(AgentRepository(db_session), EventRepository(db_session))
+    return AgentManagementService(
+        AgentRepository(db_session), EventRepository(db_session)
+    )
 
 
 async def _create(service: AgentManagementService, name: str = "support-bot", **kw):
@@ -107,7 +110,9 @@ async def test_update_agent_fields_and_status(db_session):
         updated_by=ACTOR,
         org_id=ORG,
         description="Updated description",
-        model_config=ModelConfig(provider="anthropic", model="claude-3", temperature=0.7),
+        model_config=ModelConfig(
+            provider="anthropic", model="claude-3", temperature=0.7
+        ),
         allowed_tools=["search"],
         status=AgentStatus.INACTIVE,
     )

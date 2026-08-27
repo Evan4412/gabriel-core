@@ -62,7 +62,10 @@ class SqlAlchemyEventStore:
                 select(EventORM).order_by(EventORM.occurred_at, EventORM.id)
             )
             rows = list(result.scalars().all())
-        return cls(session_factory=session_factory, initial_events=[_orm_to_event(row) for row in rows])
+        return cls(
+            session_factory=session_factory,
+            initial_events=[_orm_to_event(row) for row in rows],
+        )
 
     async def append(self, event: Event) -> None:
         await self.append_many([event])
@@ -82,7 +85,9 @@ class SqlAlchemyEventStore:
         return list(self._events)
 
     def events_for_organization(self, organization_id: str) -> list[Event]:
-        return [event for event in self._events if event.organization_id == organization_id]
+        return [
+            event for event in self._events if event.organization_id == organization_id
+        ]
 
     def events_for_resource(self, resource_grn: str) -> list[Event]:
         return [event for event in self._events if event.resource_grn == resource_grn]
@@ -94,7 +99,9 @@ class SqlAlchemyEventStore:
         return [event for event in self._events if event.principal_id == principal_id]
 
     def events_by_correlation_id(self, correlation_id: str) -> list[Event]:
-        return [event for event in self._events if event.correlation_id == correlation_id]
+        return [
+            event for event in self._events if event.correlation_id == correlation_id
+        ]
 
     def count(self) -> int:
         return len(self._events)

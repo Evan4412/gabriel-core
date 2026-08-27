@@ -5,7 +5,6 @@ Events are append-only and queried by organization, resource, correlation_id,
 and timestamp for audit trails and replays.
 """
 
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -100,9 +99,7 @@ class EventRepository:
         Returns:
             EventORM: The event, or None if not found.
         """
-        result = await self.session.execute(
-            select(EventORM).filter_by(id=event_id)
-        )
+        result = await self.session.execute(select(EventORM).filter_by(id=event_id))
         return result.scalar_one_or_none()
 
     async def events_for_organization(self, organization_id: str) -> list[EventORM]:
@@ -147,9 +144,7 @@ class EventRepository:
             list[EventORM]: All events of that type, in occurred order.
         """
         result = await self.session.execute(
-            select(EventORM)
-            .filter_by(type=event_type)
-            .order_by(EventORM.occurred_at)
+            select(EventORM).filter_by(type=event_type).order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
 

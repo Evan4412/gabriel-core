@@ -10,6 +10,7 @@ V1 keeps membership simple: a document belongs to at most one knowledge
 source (``Document.knowledge_source_grn`` column), avoiding a join table
 until multi-source membership is actually needed.
 """
+
 from __future__ import annotations
 
 from enum import StrEnum

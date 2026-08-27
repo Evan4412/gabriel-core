@@ -55,7 +55,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    logger.info("Seeding %s agent specification(s) into '%s' ...", len(list_templates()), args.out)
+    logger.info(
+        "Seeding %s agent specification(s) into '%s' ...",
+        len(list_templates()),
+        args.out,
+    )
     written = seed_specs(args.out, fmt=args.format)
     logger.info("Done. %s specification file(s) written.", len(written))
 

@@ -50,9 +50,7 @@ class ExternalIntegrationRepository:
         )
         return list(result.scalars().all())
 
-    async def update(
-        self, orm: ExternalIntegrationORM
-    ) -> ExternalIntegrationORM:
+    async def update(self, orm: ExternalIntegrationORM) -> ExternalIntegrationORM:
         existing = await self.get_by_grn(orm.grn)
         existing.state = orm.state
         existing.version = orm.version

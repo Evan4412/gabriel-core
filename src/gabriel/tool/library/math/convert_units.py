@@ -20,12 +20,26 @@ async def convert_units(value: float, from_unit: str, to_unit: str) -> dict:
 
     conversions = {
         # Length (base: metres)
-        "mm": 0.001, "cm": 0.01, "m": 1.0, "km": 1000.0,
-        "in": 0.0254, "ft": 0.3048, "yd": 0.9144, "mi": 1609.344,
+        "mm": 0.001,
+        "cm": 0.01,
+        "m": 1.0,
+        "km": 1000.0,
+        "in": 0.0254,
+        "ft": 0.3048,
+        "yd": 0.9144,
+        "mi": 1609.344,
         # Mass (base: kilograms)
-        "mg": 1e-6, "g": 0.001, "kg": 1.0, "lb": 0.453592, "oz": 0.028350, "t": 1000.0,
+        "mg": 1e-6,
+        "g": 0.001,
+        "kg": 1.0,
+        "lb": 0.453592,
+        "oz": 0.028350,
+        "t": 1000.0,
         # Speed (base: m/s)
-        "mph": 0.44704, "kph": 0.27778, "m/s": 1.0, "knot": 0.51444,
+        "mph": 0.44704,
+        "kph": 0.27778,
+        "m/s": 1.0,
+        "knot": 0.51444,
     }
 
     temp_units = {"c", "f", "k"}
@@ -61,4 +75,9 @@ async def convert_units(value: float, from_unit: str, to_unit: str) -> dict:
 
     base = value * conversions[f]
     result = base / conversions[t]
-    return {"value": value, "from": from_unit, "to": to_unit, "result": round(result, 6)}
+    return {
+        "value": value,
+        "from": from_unit,
+        "to": to_unit,
+        "result": round(result, 6),
+    }

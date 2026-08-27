@@ -1,4 +1,5 @@
 """Unit tests for KeyManager: kid derivation, rotation, and JWKS publication."""
+
 from __future__ import annotations
 
 from gabriel.identity.keys import KeyManager

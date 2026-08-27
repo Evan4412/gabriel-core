@@ -1,8 +1,8 @@
 """API tests for /api/v1/tools (V1 — Tool as a Universal Resource)."""
+
 from __future__ import annotations
 
 from uuid import uuid4
-
 
 
 def _unique_org() -> str:
@@ -67,8 +67,7 @@ def test_tool_crud_lifecycle(client, make_auth_headers):
     deleted = client.delete(f"/api/v1/tools/{tool['grn']}", headers=headers)
     assert deleted.status_code == 204
     assert (
-        client.get(f"/api/v1/tools/{tool['grn']}", headers=headers).status_code
-        == 404
+        client.get(f"/api/v1/tools/{tool['grn']}", headers=headers).status_code == 404
     )
 
 
@@ -127,8 +126,7 @@ def test_cross_org_tool_access_forbidden(client, make_auth_headers):
     tool = _create_tool(client, headers_a)
 
     assert (
-        client.get(f"/api/v1/tools/{tool['grn']}", headers=headers_b).status_code
-        == 403
+        client.get(f"/api/v1/tools/{tool['grn']}", headers=headers_b).status_code == 403
     )
     assert (
         client.patch(

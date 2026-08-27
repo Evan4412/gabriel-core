@@ -1,4 +1,5 @@
 """UserService: registration, authentication, lifecycle (single-transaction outbox)."""
+
 from __future__ import annotations
 
 import pytest

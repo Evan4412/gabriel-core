@@ -14,7 +14,9 @@ from gabriel.organization.models import Organization
 from gabriel.resource.registry import ResourceRegistry, registry
 
 
-def register_core_resource_types(target_registry: ResourceRegistry | None = None) -> None:
+def register_core_resource_types(
+    target_registry: ResourceRegistry | None = None,
+) -> None:
     """Register core resource types required by Gabriel bootstrap paths.
 
     The function is idempotent and safe to call multiple times.
@@ -208,4 +210,5 @@ def register_core_resource_types(target_registry: ResourceRegistry | None = None
 
     # Register identity types (Principal, future: User, Agent, etc.)
     from gabriel.identity.bootstrap import register_identity_resource_types
+
     register_identity_resource_types(reg)

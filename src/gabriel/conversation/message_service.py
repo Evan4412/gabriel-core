@@ -11,6 +11,7 @@ domain invariants:
 Each append emits a ``message_created`` event in the same transaction
 (ADR-017 transactional outbox).
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -38,7 +39,9 @@ class ConversationClosedError(Exception):
 class MessageService:
     """Business logic for messages (conversation- and org-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = MessageRepository(session)
@@ -66,7 +69,9 @@ class MessageService:
         normalized_role = role if isinstance(role, MessageRole) else MessageRole(role)
 
         # Invariant: the conversation must exist in this org and be open.
-        conversation = await self.conversations.get_by_grn(conversation_grn, org_id=org_id)
+        conversation = await self.conversations.get_by_grn(
+            conversation_grn, org_id=org_id
+        )
         if (
             conversation.status == ConversationStatus.ARCHIVED.value
             or conversation.state == ResourceState.DELETED
@@ -75,7 +80,11 @@ class MessageService:
                 f"Conversation {conversation_grn} is closed for new messages"
             )
 
-        if total_tokens is None and prompt_tokens is not None and completion_tokens is not None:
+        if (
+            total_tokens is None
+            and prompt_tokens is not None
+            and completion_tokens is not None
+        ):
             total_tokens = prompt_tokens + completion_tokens
 
         grn = GRN.generate(org_id=org_id, resource_type="message")

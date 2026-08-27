@@ -11,6 +11,7 @@ the ``memory_layer_entries`` table) — distinct from the runtime MGE working
 memory in ``memory_entries``. This router MUST be registered before the
 legacy ``/memory`` gateway router so its more specific prefix wins.
 """
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -55,7 +56,9 @@ def _parse_scope(value: str | None) -> MemoryScope | None:
     try:
         return MemoryScope(value)
     except ValueError as exc:
-        raise GabrielAPIError(f"Unknown memory scope '{value}'", status_code=422) from exc
+        raise GabrielAPIError(
+            f"Unknown memory scope '{value}'", status_code=422
+        ) from exc
 
 
 @router.get("")

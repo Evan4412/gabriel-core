@@ -45,6 +45,7 @@ from gabriel.tool.exceptions import (
 
 logger = get_logger(__name__)
 
+
 class ToolExecutor:
     """Secure dispatch engine for Gabriel tools.
 
@@ -125,9 +126,7 @@ class ToolExecutor:
         except Exception as exc:
             logger.exception("Tool '%s' raised during invocation", tool.name)
             await self._emit_event(context, tool, success=False, error=str(exc))
-            raise ToolInvocationError(
-                f"Tool '{tool.name}' failed: {exc}"
-            ) from exc
+            raise ToolInvocationError(f"Tool '{tool.name}' failed: {exc}") from exc
         elapsed_ms = int((time.monotonic() - started_at) * 1000)
 
         # 7. Emit audit event

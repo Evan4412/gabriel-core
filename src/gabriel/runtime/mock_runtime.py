@@ -1,6 +1,7 @@
 from gabriel.runtime.contract import AgentRuntime
 from gabriel.runtime.execution import ExecutionMetrics, ExecutionResult
 
+
 class MockRuntime(AgentRuntime):
     @property
     def name(self):
@@ -9,7 +10,10 @@ class MockRuntime(AgentRuntime):
     async def execute(self, request) -> ExecutionResult:
         return ExecutionResult(
             success=True,
-            output={"answer": "I am a mock response", "agent": request.agent.specification.name},
+            output={
+                "answer": "I am a mock response",
+                "agent": request.agent.specification.name,
+            },
             events=[],
             metrics=ExecutionMetrics(
                 duration_ms=1.0,

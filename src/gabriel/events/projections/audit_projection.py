@@ -20,18 +20,33 @@ class AuditLogORM(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     event_type: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
-    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
-    organization_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    occurred_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, index=True
+    )
+    organization_id: Mapped[str] = mapped_column(
+        String(128), nullable=False, index=True
+    )
     principal_id: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     decision: Mapped[str | None] = mapped_column(String(16), nullable=True, index=True)
     action: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    resource_grn: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
-    correlation_id: Mapped[str | None] = mapped_column(String(36), nullable=True, index=True)
+    resource_grn: Mapped[str | None] = mapped_column(
+        String(255), nullable=True, index=True
+    )
+    correlation_id: Mapped[str | None] = mapped_column(
+        String(36), nullable=True, index=True
+    )
     payload: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
-    event_metadata: Mapped[dict[str, Any]] = mapped_column("meta", JSON, nullable=False, default=dict)
+    event_metadata: Mapped[dict[str, Any]] = mapped_column(
+        "meta", JSON, nullable=False, default=dict
+    )
 
     __table_args__ = (
-        Index("ix_audit_log_time_principal_decision", "occurred_at", "principal_id", "decision"),
+        Index(
+            "ix_audit_log_time_principal_decision",
+            "occurred_at",
+            "principal_id",
+            "decision",
+        ),
     )
 
 

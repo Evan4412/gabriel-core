@@ -1,4 +1,5 @@
 """Handler base class: Processes commands and emits events."""
+
 from abc import ABC, abstractmethod
 
 from gabriel.events.command import Command

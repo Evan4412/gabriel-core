@@ -14,6 +14,7 @@ Design rules
 * Connection problems surface as :class:`ProviderConnectionError` — the
   runtime converts them into SSE error events instead of crashing streams.
 """
+
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
@@ -47,7 +48,6 @@ class ModelNotFoundError(ProviderError):
 # ---------------------------------------------------------------------------
 
 
-
 @dataclass(frozen=True)
 class ToolCallRequest:
     """The model asked the runtime to execute a tool."""
@@ -55,6 +55,7 @@ class ToolCallRequest:
     id: str
     name: str
     arguments: dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass(frozen=True)
 class ChatMessage:
@@ -90,7 +91,7 @@ class ChatMessage:
                     "function": {
                         "name": call.name,
                         "arguments": call.arguments,
-                    }
+                    },
                 }
                 for call in self.tool_calls
             ]

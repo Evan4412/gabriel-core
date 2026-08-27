@@ -12,6 +12,7 @@ Embedding failures degrade gracefully: chunks are stored WITHOUT embeddings
 ``embedded=False`` recorded in its metadata, so a later re-process can fill
 the vectors in once the embedding backend is reachable.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -93,7 +94,9 @@ class DocumentProcessingService:
                 texts = [chunk.text for chunk in chunks]
                 for start in range(0, len(texts), EMBED_BATCH_SIZE):
                     collected.extend(
-                        await self.embedder.embed(texts[start : start + EMBED_BATCH_SIZE])
+                        await self.embedder.embed(
+                            texts[start : start + EMBED_BATCH_SIZE]
+                        )
                     )
                 embeddings = list(collected)
                 embedded = True

@@ -1,4 +1,5 @@
 """Mappers between Domain (KnowledgeSource) and Persistence (KnowledgeSourceORM)."""
+
 from gabriel.knowledge.source_models import (
     KnowledgeSource,
     KnowledgeSourceStatus,

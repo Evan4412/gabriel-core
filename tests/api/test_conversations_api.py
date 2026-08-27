@@ -1,4 +1,5 @@
 """API tests for /api/v1/conversations (Phase 2 — Core Business Logic)."""
+
 from __future__ import annotations
 
 from uuid import uuid4
@@ -100,7 +101,9 @@ def test_message_lifecycle(client, make_auth_headers):
         headers=headers,
     )
 
-    listing = client.get(f"/api/v1/conversations/{grn}/messages", headers=headers).json()
+    listing = client.get(
+        f"/api/v1/conversations/{grn}/messages", headers=headers
+    ).json()
     assert listing["total"] == 2
     assert [m["content"] for m in listing["items"]] == ["Hello!", "Thanks"]
 
@@ -130,7 +133,9 @@ def test_delete_conversation_soft(client, make_auth_headers):
     assert deleted.status_code == 200, deleted.text
     assert deleted.json()["state"] == "deleted"
 
-    assert client.get(f"/api/v1/conversations/{grn}", headers=headers).status_code == 404
+    assert (
+        client.get(f"/api/v1/conversations/{grn}", headers=headers).status_code == 404
+    )
     assert client.get("/api/v1/conversations", headers=headers).json()["total"] == 0
 
 

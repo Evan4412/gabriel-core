@@ -10,6 +10,7 @@ Phase 4 (Document & Knowledge) extends the model with library fields
 can be listed, retrieved, processed into chunks, and grouped into knowledge
 sources. All new fields default so pre-existing usage remains valid.
 """
+
 from __future__ import annotations
 
 from enum import StrEnum

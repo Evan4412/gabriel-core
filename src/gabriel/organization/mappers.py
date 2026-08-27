@@ -1,4 +1,5 @@
 """Mappers between Domain (Organization) and Persistence (OrganizationORM)."""
+
 from gabriel.organization.models import Organization
 from gabriel.organization.orm import OrganizationORM
 from gabriel.resource.grn import GRN

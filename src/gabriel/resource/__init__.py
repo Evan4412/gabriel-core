@@ -7,11 +7,11 @@ from gabriel.resource.serializer import ResourceSerializer
 from gabriel.resource.validators import ResourceValidator
 
 __all__ = [
-	"ResourceDescriptor",
-	"ResourceFactory",
-	"ResourceRegistry",
-	"ResourceSerializer",
-	"ResourceValidator",
     "ResourceDescriptor",
-	"registry",
+    "ResourceFactory",
+    "ResourceRegistry",
+    "ResourceSerializer",
+    "ResourceValidator",
+    "ResourceDescriptor",
+    "registry",
 ]

@@ -9,6 +9,7 @@ Provider selection is config-driven per agent: the agent's
 ``model_config.provider`` names the provider; when an agent declares no
 provider the registry's ``default_provider`` is used.
 """
+
 from __future__ import annotations
 
 import os

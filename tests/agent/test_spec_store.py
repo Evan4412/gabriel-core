@@ -78,7 +78,9 @@ def test_store_reads_both_formats(tmp_path) -> None:
 
 def test_name_sanitization(tmp_path) -> None:
     store = AgentSpecificationStore(tmp_path)
-    spec = AgentSpecification(name="team/chat bot:v1", runtime="langgraph", model="gpt-5")
+    spec = AgentSpecification(
+        name="team/chat bot:v1", runtime="langgraph", model="gpt-5"
+    )
     path = store.save(spec)
     # Slashes/colons/spaces are sanitized into a safe stem.
     assert "/" not in path.name

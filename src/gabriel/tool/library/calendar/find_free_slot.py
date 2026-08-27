@@ -1,4 +1,5 @@
 """find_free_slot — find the next free time slot in Google Calendar."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from datetime import datetime, timedelta, UTC
@@ -41,7 +42,9 @@ async def find_free_slot(
             "items": [{"id": calendar_id}],
         }
         freebusy = service.freebusy().query(body=body).execute()
-        busy_periods = freebusy.get("calendars", {}).get(calendar_id, {}).get("busy", [])
+        busy_periods = (
+            freebusy.get("calendars", {}).get(calendar_id, {}).get("busy", [])
+        )
 
         # Normalise busy periods to datetime objects
         busy: list[tuple[datetime, datetime]] = []
@@ -64,7 +67,9 @@ async def find_free_slot(
                 continue
             # Stay within working hours
             end_candidate = candidate + duration
-            if end_candidate.hour > 17 or (end_candidate.hour == 17 and end_candidate.minute > 0):
+            if end_candidate.hour > 17 or (
+                end_candidate.hour == 17 and end_candidate.minute > 0
+            ):
                 candidate = (candidate + timedelta(days=1)).replace(
                     hour=9, minute=0, second=0, microsecond=0
                 )

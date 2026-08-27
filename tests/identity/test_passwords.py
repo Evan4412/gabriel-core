@@ -1,4 +1,5 @@
 """Unit tests for PBKDF2 password hashing."""
+
 from __future__ import annotations
 
 import pytest

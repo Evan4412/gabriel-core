@@ -1,4 +1,5 @@
 """Tests for Principal persistence layer (repository pattern)."""
+
 import pytest
 from gabriel.identity.principal import Principal
 from gabriel.identity.principal_id import PrincipalID
@@ -13,7 +14,6 @@ async def test_create_and_retrieve_principal(db_session):
     """Test that Principals are created as domain objects and properly persisted."""
     # Setup
     register_core_resource_types()
-
 
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
@@ -53,7 +53,6 @@ async def test_principal_capability_round_trip(db_session):
     """Test that capabilities survive JSON serialization/deserialization."""
     register_core_resource_types()
 
-
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
 
@@ -89,7 +88,6 @@ async def test_principal_status_defaults_to_active(db_session):
     """Test that principal status defaults to 'active'."""
     register_core_resource_types()
 
-
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
 
@@ -113,7 +111,6 @@ async def test_principal_status_defaults_to_active(db_session):
 async def test_list_principals_for_organization(db_session):
     """Test listing all principals in an organization."""
     register_core_resource_types()
-
 
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)
@@ -149,7 +146,6 @@ async def test_list_principals_for_organization(db_session):
 async def test_principal_principal_id_format(db_session):
     """Test that PrincipalID follows expected format."""
     register_core_resource_types()
-
 
     repo = PrincipalRepository(db_session)
     service = PrincipalService(repo)

@@ -13,6 +13,7 @@ that is propagated through all internal calls"). It:
 
 It intentionally does **not** perform authorization; that is PEEL's job.
 """
+
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -39,7 +40,9 @@ class LoginResult:
 
     __slots__ = ("principal", "token", "session")
 
-    def __init__(self, principal: Principal, token: Token, session: dict[str, Any]) -> None:
+    def __init__(
+        self, principal: Principal, token: Token, session: dict[str, Any]
+    ) -> None:
         self.principal = principal
         self.token = token
         self.session = session
@@ -95,7 +98,9 @@ class IdentityService:
         """
         token_str = token.value if isinstance(token, Token) else token
         if self.registry.has("production"):
-            result = await self.registry.get("production").authenticate({"token": token_str})
+            result = await self.registry.get("production").authenticate(
+                {"token": token_str}
+            )
             return result.principal
         return self.principal_from_token(token_str)
 
@@ -132,7 +137,9 @@ def build_key_manager(settings: IdentitySettings) -> KeyManager:
     ``GABRIEL_JWT_PRIVATE_KEY_PATH`` / ``GABRIEL_JWT_PUBLIC_KEY_PATH``.
     """
     if settings.private_key_path and settings.public_key_path:
-        return KeyManager.from_files(settings.private_key_path, settings.public_key_path)
+        return KeyManager.from_files(
+            settings.private_key_path, settings.public_key_path
+        )
     return KeyManager()
 
 

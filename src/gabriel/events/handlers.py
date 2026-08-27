@@ -1,4 +1,5 @@
 """Organization domain handlers and events."""
+
 from gabriel.events.command import Command
 from gabriel.events.event import Event
 from gabriel.events.handler import Handler
@@ -82,4 +83,6 @@ class CreateOrganizationHandler(Handler):
         except CommandValidationError:
             raise
         except Exception as exc:
-            raise HandlerExecutionError(f"Failed to create organization: {exc}") from exc
+            raise HandlerExecutionError(
+                f"Failed to create organization: {exc}"
+            ) from exc

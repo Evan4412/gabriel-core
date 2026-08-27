@@ -4,17 +4,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from gabriel.runtime.execution import ExecutionRequest, ExecutionResult
 
+
 class AgentRuntime(ABC):
     @abstractmethod
-    async def execute(
-        self,
-        request: "ExecutionRequest"
-    ) -> "ExecutionResult":
+    async def execute(self, request: "ExecutionRequest") -> "ExecutionResult":
         """Execute the agent and return a standardized result."""
 
     @abstractmethod
-    async def health(self):
-        ...
+    async def health(self): ...
 
     @property
     @abstractmethod

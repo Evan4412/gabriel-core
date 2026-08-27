@@ -30,9 +30,13 @@ class AgentValidator:
         if specification.model not in self._models:
             raise AgentValidationError(f"Unknown model: {specification.model}")
 
-        unknown_tools = [tool for tool in specification.tools if tool not in self._tools]
+        unknown_tools = [
+            tool for tool in specification.tools if tool not in self._tools
+        ]
         if unknown_tools:
-            raise AgentValidationError(f"Unknown tool(s): {', '.join(sorted(unknown_tools))}")
+            raise AgentValidationError(
+                f"Unknown tool(s): {', '.join(sorted(unknown_tools))}"
+            )
 
         unknown_caps = [
             capability
@@ -45,7 +49,9 @@ class AgentValidator:
             )
 
         unknown_layers = [
-            layer for layer in specification.memory_layers if layer not in self._memory_layers
+            layer
+            for layer in specification.memory_layers
+            if layer not in self._memory_layers
         ]
         if unknown_layers:
             raise AgentValidationError(

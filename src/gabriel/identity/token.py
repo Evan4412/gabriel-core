@@ -1,4 +1,5 @@
 """Token and TokenPayload: JWT-based cryptographic identity verification."""
+
 from datetime import datetime, UTC
 from typing import Any
 

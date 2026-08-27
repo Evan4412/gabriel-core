@@ -1,4 +1,5 @@
 """Mappers between Domain (Conversation) and Persistence (ConversationORM)."""
+
 from gabriel.conversation.models import Conversation, ConversationStatus
 from gabriel.conversation.orm import ConversationORM
 from gabriel.resource.grn import GRN

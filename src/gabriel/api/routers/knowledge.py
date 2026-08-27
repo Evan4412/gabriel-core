@@ -14,6 +14,7 @@ Knowledge sources are Universal Resources that group documents into
 retrievable collections; agents reference them by GRN and the gateway
 retrieves relevant chunks automatically during chat turns (RAG).
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query, Request

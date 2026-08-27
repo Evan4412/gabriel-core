@@ -12,6 +12,7 @@ declaration only (local/enterprise/cloud/edge) — no routing engine consumes
 it yet. The chat runtime honours the ``enabled`` flag when resolving which
 tools an agent may use.
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Query
@@ -208,7 +209,8 @@ async def sync_tools(
     async with session_factory() as session:
         svc = _service(session)
         existing_names = {
-            t.name for t in await svc.list_tools(context.organization)
+            t.name
+            for t in await svc.list_tools(context.organization)
             if t.org_id == context.organization
         }
         for tool in discovered:

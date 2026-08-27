@@ -3,6 +3,7 @@
 Queries are scoped by organization AND recipient (tenant isolation plus
 recipient privacy: a user only ever sees their own notifications).
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC

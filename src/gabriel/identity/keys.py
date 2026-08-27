@@ -5,6 +5,7 @@ seamless"). The active key signs new tokens; previously-active keys are retained
 for verification so tokens issued before a rotation remain valid until they
 expire.
 """
+
 import base64
 import hashlib
 import json
@@ -49,7 +50,9 @@ class KeyManager:
     verification set (keyed by ``kid``) and published via :meth:`jwks`.
     """
 
-    def __init__(self, private_key_pem: bytes | None = None, public_key_pem: bytes | None = None):
+    def __init__(
+        self, private_key_pem: bytes | None = None, public_key_pem: bytes | None = None
+    ):
         """Initialize with existing keys or generate a new pair.
 
         Args:

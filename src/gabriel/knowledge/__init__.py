@@ -9,6 +9,7 @@ Vertical slice for GABRIEL's document-grounded retrieval:
 - ``source_*``          — KnowledgeSource resource (document collections).
 - ``retrieval``         — query → context blocks for the gateway runtime.
 """
+
 from gabriel.knowledge.chunking import Chunk, TextChunker
 from gabriel.knowledge.embeddings import (
     EmbeddingProvider,

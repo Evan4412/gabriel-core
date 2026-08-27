@@ -1,4 +1,5 @@
 """Tests for MessageService (Phase 2 — Core Business Logic)."""
+
 import pytest
 from sqlalchemy import select
 
@@ -77,7 +78,11 @@ async def test_create_message_rejected_for_archived_conversation(db_session):
 
     with pytest.raises(ConversationClosedError):
         await MessageService(db_session).create_message(
-            str(conversation.grn), org_id=ORG, created_by=ACTOR, role="user", content="Hi"
+            str(conversation.grn),
+            org_id=ORG,
+            created_by=ACTOR,
+            role="user",
+            content="Hi",
         )
 
 

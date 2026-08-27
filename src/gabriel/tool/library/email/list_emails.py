@@ -1,4 +1,5 @@
 """list_emails — list recent emails from the inbox."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any
@@ -31,12 +32,16 @@ async def list_emails(
             msg = client.fetch_email(email_id)
             if msg is None:
                 continue
-            results.append({
-                "id": email_id.decode() if isinstance(email_id, bytes) else email_id,
-                "subject": client.decode_header_value(msg["Subject"]),
-                "from": msg["From"],
-                "date": msg["Date"],
-            })
+            results.append(
+                {
+                    "id": email_id.decode()
+                    if isinstance(email_id, bytes)
+                    else email_id,
+                    "subject": client.decode_header_value(msg["Subject"]),
+                    "from": msg["From"],
+                    "date": msg["Date"],
+                }
+            )
         client.close()
         return {"emails": results, "count": len(results)}
     except Exception as exc:

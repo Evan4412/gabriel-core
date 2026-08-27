@@ -8,6 +8,7 @@ from typing import Any
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import Resource, ResourceState, ResourceType
 
+
 class ToolCategory(StrEnum):
     """Broad category a tool belongs to.
 
@@ -63,6 +64,7 @@ class SafetyLevel(int, Enum):
     SAFE = 0
     REQUIRES_CONFIRMATION = 1
     RESTRICTED = 2
+
 
 class Tool(Resource):
     """Declarative tool resource.

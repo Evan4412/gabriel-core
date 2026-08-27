@@ -16,6 +16,7 @@ Security properties
 * Rotation with reuse detection: presenting an already-rotated token revokes
   the whole chain (a replayed stolen token cannot mint new sessions).
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -47,7 +48,9 @@ class RefreshTokenORM(Base):
     principal_id: Mapped[str] = mapped_column(String(225), index=True, nullable=False)
     org_id: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
     issued_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
     revoked_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )
@@ -144,7 +147,9 @@ class RefreshTokenService:
     async def revoke_all_for_principal(self, principal_id: str) -> int:
         """Revoke every active refresh token for a principal."""
         result = await self.session.execute(
-            select(RefreshTokenORM).filter_by(principal_id=principal_id, revoked_at=None)
+            select(RefreshTokenORM).filter_by(
+                principal_id=principal_id, revoked_at=None
+            )
         )
         records = list(result.scalars().all())
         now = utcnow()

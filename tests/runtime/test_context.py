@@ -1,4 +1,5 @@
 """Tests for ExecutionContext."""
+
 import pytest
 import json
 from uuid import uuid4
@@ -30,7 +31,9 @@ class TestExecutionContextImmutability:
             # Can't reassign the metadata field itself
             execution_context.metadata = {"new": "value"}
 
-    def test_context_cannot_modify_capabilities(self, execution_context: ExecutionContext):
+    def test_context_cannot_modify_capabilities(
+        self, execution_context: ExecutionContext
+    ):
         """Capabilities frozenset is immutable."""
         with pytest.raises(AttributeError):
             execution_context.capabilities.add("new_capability")
@@ -112,9 +115,7 @@ class TestExecutionContextEquality:
         # Contexts with same execution_id and organization are equal
         assert ctx1 == ctx2
 
-    def test_different_execution_id_not_equal(
-        self, principal: Principal, org_id: str
-    ):
+    def test_different_execution_id_not_equal(self, principal: Principal, org_id: str):
         """Contexts with different execution_ids are not equal."""
         corr_id = uuid4()
         ctx1 = ExecutionContext(
@@ -160,7 +161,9 @@ class TestExecutionContextSerialization:
         assert "principal_id" in d
         assert "organization" in d
         assert "correlation_id" in d
-        assert all(isinstance(v, (str, int, list, dict, type(None))) for v in d.values())
+        assert all(
+            isinstance(v, (str, int, list, dict, type(None))) for v in d.values()
+        )
 
     def test_to_json(self, execution_context: ExecutionContext):
         """to_json produces valid JSON string."""
@@ -220,7 +223,10 @@ class TestExecutionContextCapabilities:
             resource=None,
             started_at=utcnow(),
             capabilities=frozenset(
-                [RuntimeCapability.READ_MEMORY.value, RuntimeCapability.INVOKE_TOOL.value]
+                [
+                    RuntimeCapability.READ_MEMORY.value,
+                    RuntimeCapability.INVOKE_TOOL.value,
+                ]
             ),
             metadata={},
         )

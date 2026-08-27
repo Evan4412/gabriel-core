@@ -17,11 +17,21 @@ class ResourceProjectionORM(Base):
     __tablename__ = "resource_projections"
 
     grn: Mapped[str] = mapped_column(String(255), primary_key=True)
-    organization_id: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
-    resource_type: Mapped[str | None] = mapped_column(String(64), index=True, nullable=True)
-    state: Mapped[str] = mapped_column(String(32), nullable=False, server_default="active")
-    attributes: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, server_default="{}")
-    payload: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, server_default="{}")
+    organization_id: Mapped[str] = mapped_column(
+        String(128), index=True, nullable=False
+    )
+    resource_type: Mapped[str | None] = mapped_column(
+        String(64), index=True, nullable=True
+    )
+    state: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default="active"
+    )
+    attributes: Mapped[dict[str, Any]] = mapped_column(
+        JSON, nullable=False, server_default="{}"
+    )
+    payload: Mapped[dict[str, Any]] = mapped_column(
+        JSON, nullable=False, server_default="{}"
+    )
     last_event_type: Mapped[str | None] = mapped_column(String(128), nullable=True)
     last_event_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

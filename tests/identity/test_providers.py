@@ -1,4 +1,5 @@
 """Unit tests for the provider registry and the development identity provider."""
+
 from __future__ import annotations
 
 import pytest

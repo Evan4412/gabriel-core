@@ -20,6 +20,7 @@ Changes
    (key/value, scope, tags, expiry; key unique per (org, scope, subject)
    namespace). Distinct from the runtime working-memory ``memory_entries``.
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -76,7 +77,9 @@ def upgrade() -> None:
         sa.Column("model", sa.String(255), nullable=True),
     )
     op.create_index(
-        "ix_messages_conversation_created", "messages", ["conversation_grn", "created_at"]
+        "ix_messages_conversation_created",
+        "messages",
+        ["conversation_grn", "created_at"],
     )
 
     # 3. notifications — per-recipient alerts derived from domain events
@@ -111,7 +114,10 @@ def upgrade() -> None:
         sa.Column("tags", sa.JSON, nullable=False),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
         sa.UniqueConstraint(
-            "org_id", "scope", "subject_grn", "key",
+            "org_id",
+            "scope",
+            "subject_grn",
+            "key",
             name="uq_memory_layer_entries_namespace_key",
         ),
     )

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from gabriel.memory.models import MemoryEntry, MemoryLayer
 
+
 class MemoryAccessInterface(ABC):
     """Memory Access Interface (MAI) — ADR-014 contract.
 

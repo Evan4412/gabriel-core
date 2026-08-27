@@ -13,7 +13,11 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-from gabriel.api.auth import AuthenticationError, authenticate_token, extract_bearer_token
+from gabriel.api.auth import (
+    AuthenticationError,
+    authenticate_token,
+    extract_bearer_token,
+)
 from gabriel.events.audit import PeelEvaluationEvent
 from gabriel.logging_config import get_logger
 from gabriel.policy.engine import Effect
@@ -119,7 +123,7 @@ _PUBLIC_PREFIXES = ("/health", "/auth", "/api/v1/auth", "/api/v1/agent-specs")
 
 def _normalize_api_path(path: str) -> str:
     if path.startswith("/api/v1/"):
-        return path[len("/api/v1"):]
+        return path[len("/api/v1") :]
     if path == "/api/v1":
         return "/"
     return path
@@ -146,10 +150,18 @@ def _derive_action(request: Request) -> str | None:
         return None
 
     verb = _VERB_BY_METHOD.get(request.method.upper(), "read")
-    if domain == "agent" and request.method.upper() == "POST" and segments[-1] == "execute":
+    if (
+        domain == "agent"
+        and request.method.upper() == "POST"
+        and segments[-1] == "execute"
+    ):
         verb = "execute"
     # Knowledge search is a read-shaped POST (query in the body).
-    if domain == "knowledge" and request.method.upper() == "POST" and segments[-1] == "search":
+    if (
+        domain == "knowledge"
+        and request.method.upper() == "POST"
+        and segments[-1] == "search"
+    ):
         verb = "search"
     return f"{domain}:{verb}"
 
@@ -248,7 +260,9 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
 
             auth_result = await authenticate_token(identity_service, token)
 
-            correlation_id = _parse_correlation_id(request.headers.get("x-correlation-id"))
+            correlation_id = _parse_correlation_id(
+                request.headers.get("x-correlation-id")
+            )
             request.state.execution_context = ExecutionContext(
                 execution_id=uuid4(),
                 principal=auth_result.principal,

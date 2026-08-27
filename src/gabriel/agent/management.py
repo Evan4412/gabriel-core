@@ -16,6 +16,7 @@ unchanged. Status maps onto the Resource lifecycle:
     inactive → ResourceState.SUSPENDED, enabled=False
     draft    → ResourceState.DRAFT,     enabled=False
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC
@@ -112,7 +113,9 @@ def agent_public_view(agent: Agent) -> dict[str, Any]:
 class AgentManagementService:
     """Business logic for managing Agent resources (org-scoped)."""
 
-    def __init__(self, repository: AgentRepository, event_repo: EventRepository | None = None):
+    def __init__(
+        self, repository: AgentRepository, event_repo: EventRepository | None = None
+    ):
         self.repo = repository
         self.event_repo = event_repo
 

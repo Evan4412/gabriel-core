@@ -6,6 +6,7 @@ simultaneously present in the discovery catalog, backed by an *enabled*
 tools (deny-wins) — plus document-collection grounding in
 ``ChatRuntimeService.resolve_config``.
 """
+
 from __future__ import annotations
 
 import pytest

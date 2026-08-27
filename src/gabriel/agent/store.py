@@ -106,7 +106,9 @@ class AgentSpecificationStore:
         payload = spec.model_dump(mode="json")
 
         if fmt == "json":
-            path.write_text(json.dumps(payload, indent=2, sort_keys=False), encoding="utf-8")
+            path.write_text(
+                json.dumps(payload, indent=2, sort_keys=False), encoding="utf-8"
+            )
         else:  # yaml
             path.write_text(
                 yaml.safe_dump(payload, sort_keys=False, default_flow_style=False),
@@ -114,7 +116,9 @@ class AgentSpecificationStore:
             )
         return path
 
-    def save_many(self, specs: list[AgentSpecification], fmt: str | None = None) -> list[Path]:
+    def save_many(
+        self, specs: list[AgentSpecification], fmt: str | None = None
+    ) -> list[Path]:
         """Persist a batch of specifications; returns the paths written."""
         return [self.save(spec, fmt=fmt) for spec in specs]
 
@@ -188,7 +192,9 @@ class AgentSpecificationStore:
 
     def exists(self, name: str) -> bool:
         """Return True if a spec named *name* is persisted in either format."""
-        return self.path_for(name, "json").exists() or self.path_for(name, "yaml").exists()
+        return (
+            self.path_for(name, "json").exists() or self.path_for(name, "yaml").exists()
+        )
 
     def delete(self, name: str) -> None:
         """Delete a persisted specification (both formats if present)."""

@@ -7,6 +7,7 @@ whole pipeline stays testable without a Postgres instance.
 
 All queries are tenant-scoped: ``org_id`` is always the first filter (P-2).
 """
+
 from __future__ import annotations
 
 import math
@@ -258,7 +259,7 @@ class ChunkVectorStore:
                    metadata,
                    1 - (embedding <=> :query_vec::vector) AS score
             FROM document_chunks
-            WHERE {' AND '.join(clauses)}
+            WHERE {" AND ".join(clauses)}
             ORDER BY embedding <=> :query_vec::vector
             LIMIT :limit
             """

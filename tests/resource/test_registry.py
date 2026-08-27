@@ -1,4 +1,5 @@
 """Tests for resource registry, factory, serializer, and validator."""
+
 import pytest
 
 from gabriel.resource.descriptor import ResourceDescriptor
@@ -190,7 +191,9 @@ class TestResourceRegistry:
 class TestResourceFactory:
     """Tests for the resource factory."""
 
-    def test_factory_create_via_model_create_method(self, registry: ResourceRegistry, org_id: str):
+    def test_factory_create_via_model_create_method(
+        self, registry: ResourceRegistry, org_id: str
+    ):
         """Factory uses model's create() method if available."""
         registry.register_from_class(Organization, LifecycleManager)
         factory = ResourceFactory(registry)
@@ -395,8 +398,12 @@ class TestUniversalResourceModel:
 
     def test_register_multiple_resources(self, registry: ResourceRegistry):
         """Registry handles multiple resource types without if/else chains."""
-        registry.register_from_class(Organization, LifecycleManager, tags=frozenset(["core"]))
-        registry.register_from_class(Policy, LifecycleManager, tags=frozenset(["security"]))
+        registry.register_from_class(
+            Organization, LifecycleManager, tags=frozenset(["core"])
+        )
+        registry.register_from_class(
+            Policy, LifecycleManager, tags=frozenset(["security"])
+        )
 
         assert registry.is_registered("organization")
         assert registry.is_registered("policy")

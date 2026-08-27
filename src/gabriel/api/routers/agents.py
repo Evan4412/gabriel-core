@@ -16,13 +16,18 @@ execute/enable/disable actions still flow through the gateway command path.
 NOTE: pydantic v2 reserves the ``model_config`` attribute name, so the request
 models expose the field through an alias (wire format stays ``model_config``).
 """
+
 from __future__ import annotations
 
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from gabriel.agent.management import AgentManagementService, AgentStatus, agent_public_view
+from gabriel.agent.management import (
+    AgentManagementService,
+    AgentStatus,
+    agent_public_view,
+)
 from gabriel.agent.repository import AgentRepository
 from gabriel.api.dependencies import (
     GatewayService,
@@ -54,7 +59,9 @@ def _parse_status(value: str | None) -> AgentStatus | None:
     try:
         return AgentStatus(value)
     except ValueError as exc:
-        raise GabrielAPIError(f"Unknown agent status '{value}'", status_code=422) from exc
+        raise GabrielAPIError(
+            f"Unknown agent status '{value}'", status_code=422
+        ) from exc
 
 
 def _service(session: AsyncSession) -> AgentManagementService:

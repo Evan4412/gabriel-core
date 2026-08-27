@@ -8,6 +8,7 @@ Token accounting fields (``prompt_tokens``, ``completion_tokens``,
 ``total_tokens``) and ``model`` capture the LLM usage of assistant turns and
 stay ``None`` for plain user/system turns.
 """
+
 from __future__ import annotations
 
 from enum import StrEnum

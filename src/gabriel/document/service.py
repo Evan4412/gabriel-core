@@ -14,6 +14,7 @@ The service is framework-agnostic: it depends only on a Dispatcher and an
 ExecutionContext, so it can be driven from the API gateway, a background
 worker, or a connector. It contains NO chat / LLM / UI logic.
 """
+
 from __future__ import annotations
 
 import hashlib

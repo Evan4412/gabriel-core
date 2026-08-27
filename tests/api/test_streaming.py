@@ -16,7 +16,9 @@ async def test_event_stream_connectivity(client, auth_headers):
     # TestClient doesn't support true async streaming, so we just verify
     # the endpoint exists and returns the correct media type.
     # Full streaming integration requires a live ASGI server (e.g. pytest-anyio + httpx).
-    client.app.dependency_overrides[get_event_streamer] = lambda: _OneShotEventStreamer()
+    client.app.dependency_overrides[get_event_streamer] = lambda: (
+        _OneShotEventStreamer()
+    )
     try:
         with client.stream("GET", "/events/stream", headers=auth_headers) as response:
             assert response.status_code == 200

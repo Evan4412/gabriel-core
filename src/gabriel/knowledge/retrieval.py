@@ -10,6 +10,7 @@ Degradation, not failure (P-1 self-healing): if the embedding provider is
 unreachable the retriever falls back to keyword search, and any unexpected
 error yields an empty result — a chat turn must never break because RAG did.
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable

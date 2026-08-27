@@ -27,7 +27,9 @@ def validator() -> AgentValidator:
 
 
 @pytest.mark.asyncio
-async def test_deploy_agent(registry: ResourceRegistry, validator: AgentValidator) -> None:
+async def test_deploy_agent(
+    registry: ResourceRegistry, validator: AgentValidator
+) -> None:
     service = AgentDeploymentService(
         validator=validator,
         event_store=EventStore(),

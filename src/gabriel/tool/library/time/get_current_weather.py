@@ -64,9 +64,9 @@ async def get_current_weather(location: str, unit: str = "f") -> dict:
             "temperature": temperature,
             "feels_like": feels_like,
             "temperature_unit": temp_unit,
-            "condition": (
-                (current.get("weatherDesc") or [{"value": ""}])[0]
-            ).get("value", ""),
+            "condition": ((current.get("weatherDesc") or [{"value": ""}])[0]).get(
+                "value", ""
+            ),
             "humidity": current.get("humidity"),
             "wind_kph": current.get("windspeedKmph"),
             "wind_mph": current.get("windspeedMiles"),

@@ -14,6 +14,7 @@ middleware). Organization *creation* is intentionally not exposed here — new
 organizations are created through the public ``POST /auth/register`` flow so
 the creator always becomes the owner.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -54,12 +55,12 @@ class ChangeRoleRequest(BaseModel):
 def _require_org(context: ExecutionContext, org_id: str) -> None:
     """Tenant isolation: the caller must belong to the addressed org."""
     if context.organization != org_id:
-        raise GabrielAPIError(
-            "Cross-organization access is forbidden", status_code=403
-        )
+        raise GabrielAPIError("Cross-organization access is forbidden", status_code=403)
 
 
-async def _caller_role(session: AsyncSession, context: ExecutionContext, org_id: str) -> OrgRole | None:
+async def _caller_role(
+    session: AsyncSession, context: ExecutionContext, org_id: str
+) -> OrgRole | None:
     membership = await MembershipService(session).find_membership(
         org_id, str(context.principal.id)
     )
@@ -68,9 +69,7 @@ async def _caller_role(session: AsyncSession, context: ExecutionContext, org_id:
 
 def _require_admin(role: OrgRole | None) -> None:
     if role is None or not role_at_least(role, OrgRole.ADMIN):
-        raise GabrielAPIError(
-            "Organization admin role required", status_code=403
-        )
+        raise GabrielAPIError("Organization admin role required", status_code=403)
 
 
 def _membership_view(m: OrgMembershipORM) -> dict[str, Any]:

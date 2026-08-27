@@ -26,7 +26,9 @@ def utcnow() -> datetime:
 class PolicyService:
     """Business logic for policies."""
 
-    def __init__(self, repository: PolicyRepository, event_repo: EventRepository | None = None):
+    def __init__(
+        self, repository: PolicyRepository, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.repo = repository
         self.event_repo = event_repo
@@ -79,14 +81,20 @@ class PolicyService:
                 await self.repo.session.commit()
             return orm_to_domain(persisted_orm)
         except IntegrityError as exc:
-            raise DuplicateResourceError(f"Policy with GRN '{grn_str}' already exists.") from exc
+            raise DuplicateResourceError(
+                f"Policy with GRN '{grn_str}' already exists."
+            ) from exc
 
     async def get_policy(self, grn_str: str) -> Policy:
         orm_policy = await self.repo.get_by_grn(grn_str)
         return orm_to_domain(orm_policy)
 
     async def list_policies(self, org_id: str | None = None) -> list[Policy]:
-        orm_policies = await self.repo.list_for_org(org_id) if org_id else await self.repo.list_all()
+        orm_policies = (
+            await self.repo.list_for_org(org_id)
+            if org_id
+            else await self.repo.list_all()
+        )
         return [orm_to_domain(policy) for policy in orm_policies]
 
     async def update_policy(

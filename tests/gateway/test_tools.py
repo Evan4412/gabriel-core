@@ -1,4 +1,5 @@
 """Runtime tool framework tests (Phase 3)."""
+
 from __future__ import annotations
 
 import json
@@ -114,4 +115,3 @@ async def test_function_tool_bridges_function_registry():
     )
     assert tool.name == "echo_bridge"
     assert (await tool.run(text="hi")) == {"echo": "hi"}
-

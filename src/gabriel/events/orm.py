@@ -31,9 +31,7 @@ class EventORM(Base):
 
     # Tenant isolation
     organization_id: Mapped[str] = mapped_column(
-        String(128),
-        index=True,
-        nullable=False
+        String(128), index=True, nullable=False
     )
     """Organization this event belongs to (tenant isolation)."""
 
@@ -45,15 +43,13 @@ class EventORM(Base):
         DateTime(timezone=True),
         nullable=False,
         server_default=text("now()"),
-        index=True
+        index=True,
     )
     """When the event occurred."""
 
     # Resource reference (nullable for org-level events)
     resource_grn: Mapped[str | None] = mapped_column(
-        String(255),
-        index=True,
-        nullable=True
+        String(255), index=True, nullable=True
     )
     """The GRN of the resource this event concerns (nullable for org-level)."""
 
@@ -63,31 +59,21 @@ class EventORM(Base):
 
     # Tracing
     correlation_id: Mapped[str | None] = mapped_column(
-        String(36),
-        index=True,
-        nullable=True
+        String(36), index=True, nullable=True
     )
     """Trace ID for correlating related events (e.g., single request)."""
 
-    causation_id: Mapped[str | None] = mapped_column(
-        String(36),
-        nullable=True
-    )
+    causation_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     """The event ID that caused this event (for causal ordering)."""
 
     # Extensible data
     payload: Mapped[dict[str, Any]] = mapped_column(
-        JSON,
-        nullable=False,
-        server_default="{}"
+        JSON, nullable=False, server_default="{}"
     )
     """Event-specific payload (resource type in payload for generic 'resource_created')."""
 
     event_metadata: Mapped[dict[str, Any]] = mapped_column(
-        "meta",
-        JSON,
-        nullable=False,
-        server_default="{}"
+        "meta", JSON, nullable=False, server_default="{}"
     )
     """Extensible metadata (source_system, api_version, etc.)."""
 

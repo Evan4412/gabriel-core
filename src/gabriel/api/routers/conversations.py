@@ -15,6 +15,7 @@ isolation on top of PEEL middleware; capability enforcement comes from
 NOTE: the ``/messages`` routes are declared *before* the bare ``/{grn:path}``
 routes — the greedy ``:path`` converter would otherwise swallow them.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -155,7 +156,9 @@ async def create_message(
     try:
         role = MessageRole(body.role)
     except ValueError as exc:
-        raise GabrielAPIError(f"Unknown message role '{body.role}'", status_code=422) from exc
+        raise GabrielAPIError(
+            f"Unknown message role '{body.role}'", status_code=422
+        ) from exc
 
     async with session_factory() as session:
         try:

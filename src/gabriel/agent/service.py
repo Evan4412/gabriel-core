@@ -27,7 +27,9 @@ def utcnow() -> datetime:
 class AgentService:
     """Business logic for persisted Agent resources."""
 
-    def __init__(self, repository: AgentRepository, event_repo: EventRepository | None = None):
+    def __init__(
+        self, repository: AgentRepository, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.repo = repository
         self.event_repo = event_repo
@@ -70,19 +72,28 @@ class AgentService:
                         resource_grn=grn_str,
                         correlation_id=correlation_id,
                         payload={"resource_type": "agent", "grn": grn_str},
-                        metadata={"service": "AgentService", "operation": "create_agent"},
+                        metadata={
+                            "service": "AgentService",
+                            "operation": "create_agent",
+                        },
                     )
                 )
                 await self.repo.session.commit()
             return orm_to_domain(persisted_orm)
         except IntegrityError as exc:
-            raise DuplicateResourceError(f"Agent with GRN '{grn_str}' already exists.") from exc
+            raise DuplicateResourceError(
+                f"Agent with GRN '{grn_str}' already exists."
+            ) from exc
 
     async def get_agent(self, grn_str: str) -> Agent:
         return orm_to_domain(await self.repo.get_by_grn(grn_str))
 
     async def list_agents(self, org_id: str | None = None) -> list[Agent]:
-        orm_agents = await self.repo.list_for_org(org_id) if org_id else await self.repo.list_all()
+        orm_agents = (
+            await self.repo.list_for_org(org_id)
+            if org_id
+            else await self.repo.list_all()
+        )
         return [orm_to_domain(agent) for agent in orm_agents]
 
     async def update_agent(

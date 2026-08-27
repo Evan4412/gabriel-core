@@ -3,6 +3,7 @@
 Note: Capabilities describe what a principal *can* do.
 Permissions (whether they *should* do it) come from PEEL.
 """
+
 from enum import StrEnum
 
 

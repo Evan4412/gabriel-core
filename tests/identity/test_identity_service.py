@@ -1,4 +1,5 @@
 """Unit tests for the IdentityService orchestration layer."""
+
 from __future__ import annotations
 
 import pytest

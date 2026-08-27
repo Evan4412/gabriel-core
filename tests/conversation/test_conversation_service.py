@@ -1,4 +1,5 @@
 """Tests for ConversationService (Phase 2 — Core Business Logic)."""
+
 import pytest
 from sqlalchemy import select
 
@@ -71,7 +72,9 @@ async def test_list_filters_by_status(db_session):
     service = ConversationService(db_session)
     keep = await _create(service, title="keep")
     to_archive = await _create(service, title="archive me")
-    await service.archive_conversation(str(to_archive.grn), archived_by=ACTOR, org_id=ORG)
+    await service.archive_conversation(
+        str(to_archive.grn), archived_by=ACTOR, org_id=ORG
+    )
 
     active, total_active = await service.list_conversations(
         ORG, status=ConversationStatus.ACTIVE
@@ -102,7 +105,9 @@ async def test_delete_is_soft_and_hides_from_reads(db_session):
     service = ConversationService(db_session)
     conversation = await _create(service)
 
-    await service.delete_conversation(str(conversation.grn), deleted_by=ACTOR, org_id=ORG)
+    await service.delete_conversation(
+        str(conversation.grn), deleted_by=ACTOR, org_id=ORG
+    )
 
     with pytest.raises(ResourceNotFoundError):
         await service.get_conversation(str(conversation.grn), org_id=ORG)

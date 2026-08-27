@@ -7,7 +7,11 @@ from gabriel.agent.capabilities import (
     to_runtime_capabilities,
 )
 from gabriel.agent.deployment import AgentDeploymentService
-from gabriel.agent.exceptions import AgentDeploymentError, AgentError, AgentValidationError
+from gabriel.agent.exceptions import (
+    AgentDeploymentError,
+    AgentError,
+    AgentValidationError,
+)
 from gabriel.agent.grn_bindings import (
     ToolBinding,
     is_tool_grn,

@@ -4,6 +4,7 @@ from __future__ import annotations
 from gabriel.identity.principal import Principal
 from gabriel.api.schema import ChatSummary
 
+
 class ChatRepository:
     """Repository over the gateway's in-memory resource projection."""
 
@@ -18,7 +19,7 @@ class ChatRepository:
 
 
 class ChatService:
-    """ Application service for chat-related operations."""
+    """Application service for chat-related operations."""
 
     def __init__(self, repository: ChatRepository) -> None:
         self._repository = repository

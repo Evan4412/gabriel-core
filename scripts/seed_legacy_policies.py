@@ -122,7 +122,9 @@ def parse_legacy_gate(path: str | Path) -> list[LegacyToolDecision]:
     if not source_path.exists():
         raise FileNotFoundError(f"Legacy gate file not found: {source_path}")
 
-    module = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
+    module = ast.parse(
+        source_path.read_text(encoding="utf-8"), filename=str(source_path)
+    )
     constants: dict[str, Any] = {}
 
     for node in module.body:
@@ -164,7 +166,9 @@ def parse_legacy_gate(path: str | Path) -> list[LegacyToolDecision]:
     return rows
 
 
-def _build_statements(mappings: list[LegacyToolDecision], decision: str) -> list[PolicyStatement]:
+def _build_statements(
+    mappings: list[LegacyToolDecision], decision: str
+) -> list[PolicyStatement]:
     statements: list[PolicyStatement] = []
     effect = Effect.ALLOW if decision == "allow" else Effect.DENY
 
@@ -269,8 +273,12 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Seed legacy gate ALLOW/ASK/DENY mappings into core Policy resources.",
     )
-    parser.add_argument("--gate-path", required=True, help="Path to legacy gate.py file")
-    parser.add_argument("--org-id", default="core", help="Organization to own seeded policies")
+    parser.add_argument(
+        "--gate-path", required=True, help="Path to legacy gate.py file"
+    )
+    parser.add_argument(
+        "--org-id", default="core", help="Organization to own seeded policies"
+    )
     parser.add_argument(
         "--created-by",
         default="principal://core/system/seed-legacy-policies",

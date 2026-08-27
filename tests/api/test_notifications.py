@@ -4,6 +4,7 @@ Notifications are created from domain events by :class:`NotificationService`
 (there is deliberately no public creation endpoint), so these tests seed the
 API's database directly through the app's session factory.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -109,7 +110,9 @@ def test_notifications_are_recipient_scoped(client, make_auth_headers):
     assert client.get("/api/v1/notifications", headers=bob_headers).json()["total"] == 0
     # Bob cannot mark Alice's notification read.
     assert (
-        client.post(f"/api/v1/notifications/{grn}/read", headers=bob_headers).status_code
+        client.post(
+            f"/api/v1/notifications/{grn}/read", headers=bob_headers
+        ).status_code
         == 404
     )
 

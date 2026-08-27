@@ -13,6 +13,7 @@ signup creates:
 all committed atomically (ADR-017 transactional outbox). If anything fails,
 nothing is persisted — no orphan organizations.
 """
+
 from __future__ import annotations
 
 import re
@@ -84,8 +85,12 @@ class RegistrationService:
             DuplicateResourceError: If the derived org_id is already taken.
         """
         email = email.strip().lower()
-        org_display = (organization_name or "").strip() or f"{email.split('@', 1)[0]}'s workspace"
-        org_id = await self._unique_org_id(_slugify(org_display), allow_suffix=organization_name is None)
+        org_display = (
+            organization_name or ""
+        ).strip() or f"{email.split('@', 1)[0]}'s workspace"
+        org_id = await self._unique_org_id(
+            _slugify(org_display), allow_suffix=organization_name is None
+        )
 
         # 1. Build + stage the organization (no commit yet)
         org_grn = GRN.generate(org_id, "organization")

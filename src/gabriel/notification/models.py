@@ -6,6 +6,7 @@ user record). They are typically *derived* from domain events via
 ``NotificationService.create_from_event`` — the source event id is kept on the
 notification for traceability.
 """
+
 from __future__ import annotations
 
 from datetime import datetime

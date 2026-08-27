@@ -10,7 +10,12 @@ class _StubProjection:
         self.resources = resources
         self.calls: list[dict[str, object]] = []
 
-    def list_resources(self, organization_id: str, resource_type: str | None = None, include_deleted: bool = False):
+    def list_resources(
+        self,
+        organization_id: str,
+        resource_type: str | None = None,
+        include_deleted: bool = False,
+    ):
         self.calls.append(
             {
                 "organization_id": organization_id,

@@ -1,4 +1,5 @@
 """Persistence model for the Message resource."""
+
 from __future__ import annotations
 
 from sqlalchemy import Index, Integer, String, Text
@@ -16,7 +17,9 @@ class MessageORM(Base, GabrielResourceMixin):
         Index("ix_messages_conversation_created", "conversation_grn", "created_at"),
     )
 
-    conversation_grn: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    conversation_grn: Mapped[str] = mapped_column(
+        String(255), nullable=False, index=True
+    )
     role: Mapped[str] = mapped_column(String(32), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     prompt_tokens: Mapped[int | None] = mapped_column(Integer, nullable=True)

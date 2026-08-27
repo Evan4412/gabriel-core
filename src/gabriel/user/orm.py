@@ -12,9 +12,7 @@ class UserORM(Base, GabrielResourceMixin):
     """
 
     __tablename__ = "users"
-    __table_args__ = (
-        UniqueConstraint("org_id", "email", name="uq_users_org_email"),
-    )
+    __table_args__ = (UniqueConstraint("org_id", "email", name="uq_users_org_email"),)
 
     email: Mapped[str] = mapped_column(String(320), nullable=False, index=True)
     display_name: Mapped[str] = mapped_column(String(255), nullable=False)

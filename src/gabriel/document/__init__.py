@@ -10,6 +10,7 @@ This package owns:
 - :class:`DocumentIngestionService` — orchestrates normalization, mints a GRN,
   and emits a ``resource_created`` event so the Event Store records the fact.
 """
+
 from gabriel.document.models import Document
 from gabriel.document.normalizer import DocumentNormalizer, NormalizationError
 from gabriel.document.service import DocumentIngestionService, IngestedDocument

@@ -1,4 +1,5 @@
 """Projection base class: Builds read models from events."""
+
 from abc import ABC, abstractmethod
 
 from gabriel.events.event import Event

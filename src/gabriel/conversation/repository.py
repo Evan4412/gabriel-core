@@ -4,6 +4,7 @@ All queries are org-scoped; tenant isolation is enforced at the query layer
 (P-2: isolation by default). Listing is paginated (limit/offset) and returns
 the total count so API responses can expose paging metadata.
 """
+
 from __future__ import annotations
 
 from sqlalchemy import func, select
@@ -59,13 +60,13 @@ class ConversationRepository:
             count_stmt = count_stmt.filter_by(status=status)
         if not include_deleted:
             stmt = stmt.filter(ConversationORM.state != ResourceState.DELETED)
-            count_stmt = count_stmt.filter(ConversationORM.state != ResourceState.DELETED)
+            count_stmt = count_stmt.filter(
+                ConversationORM.state != ResourceState.DELETED
+            )
 
         total = (await self.session.execute(count_stmt)).scalar_one()
         stmt = (
-            stmt.order_by(ConversationORM.created_at.desc())
-            .limit(limit)
-            .offset(offset)
+            stmt.order_by(ConversationORM.created_at.desc()).limit(limit).offset(offset)
         )
         result = await self.session.execute(stmt)
         return list(result.scalars().all()), int(total)

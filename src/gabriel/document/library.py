@@ -14,6 +14,7 @@ Chunking/embedding is delegated to
 processing remain independently testable. The pre-existing event-sourced
 ``DocumentIngestionService`` is untouched.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -174,9 +175,7 @@ class DocumentLibraryService:
     async def get_document(self, grn_str: str, org_id: str | None = None) -> Document:
         return orm_to_domain(await self.repo.get_by_grn(grn_str, org_id=org_id))
 
-    async def get_document_text(
-        self, grn_str: str, org_id: str | None = None
-    ) -> str:
+    async def get_document_text(self, grn_str: str, org_id: str | None = None) -> str:
         """Return the normalized text of a document from the content store."""
         document = await self.get_document(grn_str, org_id=org_id)
         if not document.content_pointer:
@@ -275,9 +274,7 @@ class DocumentLibraryService:
         orm.version += 1
         orm.updated_by = deleted_by
         # Chunks are derived data — hard-delete them with the document.
-        await ChunkVectorStore(self.session).delete_for_document(
-            grn_str, orm.org_id
-        )
+        await ChunkVectorStore(self.session).delete_for_document(grn_str, orm.org_id)
         await self.event_repo.append(
             Event(
                 type="resource_deleted",

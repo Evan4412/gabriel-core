@@ -8,6 +8,7 @@ from gabriel.agent.models import Agent
 from gabriel.agent.specification import AgentSpecification
 from gabriel.resource.grn import GRN
 
+
 @pytest.mark.asyncio
 async def test_langgraph_execution_flow(execution_context):
     from gabriel.events.event_store import EventStore

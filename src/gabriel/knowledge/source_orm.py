@@ -1,4 +1,5 @@
 """Persistence model for the KnowledgeSource resource."""
+
 from __future__ import annotations
 
 from sqlalchemy import Index, Integer, String, Text

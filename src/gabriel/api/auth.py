@@ -12,6 +12,7 @@ bypass).
 Tokens are accepted from either the ``Authorization: Bearer <jwt>`` header
 (programmatic clients, SDK) or the httpOnly session cookie (browser clients).
 """
+
 from __future__ import annotations
 
 from pydantic import BaseModel

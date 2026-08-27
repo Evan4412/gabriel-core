@@ -1,4 +1,5 @@
 """EventStore: Append-only event log."""
+
 from gabriel.events.event import Event
 from gabriel.events.exceptions import InvalidEventError
 

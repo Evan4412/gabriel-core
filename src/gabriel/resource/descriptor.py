@@ -1,4 +1,5 @@
 """Resource descriptors that capture metadata about resource types."""
+
 from dataclasses import dataclass
 from typing import Any
 from collections.abc import Callable

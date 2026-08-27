@@ -9,20 +9,17 @@ from gabriel.api.dependencies import (
     get_execution_context,
     get_chat_service,
     build_command,
-    GatewayService
+    GatewayService,
 )
-from gabriel.api.schema import (
-    ChatSummaryResponse,
-    ChatCreateRequest,
-    ResourceResponse
-)
+from gabriel.api.schema import ChatSummaryResponse, ChatCreateRequest, ResourceResponse
 
 router = APIRouter(prefix="/chat", tags=["chat"])
+
 
 @router.get("/conversations", response_model=list[ChatSummaryResponse])
 async def list_conversations(
     context: ExecutionContext = Depends(get_execution_context),
-    service: ChatService = Depends(get_chat_service)
+    service: ChatService = Depends(get_chat_service),
 ):
     chatConversations = service.get_chat_summary(context.principal)
     return [
@@ -38,7 +35,12 @@ async def list_conversations(
         for completion in chatConversations
     ]
 
-@router.post("/conversations", response_model=ResourceResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post(
+    "/conversations",
+    response_model=ResourceResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_chat(
     payload: ChatCreateRequest,
     context: ExecutionContext = Depends(get_execution_context),

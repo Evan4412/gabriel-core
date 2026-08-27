@@ -32,24 +32,25 @@ def register_default_runtimes(
 ) -> RuntimeRegistry:
     """Register built-in runtimes into the target registry.
 
-        Args:
-            registry: Target registry. Defaults to the module-level runtime_registry.
-                    Tests should always pass an explicit registry instance.
-            dispatcher: Dispatcher instance required by LangGraphAdapter.
-                        Must be provided if LangGraph is installed. Passing None
-                        when langgraph is available will raise ValueError.
+    Args:
+        registry: Target registry. Defaults to the module-level runtime_registry.
+                Tests should always pass an explicit registry instance.
+        dispatcher: Dispatcher instance required by LangGraphAdapter.
+                    Must be provided if LangGraph is installed. Passing None
+                    when langgraph is available will raise ValueError.
 
-        Returns:
-            The registry that was populated.
+    Returns:
+        The registry that was populated.
 
-        Notes:
-            DuplicateRuntimeError is suppressed intentionally — calling this function
-            more than once on the same registry is safe and idempotent.
+    Notes:
+        DuplicateRuntimeError is suppressed intentionally — calling this function
+        more than once on the same registry is safe and idempotent.
     """
     target = registry or runtime_registry
 
     try:
         from gabriel.runtime.mock_runtime import MockRuntime
+
         target.register(MockRuntime())
     except DuplicateRuntimeError:
         pass

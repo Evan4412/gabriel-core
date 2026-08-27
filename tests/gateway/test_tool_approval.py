@@ -5,6 +5,7 @@ Covers the ``REQUIRES_CONFIRMATION`` flow end-to-end:
 * accept → the tool executes and the result flows back to the LLM;
 * deny → the tool is skipped and an informative message is injected.
 """
+
 from __future__ import annotations
 
 import json
@@ -84,7 +85,10 @@ async def _collect_with_decision(
 async def test_confirmation_tool_accept_executes(session_factory):
     provider = FakeProvider(
         script=[
-            {"text": "", "tool_calls": [make_tool_call("calculate", expression="2 + 2")]},
+            {
+                "text": "",
+                "tool_calls": [make_tool_call("calculate", expression="2 + 2")],
+            },
             {"text": "The answer is 4."},
         ]
     )
@@ -110,7 +114,10 @@ async def test_confirmation_tool_accept_executes(session_factory):
 async def test_confirmation_tool_deny_skips_execution(session_factory):
     provider = FakeProvider(
         script=[
-            {"text": "", "tool_calls": [make_tool_call("calculate", expression="2 + 2")]},
+            {
+                "text": "",
+                "tool_calls": [make_tool_call("calculate", expression="2 + 2")],
+            },
             {"text": "Understood, I will not run it."},
         ]
     )

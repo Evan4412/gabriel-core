@@ -3,6 +3,7 @@
 All queries are org-scoped (P-2: isolation by default). Expired entries are
 filtered out of reads at the query layer.
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC
@@ -77,7 +78,9 @@ class MemoryLayerRepository:
     ) -> tuple[list[MemoryLayerEntryORM], int]:
         """Return (page, total) of live (non-expired) entries for an org."""
         stmt = select(MemoryLayerEntryORM).filter_by(org_id=org_id)
-        count_stmt = select(func.count(MemoryLayerEntryORM.grn)).filter_by(org_id=org_id)
+        count_stmt = select(func.count(MemoryLayerEntryORM.grn)).filter_by(
+            org_id=org_id
+        )
         if scope is not None:
             stmt = stmt.filter_by(scope=scope)
             count_stmt = count_stmt.filter_by(scope=scope)

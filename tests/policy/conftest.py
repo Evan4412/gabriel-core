@@ -1,4 +1,5 @@
 """Fixtures for policy tests."""
+
 import pytest
 import pytest_asyncio
 from uuid import uuid4
@@ -37,7 +38,9 @@ async def db_session() -> AsyncSession:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    session_factory = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    session_factory = async_sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with session_factory() as session:
         yield session
@@ -103,7 +106,9 @@ def allow_read_statement() -> PolicyStatement:
 
 
 @pytest.fixture
-def allow_all_policy(org_id: str, principal: Principal, allow_all_statement: PolicyStatement) -> Policy:
+def allow_all_policy(
+    org_id: str, principal: Principal, allow_all_statement: PolicyStatement
+) -> Policy:
     """Create a policy that allows everything."""
     grn = GRN(
         org_id=org_id,
@@ -119,7 +124,9 @@ def allow_all_policy(org_id: str, principal: Principal, allow_all_statement: Pol
 
 
 @pytest.fixture
-def deny_admin_policy(org_id: str, principal: Principal, deny_admin_statement: PolicyStatement) -> Policy:
+def deny_admin_policy(
+    org_id: str, principal: Principal, deny_admin_statement: PolicyStatement
+) -> Policy:
     """Create a policy that denies admin actions."""
     grn = GRN(
         org_id=org_id,

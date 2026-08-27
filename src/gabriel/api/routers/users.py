@@ -13,6 +13,7 @@ other organizations are rejected (tenant isolation, defense in depth on top of
 the PEEL middleware; capability enforcement comes from ``user:*`` actions in
 ``gabriel.policy.capabilities``).
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends

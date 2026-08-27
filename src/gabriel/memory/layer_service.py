@@ -6,6 +6,7 @@ entries behave as if they do not exist. Deletions are hard deletes — memory
 purges must actually remove data — but the deletion *event* is preserved in
 the event store for auditability.
 """
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -34,7 +35,9 @@ def _normalize_scope(scope: MemoryScope | str) -> MemoryScope:
 class MemoryLayerService:
     """Business logic for memory layer entries (org-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = MemoryLayerRepository(session)
@@ -113,7 +116,9 @@ class MemoryLayerService:
             await self.session.flush()
         return orm_to_domain(orm)
 
-    async def get_entry(self, grn_str: str, org_id: str | None = None) -> MemoryLayerEntry:
+    async def get_entry(
+        self, grn_str: str, org_id: str | None = None
+    ) -> MemoryLayerEntry:
         return orm_to_domain(await self.repo.get_by_grn(grn_str, org_id=org_id))
 
     async def get_by_key(
@@ -147,7 +152,11 @@ class MemoryLayerService:
         """
         scope_value = _normalize_scope(scope).value if scope is not None else None
         orms, total = await self.repo.list_for_org(
-            org_id, scope=scope_value, subject_grn=subject_grn, limit=limit, offset=offset
+            org_id,
+            scope=scope_value,
+            subject_grn=subject_grn,
+            limit=limit,
+            offset=offset,
         )
         entries = [orm_to_domain(orm) for orm in orms]
         if tag is not None:

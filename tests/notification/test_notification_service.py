@@ -1,4 +1,5 @@
 """Tests for NotificationService (Phase 2 — Core Business Logic)."""
+
 import pytest
 from sqlalchemy import select
 
@@ -15,7 +16,11 @@ OTHER = "grn:acme:user/u2:1"
 
 
 async def _notify(service: NotificationService, recipient: str = RECIPIENT, **kw):
-    defaults = {"type": "resource_created", "title": "Something happened", "body": "details"}
+    defaults = {
+        "type": "resource_created",
+        "title": "Something happened",
+        "body": "details",
+    }
     defaults.update(kw)
     return await service.create_notification(ORG, recipient, **defaults)
 
@@ -65,7 +70,9 @@ async def test_mark_read_is_idempotent_and_audited(db_session):
     assert again.read is True
     assert again.version == first.version  # no double bump
 
-    result = await db_session.execute(select(EventORM).filter_by(type="notification_read"))
+    result = await db_session.execute(
+        select(EventORM).filter_by(type="notification_read")
+    )
     assert len(list(result.scalars())) == 1
 
 

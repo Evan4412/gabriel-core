@@ -1,4 +1,5 @@
 """V1 Tool resource fields — execution_runtime, enabled, configuration."""
+
 import pytest
 
 from gabriel.tool.models import ExecutionRuntime

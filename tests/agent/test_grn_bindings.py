@@ -17,7 +17,9 @@ def test_tool_grn_template_form() -> None:
 
 
 def test_tool_grn_concrete_form() -> None:
-    assert tool_grn("calculate", org_id="acme", version=2) == "grn:acme:tool/calculate:2"
+    assert (
+        tool_grn("calculate", org_id="acme", version=2) == "grn:acme:tool/calculate:2"
+    )
 
 
 def test_tool_grn_rejects_empty_name() -> None:

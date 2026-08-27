@@ -16,6 +16,7 @@ The Gateway's core loop. For one user turn it:
 The Gateway owns no persistent business data: every durable write goes
 through the Phase-2 conversation/message services.
 """
+
 from __future__ import annotations
 
 import json
@@ -408,8 +409,11 @@ class ChatRuntimeService:
         if call.name not in allowed:
             error = f"Tool '{call.name}' is not allowed for this agent."
             return ToolResult(
-                tool_call_id=call.id, name=call.name,
-                content=json.dumps({"error": error}), success=False, error=error,
+                tool_call_id=call.id,
+                name=call.name,
+                content=json.dumps({"error": error}),
+                success=False,
+                error=error,
             )
 
         async with self._session_factory() as session:
@@ -418,8 +422,11 @@ class ChatRuntimeService:
             if tool_domain is None:
                 error = f"Tool '{call.name}' not found for org."
                 return ToolResult(
-                    tool_call_id=call.id, name=call.name,
-                    content=json.dumps({"error": error}), success=False, error=error,
+                    tool_call_id=call.id,
+                    name=call.name,
+                    content=json.dumps({"error": error}),
+                    success=False,
+                    error=error,
                 )
             grn = str(tool_domain.grn)
 
@@ -430,7 +437,9 @@ class ChatRuntimeService:
             async with self._session_factory() as session:
                 event_repo = EventRepository(session)
                 tool_service = ToolService(ToolRepository(session), event_repo)
-                executor = ToolExecutor(tool_service, self.fn_registry, self.peel, event_repo)
+                executor = ToolExecutor(
+                    tool_service, self.fn_registry, self.peel, event_repo
+                )
                 result = await executor.invoke(
                     context, grn, call.arguments, confirmed=confirmed
                 )
@@ -673,7 +682,9 @@ class ChatRuntimeService:
                     if requires_confirmation:
                         async with self._session_factory() as session:
                             tool_service = ToolService(ToolRepository(session), None)
-                            tool = await tool_service.get_tool_by_name(org_id, call.name)
+                            tool = await tool_service.get_tool_by_name(
+                                org_id, call.name
+                            )
 
                         # This should normally be impossible: `call.name` originated from
                         # `config.allowed_tools`, which requires an enabled persisted resource.
@@ -716,7 +727,9 @@ class ChatRuntimeService:
                             )
                             continue
 
-                        key = self.approvals.register(chat_session.session_id, call.name)
+                        key = self.approvals.register(
+                            chat_session.session_id, call.name
+                        )
                         yield sse_event(
                             "tool_approval_required",
                             {
@@ -894,7 +907,7 @@ def _parse_sse(frame: str) -> tuple[str, dict[str, Any]]:
     data: dict[str, Any] = {}
     for line in frame.strip().splitlines():
         if line.startswith("event: "):
-            event = line[len("event: "):]
+            event = line[len("event: ") :]
         elif line.startswith("data: "):
-            data = json.loads(line[len("data: "):])
+            data = json.loads(line[len("data: ") :])
     return event, data

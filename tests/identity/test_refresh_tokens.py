@@ -1,4 +1,5 @@
 """Refresh token lifecycle: issue → rotate → reuse detection → revoke."""
+
 from __future__ import annotations
 
 import pytest

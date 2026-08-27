@@ -10,6 +10,7 @@ Connection failures raise :class:`EmbeddingConnectionError` so callers can
 degrade gracefully (store chunks without embeddings, fall back to keyword
 search).
 """
+
 from __future__ import annotations
 
 import os
@@ -44,12 +45,10 @@ class EmbeddingProvider(Protocol):
     """Generates dense vector embeddings for text."""
 
     @property
-    def name(self) -> str:
-        ...
+    def name(self) -> str: ...
 
     @property
-    def model(self) -> str:
-        ...
+    def model(self) -> str: ...
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         """Embed *texts*, returning one vector per input (order preserved)."""
@@ -114,8 +113,7 @@ class OllamaEmbeddingProvider:
         embeddings = response.json().get("embeddings") or []
         if len(embeddings) != len(texts):
             raise EmbeddingError(
-                f"Ollama returned {len(embeddings)} embeddings for "
-                f"{len(texts)} inputs"
+                f"Ollama returned {len(embeddings)} embeddings for {len(texts)} inputs"
             )
         return [[float(x) for x in vector] for vector in embeddings]
 

@@ -3,6 +3,7 @@
 NOTE: All queries are org-scoped where an ``org_id`` is available; tenant
 isolation is enforced at the query layer (P-2: isolation by default).
 """
+
 from __future__ import annotations
 
 from sqlalchemy import select
@@ -29,7 +30,9 @@ class UserRepository:
             raise ResourceNotFoundError(f"User {grn} not found")
         return user
 
-    async def get_by_email(self, email: str, org_id: str | None = None) -> UserORM | None:
+    async def get_by_email(
+        self, email: str, org_id: str | None = None
+    ) -> UserORM | None:
         """Look up a user by email, optionally scoped to an organization.
 
         Without ``org_id`` (login before the tenant is known) the lookup is

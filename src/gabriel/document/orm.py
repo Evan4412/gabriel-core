@@ -1,4 +1,5 @@
 """Persistence model for the Document resource (Phase 4)."""
+
 from __future__ import annotations
 
 from sqlalchemy import Index, Integer, String

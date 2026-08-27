@@ -5,6 +5,7 @@ from gabriel.resource.exceptions import InvalidGRNError
 
 GRN_SCHEME = "grn"
 
+
 @dataclass(frozen=True)
 class GRN:
     """
@@ -56,7 +57,7 @@ class GRN:
         raise InvalidGRNError if malformed
         """
         try:
-            body = raw[len(f"{GRN_SCHEME}:"):]
+            body = raw[len(f"{GRN_SCHEME}:") :]
             org_id, remainder = body.split(":", 1)
             type_and_id, version_str = remainder.rsplit(":", 1)
             resource_type, resource_id = type_and_id.split("/", 1)
@@ -66,7 +67,7 @@ class GRN:
             if version < 1:
                 raise ValueError
 
-        except(ValueError, TypeError):
+        except (ValueError, TypeError):
             raise InvalidGRNError(f"Malformed GRN: {raw}") from None
 
         return cls(

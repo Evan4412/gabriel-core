@@ -4,6 +4,7 @@ All queries are org-scoped; tenant isolation is enforced at the query layer
 (P-2: isolation by default). Listing is paginated (limit/offset) and returns
 the total count so API responses can expose paging metadata.
 """
+
 from __future__ import annotations
 
 from sqlalchemy import func, select

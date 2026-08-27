@@ -43,6 +43,7 @@ from gabriel.api.routers import (
     tools,
 )
 
+
 def register_routers(app: FastAPI) -> None:
     # Keep health at root for infra probes while versioning all other routes.
     app.include_router(health.router)

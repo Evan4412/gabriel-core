@@ -4,6 +4,7 @@ Environment-driven settings for the Identity Service. Kept deliberately small:
 a frozen dataclass populated from environment variables. No external settings
 framework — the simplest thing that works (Simplicity First).
 """
+
 from __future__ import annotations
 
 import os
@@ -64,7 +65,9 @@ class IdentitySettings:
         return cls(
             environment=environment,
             token_ttl_seconds=_env_int("GABRIEL_JWT_TOKEN_TTL_SECONDS", 3600),
-            session_cookie_name=os.getenv("GABRIEL_SESSION_COOKIE_NAME", "gabriel_session"),
+            session_cookie_name=os.getenv(
+                "GABRIEL_SESSION_COOKIE_NAME", "gabriel_session"
+            ),
             # Default secure cookies on in production, off otherwise.
             session_cookie_secure=_env_bool("GABRIEL_SESSION_COOKIE_SECURE", is_prod),
             private_key_path=os.getenv("GABRIEL_JWT_PRIVATE_KEY_PATH"),

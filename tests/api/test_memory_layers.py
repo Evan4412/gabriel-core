@@ -1,4 +1,5 @@
 """API tests for /api/v1/memory/layers (Phase 2 — Core Business Logic)."""
+
 from __future__ import annotations
 
 from uuid import uuid4
@@ -100,7 +101,9 @@ def test_delete_entry(client, make_auth_headers):
     deleted = client.delete(f"/api/v1/memory/layers/{grn}", headers=headers)
     assert deleted.status_code == 204, deleted.text
 
-    assert client.get(f"/api/v1/memory/layers/{grn}", headers=headers).status_code == 404
+    assert (
+        client.get(f"/api/v1/memory/layers/{grn}", headers=headers).status_code == 404
+    )
 
 
 def test_entries_are_tenant_isolated(client, make_auth_headers):

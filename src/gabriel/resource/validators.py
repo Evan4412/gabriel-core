@@ -1,4 +1,5 @@
 """Resource validators that enforce rules on resource creation/updates."""
+
 from typing import Any
 from pydantic import ValidationError
 
@@ -55,8 +56,6 @@ class ResourceValidator:
         try:
             self.descriptor.model.model_validate(resource.model_dump())
         except ValidationError as e:
-            raise ResourceValidationError(
-                f"Pydantic validation failed: {e}"
-            ) from e
+            raise ResourceValidationError(f"Pydantic validation failed: {e}") from e
 
         return True

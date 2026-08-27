@@ -12,6 +12,7 @@ Design notes / layer boundary:
   per-extension extractors. The fallback for plain text formats has no third
   party dependencies so the Core ingestion path always works.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -65,9 +66,7 @@ class DocumentNormalizer:
         except NormalizationError:
             raise
         except Exception as exc:  # pragma: no cover - defensive
-            raise NormalizationError(
-                f"Failed to normalize {path.name}: {exc}"
-            ) from exc
+            raise NormalizationError(f"Failed to normalize {path.name}: {exc}") from exc
 
     # ------------------------------------------------------------------
     # Strategies
@@ -130,6 +129,4 @@ class DocumentNormalizer:
                     "DOCX normalization requires 'docling' or 'python-docx'"
                 ) from exc
 
-        raise NormalizationError(
-            f"Unsupported document type '{ext}' for {path.name}"
-        )
+        raise NormalizationError(f"Unsupported document type '{ext}' for {path.name}")

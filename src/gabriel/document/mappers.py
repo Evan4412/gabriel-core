@@ -1,4 +1,5 @@
 """Mappers between Domain (Document) and Persistence (DocumentORM)."""
+
 from gabriel.document.models import Document, DocumentStatus
 from gabriel.document.orm import DocumentORM
 from gabriel.resource.grn import GRN

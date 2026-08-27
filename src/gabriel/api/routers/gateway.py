@@ -12,6 +12,7 @@ The Gateway orchestrates LLM calls; durable business data (conversations,
 messages, agents) stays with the Phase-2 slices. Capability enforcement:
 ``gateway:*`` actions in ``gabriel.policy.capabilities``.
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
@@ -115,9 +116,7 @@ async def submit_tool_approval(
     """
     session = runtime.sessions.get(body.session_id)
     if session is None or session.org_id != context.organization:
-        raise GabrielAPIError(
-            f"Session {body.session_id} not found", status_code=404
-        )
+        raise GabrielAPIError(f"Session {body.session_id} not found", status_code=404)
     resumed = runtime.submit_approval(
         session_id=body.session_id,
         tool_name=body.tool_name,

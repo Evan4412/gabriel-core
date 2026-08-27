@@ -20,7 +20,9 @@ async def test_audit_projection_persists_and_queries_by_filters(tmp_path):
     db_path = tmp_path / "audit_projection.db"
     database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"
     engine = create_async_engine(database_url, echo=False)
-    session_factory = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    session_factory = async_sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -56,9 +58,13 @@ async def test_audit_projection_persists_and_queries_by_filters(tmp_path):
         )
     )
 
-    by_principal = await projection.query(principal_id="principal://acme/user/alice", organization_id="acme")
+    by_principal = await projection.query(
+        principal_id="principal://acme/user/alice", organization_id="acme"
+    )
     assert len(by_principal) == 2
-    assert all(event.principal_id == "principal://acme/user/alice" for event in by_principal)
+    assert all(
+        event.principal_id == "principal://acme/user/alice" for event in by_principal
+    )
 
     by_decision = await projection.query(decision="deny", organization_id="acme")
     assert len(by_decision) == 1

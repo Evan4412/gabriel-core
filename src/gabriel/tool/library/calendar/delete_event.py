@@ -1,4 +1,5 @@
 """delete_event — permanently delete a Google Calendar event."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any

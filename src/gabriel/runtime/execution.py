@@ -1,4 +1,5 @@
 """Execution state and lifecycle management."""
+
 from dataclasses import asdict
 from enum import StrEnum
 from dataclasses import dataclass, field
@@ -15,6 +16,7 @@ from gabriel.runtime.registry import RuntimeRegistry
 
 def utcnow() -> datetime:
     return datetime.now(UTC)
+
 
 @dataclass(frozen=True)
 class ExecutionMetrics:
@@ -105,9 +107,7 @@ class ExecutionContextBuilder:
         # Extract or generate IDs
         execution_id = uuid.uuid4()
         correlation_id = (
-            UUID(event.correlation_id)
-            if event.correlation_id
-            else execution_id
+            UUID(event.correlation_id) if event.correlation_id else execution_id
         )
 
         return ExecutionContext(

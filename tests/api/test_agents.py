@@ -1,4 +1,5 @@
 """API tests for the DB-backed /api/v1/agents management endpoints (Phase 2)."""
+
 from __future__ import annotations
 
 from uuid import uuid4

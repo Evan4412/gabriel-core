@@ -1,4 +1,5 @@
 """TextChunker: deterministic windowed chunking."""
+
 import pytest
 
 from gabriel.knowledge.chunking import TextChunker

@@ -12,6 +12,7 @@ Design notes
 * Capabilities on the mirrored principal are derived from the org role
   (see ``gabriel.identity.roles``) — the identity-based PEEL layer.
 """
+
 from __future__ import annotations
 
 import re
@@ -48,7 +49,9 @@ def _slugify(value: str) -> str:
 class UserService:
     """Business logic for user accounts (org-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = UserRepository(session)
@@ -181,7 +184,9 @@ class UserService:
         """
         failure = AuthenticationFailedError("Invalid email or password")
         try:
-            user_orm = await self.repo.get_by_email(email.strip().lower(), org_id=org_id)
+            user_orm = await self.repo.get_by_email(
+                email.strip().lower(), org_id=org_id
+            )
         except ValueError as exc:  # ambiguous email across orgs
             raise AuthenticationFailedError(str(exc)) from exc
         if user_orm is None or not user_orm.password_hash:

@@ -10,6 +10,7 @@ not expose:
 The provider boundary remains Gabriel-native: callers send and receive Gabriel
 provider models, never LangChain messages or result objects.
 """
+
 from __future__ import annotations
 import logging
 
@@ -183,7 +184,6 @@ class OllamaProvider:
 
         logger.info(f"(stream_chat_completion) Tools received for Ollama: {tools}")
 
-
         runnable = self._bind_runtime_options(
             llm,
             tools=tools,
@@ -229,9 +229,7 @@ class OllamaProvider:
             model=model,
             usage=None,
             tool_calls=(
-                self._tool_calls_from_message(gathered)
-                if gathered is not None
-                else ()
+                self._tool_calls_from_message(gathered) if gathered is not None else ()
             ),
             finish_reason="stop",
         )
@@ -411,9 +409,7 @@ class OllamaProvider:
                 continue
 
             raw_arguments = call.get("args") or {}
-            arguments = (
-                raw_arguments if isinstance(raw_arguments, dict) else {}
-            )
+            arguments = raw_arguments if isinstance(raw_arguments, dict) else {}
 
             call_id = call.get("id")
             calls.append(
@@ -458,9 +454,7 @@ class OllamaProvider:
         metadata = message.response_metadata or {}
 
         return str(
-            metadata.get("done_reason")
-            or metadata.get("finish_reason")
-            or "stop"
+            metadata.get("done_reason") or metadata.get("finish_reason") or "stop"
         )
 
     @staticmethod
@@ -496,13 +490,7 @@ class OllamaProvider:
                 f"Cannot reach Ollama at {self._base_url}: {message}"
             ) from exc
 
-        if (
-            "not found" in lowered
-            and (
-                "model" in lowered
-                or model.lower() in lowered
-            )
-        ):
+        if "not found" in lowered and ("model" in lowered or model.lower() in lowered):
             raise ModelNotFoundError(
                 f"Model '{model}' is not available on Ollama ({message})"
             ) from exc

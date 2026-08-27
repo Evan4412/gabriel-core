@@ -5,6 +5,7 @@ Revises: c5e9f1a2b3d4
 Create Date: 2026-07-06 00:00:00.000000
 
 """
+
 from collections.abc import Sequence
 
 from alembic import op
@@ -43,7 +44,9 @@ def upgrade() -> None:
         sa.Column("metadata", sa.JSON(), nullable=False, server_default="{}"),
         sa.Column("labels", sa.JSON(), nullable=False, server_default="{}"),
         sa.Column("specification", sa.JSON(), nullable=False, server_default="{}"),
-        sa.Column("enabled", sa.Boolean(), nullable=False, server_default=sa.text("true")),
+        sa.Column(
+            "enabled", sa.Boolean(), nullable=False, server_default=sa.text("true")
+        ),
     )
     op.create_index("ix_agents_org_id", "agents", ["org_id"])
 

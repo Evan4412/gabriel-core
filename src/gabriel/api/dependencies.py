@@ -62,214 +62,219 @@ import gabriel.knowledge.source_orm  # noqa: F401
 
 logger = get_logger(__name__)
 
+
 class SimpleCommandHandler(Handler):
-        def __init__(self, command_type: str, event_type: str):
-                self._command_type = command_type
-                self._event_type = event_type
+    def __init__(self, command_type: str, event_type: str):
+        self._command_type = command_type
+        self._event_type = event_type
 
-        @property
-        def command_type(self) -> str:
-                return self._command_type
+    @property
+    def command_type(self) -> str:
+        return self._command_type
 
-        async def handle(self, command: Command) -> list[Event]:
-                payload = dict(command.payload)
-                resource_grn = command.target_resource_grn or payload.get("grn")
+    async def handle(self, command: Command) -> list[Event]:
+        payload = dict(command.payload)
+        resource_grn = command.target_resource_grn or payload.get("grn")
 
-                if command.type in {"create_resource", "create_agent"} and not resource_grn:
-                        org_id = command.organization_id
-                        resource_type = payload.get("resource_type") or "resource"
-                        resource_id = payload.get("resource_id") or str(uuid4())
-                        resource_grn = str(
-                                GRN(
-                                        org_id=org_id,
-                                        resource_type=resource_type,
-                                        resource_id=resource_id,
-                                        version=int(payload.get("version", 1)),
-                                )
-                        )
-                        payload["grn"] = resource_grn
-
-                event = Event(
-                        type=self._event_type,
-                        principal_id=command.principal_id,
-                        organization_id=command.organization_id,
-                        resource_grn=resource_grn,
-                        correlation_id=command.correlation_id,
-                        payload=payload,
-                        metadata=command.metadata,
+        if command.type in {"create_resource", "create_agent"} and not resource_grn:
+            org_id = command.organization_id
+            resource_type = payload.get("resource_type") or "resource"
+            resource_id = payload.get("resource_id") or str(uuid4())
+            resource_grn = str(
+                GRN(
+                    org_id=org_id,
+                    resource_type=resource_type,
+                    resource_id=resource_id,
+                    version=int(payload.get("version", 1)),
                 )
-                return [event]
+            )
+            payload["grn"] = resource_grn
+
+        event = Event(
+            type=self._event_type,
+            principal_id=command.principal_id,
+            organization_id=command.organization_id,
+            resource_grn=resource_grn,
+            correlation_id=command.correlation_id,
+            payload=payload,
+            metadata=command.metadata,
+        )
+        return [event]
 
 
 class PolicyCommandHandler(Handler):
-        def __init__(
-                self,
-                command_type: str,
-                event_type: str,
-                session_factory: async_sessionmaker[AsyncSession],
-                policy_engine: PolicyEngine,
-        ):
-                self._command_type = command_type
-                self._event_type = event_type
-                self._session_factory = session_factory
-                self._policy_engine = policy_engine
+    def __init__(
+        self,
+        command_type: str,
+        event_type: str,
+        session_factory: async_sessionmaker[AsyncSession],
+        policy_engine: PolicyEngine,
+    ):
+        self._command_type = command_type
+        self._event_type = event_type
+        self._session_factory = session_factory
+        self._policy_engine = policy_engine
 
-        @property
-        def command_type(self) -> str:
-                return self._command_type
+    @property
+    def command_type(self) -> str:
+        return self._command_type
 
-        async def handle(self, command: Command) -> list[Event]:
-                payload = dict(command.payload)
-                target_grn = command.target_resource_grn or payload.get("grn")
+    async def handle(self, command: Command) -> list[Event]:
+        payload = dict(command.payload)
+        target_grn = command.target_resource_grn or payload.get("grn")
 
-                async with self._session_factory() as session:
-                        service = PolicyService(PolicyRepository(session))
+        async with self._session_factory() as session:
+            service = PolicyService(PolicyRepository(session))
 
-                        if self._command_type == "create_policy":
-                                policy = await service.create_policy(
-                                        org_id=command.organization_id,
-                                        created_by=command.principal_id,
-                                        statements=self._parse_statements(payload.get("statements", [])),
-                                        policy_grn=target_grn,
-                                        metadata=payload.get("metadata"),
-                                        labels=payload.get("labels"),
-                                        correlation_id=command.correlation_id,
-                                )
-                                self._policy_engine.add_policy(policy)
-                                resource_grn = str(policy.grn)
-                        elif self._command_type == "update_policy":
-                                if not target_grn:
-                                        raise CommandValidationError("grn is required for update_policy")
-                                policy = await service.update_policy(
-                                        grn_str=target_grn,
-                                        updated_by=command.principal_id,
-                                        statements=self._parse_statements(payload.get("statements", [])),
-                                        correlation_id=command.correlation_id,
-                                )
-                                self._policy_engine.remove_policy(target_grn)
-                                self._policy_engine.add_policy(policy)
-                                resource_grn = str(policy.grn)
-                        elif self._command_type == "delete_policy":
-                                if not target_grn:
-                                        raise CommandValidationError("grn is required for delete_policy")
-                                await service.delete_policy(
-                                        grn_str=target_grn,
-                                        deleted_by=command.principal_id,
-                                        correlation_id=command.correlation_id,
-                                )
-                                self._policy_engine.remove_policy(target_grn)
-                                resource_grn = target_grn
-                        else:
-                                raise CommandValidationError(
-                                        f"Unsupported policy command type: {self._command_type}"
-                                )
-
-                event = Event(
-                        type=self._event_type,
-                        principal_id=command.principal_id,
-                        organization_id=command.organization_id,
-                        resource_grn=resource_grn,
-                        correlation_id=command.correlation_id,
-                        payload=payload,
-                        metadata=command.metadata,
+            if self._command_type == "create_policy":
+                policy = await service.create_policy(
+                    org_id=command.organization_id,
+                    created_by=command.principal_id,
+                    statements=self._parse_statements(payload.get("statements", [])),
+                    policy_grn=target_grn,
+                    metadata=payload.get("metadata"),
+                    labels=payload.get("labels"),
+                    correlation_id=command.correlation_id,
                 )
-                return [event]
+                self._policy_engine.add_policy(policy)
+                resource_grn = str(policy.grn)
+            elif self._command_type == "update_policy":
+                if not target_grn:
+                    raise CommandValidationError("grn is required for update_policy")
+                policy = await service.update_policy(
+                    grn_str=target_grn,
+                    updated_by=command.principal_id,
+                    statements=self._parse_statements(payload.get("statements", [])),
+                    correlation_id=command.correlation_id,
+                )
+                self._policy_engine.remove_policy(target_grn)
+                self._policy_engine.add_policy(policy)
+                resource_grn = str(policy.grn)
+            elif self._command_type == "delete_policy":
+                if not target_grn:
+                    raise CommandValidationError("grn is required for delete_policy")
+                await service.delete_policy(
+                    grn_str=target_grn,
+                    deleted_by=command.principal_id,
+                    correlation_id=command.correlation_id,
+                )
+                self._policy_engine.remove_policy(target_grn)
+                resource_grn = target_grn
+            else:
+                raise CommandValidationError(
+                    f"Unsupported policy command type: {self._command_type}"
+                )
 
-        @staticmethod
-        def _parse_statements(raw_statements: Any) -> list[PolicyStatement]:
-                if not isinstance(raw_statements, list):
-                        raise CommandValidationError("statements must be a list")
-                return [PolicyStatement.model_validate(item) for item in raw_statements]
+        event = Event(
+            type=self._event_type,
+            principal_id=command.principal_id,
+            organization_id=command.organization_id,
+            resource_grn=resource_grn,
+            correlation_id=command.correlation_id,
+            payload=payload,
+            metadata=command.metadata,
+        )
+        return [event]
+
+    @staticmethod
+    def _parse_statements(raw_statements: Any) -> list[PolicyStatement]:
+        if not isinstance(raw_statements, list):
+            raise CommandValidationError("statements must be a list")
+        return [PolicyStatement.model_validate(item) for item in raw_statements]
 
 
 @dataclass
 class GatewayState:
-        event_store: EventStore | SqlAlchemyEventStore
-        dispatcher: Dispatcher
-        peel: PEEL
-        resource_projection: ResourceReadModelProjection
-        audit_projection: AuditProjection
-        memory_entries: dict[str, dict[str, Any]] = field(default_factory=dict)
+    event_store: EventStore | SqlAlchemyEventStore
+    dispatcher: Dispatcher
+    peel: PEEL
+    resource_projection: ResourceReadModelProjection
+    audit_projection: AuditProjection
+    memory_entries: dict[str, dict[str, Any]] = field(default_factory=dict)
 
 
 class GatewayService:
-        def __init__(self, state: GatewayState):
-                self.state = state
+    def __init__(self, state: GatewayState):
+        self.state = state
 
-        async def dispatch_command(self, command: Command, context: ExecutionContext) -> list[Event]:
-                return await self.state.dispatcher.dispatch(command=command, context=context)
+    async def dispatch_command(
+        self, command: Command, context: ExecutionContext
+    ) -> list[Event]:
+        return await self.state.dispatcher.dispatch(command=command, context=context)
 
-        def list_events(self) -> list[Event]:
-                return self.state.event_store.events()
+    def list_events(self) -> list[Event]:
+        return self.state.event_store.events()
 
-        def get_event(self, event_id: str) -> Event | None:
-                for event in self.state.event_store.events():
-                        if event.id == event_id:
-                                return event
-                return None
+    def get_event(self, event_id: str) -> Event | None:
+        for event in self.state.event_store.events():
+            if event.id == event_id:
+                return event
+        return None
 
-        def get_resource(self, grn: str) -> dict[str, Any] | None:
-                return self.state.resource_projection.get_resource(grn)
+    def get_resource(self, grn: str) -> dict[str, Any] | None:
+        return self.state.resource_projection.get_resource(grn)
 
-        def get_agent(self, grn: str) -> dict[str, Any] | None:
-                resource = self.state.resource_projection.get_resource(grn)
-                if not resource:
-                        return None
-                if resource.get("resource_type") != "agent":
-                        return None
-                return resource
+    def get_agent(self, grn: str) -> dict[str, Any] | None:
+        resource = self.state.resource_projection.get_resource(grn)
+        if not resource:
+            return None
+        if resource.get("resource_type") != "agent":
+            return None
+        return resource
 
-        def list_resources(
-                self,
-                organization_id: str,
-                resource_type: str | None = None,
-                include_deleted: bool = False,
-        ) -> list[dict[str, Any]]:
-                return self.state.resource_projection.list_resources(
-                        organization_id=organization_id,
-                        resource_type=resource_type,
-                        include_deleted=include_deleted,
-                )
+    def list_resources(
+        self,
+        organization_id: str,
+        resource_type: str | None = None,
+        include_deleted: bool = False,
+    ) -> list[dict[str, Any]]:
+        return self.state.resource_projection.list_resources(
+            organization_id=organization_id,
+            resource_type=resource_type,
+            include_deleted=include_deleted,
+        )
 
-        def list_memory(self, organization_id: str) -> list[dict[str, Any]]:
-                return [
-                        value
-                        for value in self.state.memory_entries.values()
-                        if value.get("organization_id") == organization_id
-                ]
+    def list_memory(self, organization_id: str) -> list[dict[str, Any]]:
+        return [
+            value
+            for value in self.state.memory_entries.values()
+            if value.get("organization_id") == organization_id
+        ]
 
-        def create_memory_entry(self, organization_id: str, content: Any, metadata: dict[str, Any]) -> dict[str, Any]:
-                memory_id = str(uuid4())
-                entry = {
-                        "id": memory_id,
-                        "organization_id": organization_id,
-                        "content": content,
-                        "metadata": metadata,
-                }
-                self.state.memory_entries[memory_id] = entry
-                return entry
+    def create_memory_entry(
+        self, organization_id: str, content: Any, metadata: dict[str, Any]
+    ) -> dict[str, Any]:
+        memory_id = str(uuid4())
+        entry = {
+            "id": memory_id,
+            "organization_id": organization_id,
+            "content": content,
+            "metadata": metadata,
+        }
+        self.state.memory_entries[memory_id] = entry
+        return entry
 
-        async def query_audit_log(
-                self,
-                *,
-                start_time=None,
-                end_time=None,
-                principal_id: str | None = None,
-                decision: str | None = None,
-                organization_id: str | None = None,
-                limit: int = 200,
-        ) -> list[Event]:
-                return await self.state.audit_projection.query(
-                        start_time=start_time,
-                        end_time=end_time,
-                        principal_id=principal_id,
-                        decision=decision,
-                        organization_id=organization_id,
-                        limit=limit,
-                )
+    async def query_audit_log(
+        self,
+        *,
+        start_time=None,
+        end_time=None,
+        principal_id: str | None = None,
+        decision: str | None = None,
+        organization_id: str | None = None,
+        limit: int = 200,
+    ) -> list[Event]:
+        return await self.state.audit_projection.query(
+            start_time=start_time,
+            end_time=end_time,
+            principal_id=principal_id,
+            decision=decision,
+            organization_id=organization_id,
+            limit=limit,
+        )
 
-        def delete_memory_entry(self, memory_id: str) -> bool:
-                return self.state.memory_entries.pop(memory_id, None) is not None
+    def delete_memory_entry(self, memory_id: str) -> bool:
+        return self.state.memory_entries.pop(memory_id, None) is not None
 
 
 class EventStreamer:
@@ -301,255 +306,254 @@ def get_event_streamer(request: Request) -> EventStreamer:
 
 
 def _register_handlers(
-        dispatcher: Dispatcher,
-        session_factory: async_sessionmaker[AsyncSession],
-        policy_engine: PolicyEngine,
+    dispatcher: Dispatcher,
+    session_factory: async_sessionmaker[AsyncSession],
+    policy_engine: PolicyEngine,
 ) -> None:
-        handlers = [
-                SimpleCommandHandler("create_resource", "resource_created"),
-                SimpleCommandHandler("update_resource", "resource_updated"),
-                SimpleCommandHandler("delete_resource", "resource_deleted"),
-                SimpleCommandHandler("create_agent", "agent_created"),
-                SimpleCommandHandler("delete_agent", "agent_deleted"),
-                SimpleCommandHandler("execute_agent", "agent_executed"),
-                SimpleCommandHandler("disable_agent", "agent_disabled"),
-                SimpleCommandHandler("enable_agent", "agent_enabled"),
-                SimpleCommandHandler("write_memory", "memory_written"),
-                SimpleCommandHandler("delete_memory", "memory_deleted"),
-                PolicyCommandHandler(
-                        "create_policy",
-                        "policy_created",
-                        session_factory,
-                        policy_engine,
-                ),
-                PolicyCommandHandler(
-                        "update_policy",
-                        "policy_updated",
-                        session_factory,
-                        policy_engine,
-                ),
-                PolicyCommandHandler(
-                        "delete_policy",
-                        "policy_deleted",
-                        session_factory,
-                        policy_engine,
-                ),
-        ]
-        for handler in handlers:
-                dispatcher.register_handler(handler)
+    handlers = [
+        SimpleCommandHandler("create_resource", "resource_created"),
+        SimpleCommandHandler("update_resource", "resource_updated"),
+        SimpleCommandHandler("delete_resource", "resource_deleted"),
+        SimpleCommandHandler("create_agent", "agent_created"),
+        SimpleCommandHandler("delete_agent", "agent_deleted"),
+        SimpleCommandHandler("execute_agent", "agent_executed"),
+        SimpleCommandHandler("disable_agent", "agent_disabled"),
+        SimpleCommandHandler("enable_agent", "agent_enabled"),
+        SimpleCommandHandler("write_memory", "memory_written"),
+        SimpleCommandHandler("delete_memory", "memory_deleted"),
+        PolicyCommandHandler(
+            "create_policy",
+            "policy_created",
+            session_factory,
+            policy_engine,
+        ),
+        PolicyCommandHandler(
+            "update_policy",
+            "policy_updated",
+            session_factory,
+            policy_engine,
+        ),
+        PolicyCommandHandler(
+            "delete_policy",
+            "policy_deleted",
+            session_factory,
+            policy_engine,
+        ),
+    ]
+    for handler in handlers:
+        dispatcher.register_handler(handler)
 
 
 async def _load_policies(session_factory: async_sessionmaker[AsyncSession]):
-        async with session_factory() as session:
-                service = PolicyService(PolicyRepository(session))
-                return await service.list_policies()
+    async with session_factory() as session:
+        service = PolicyService(PolicyRepository(session))
+        return await service.list_policies()
 
 
 async def _build_persisted_event_store() -> SqlAlchemyEventStore:
-        try:
-                async with engine.begin() as conn:
-                        await conn.run_sync(Base.metadata.create_all)
-                return await SqlAlchemyEventStore.load_from_db(async_session)
-        except (SQLAlchemyError, OSError, ConnectionError):
-                data_dir = Path(".gabriel")
-                data_dir.mkdir(parents=True, exist_ok=True)
-                fallback_engine = create_async_engine(
-                        "sqlite+aiosqlite:///./.gabriel/gateway_events.db",
-                        echo=False,
-                )
-                fallback_session = async_sessionmaker(
-                        fallback_engine,
-                        expire_on_commit=False,
-                        class_=AsyncSession,
-                )
-                async with fallback_engine.begin() as conn:
-                        await conn.run_sync(Base.metadata.create_all)
-                return await SqlAlchemyEventStore.load_from_db(fallback_session)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        return await SqlAlchemyEventStore.load_from_db(async_session)
+    except (SQLAlchemyError, OSError, ConnectionError):
+        data_dir = Path(".gabriel")
+        data_dir.mkdir(parents=True, exist_ok=True)
+        fallback_engine = create_async_engine(
+            "sqlite+aiosqlite:///./.gabriel/gateway_events.db",
+            echo=False,
+        )
+        fallback_session = async_sessionmaker(
+            fallback_engine,
+            expire_on_commit=False,
+            class_=AsyncSession,
+        )
+        async with fallback_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        return await SqlAlchemyEventStore.load_from_db(fallback_session)
 
 
 async def initialize_gateway_state(app) -> None:
-        event_store = await _build_persisted_event_store()
+    event_store = await _build_persisted_event_store()
 
-        policy_session_factory = (
-                event_store.session_factory
-                if hasattr(event_store, "session_factory")
-                else async_session
-        )
-        persisted_policies = await _load_policies(policy_session_factory)
+    policy_session_factory = (
+        event_store.session_factory
+        if hasattr(event_store, "session_factory")
+        else async_session
+    )
+    persisted_policies = await _load_policies(policy_session_factory)
 
-        peel = PEEL(PolicyEngine(persisted_policies))
-        dispatcher = Dispatcher(event_store=event_store, peel=peel)
-        _register_handlers(dispatcher, policy_session_factory, peel.engine)
+    peel = PEEL(PolicyEngine(persisted_policies))
+    dispatcher = Dispatcher(event_store=event_store, peel=peel)
+    _register_handlers(dispatcher, policy_session_factory, peel.engine)
 
-        projection_session_factory = (
-                event_store.session_factory
-                if hasattr(event_store, "session_factory")
-                else async_session
-        )
+    projection_session_factory = (
+        event_store.session_factory
+        if hasattr(event_store, "session_factory")
+        else async_session
+    )
 
-        resource_projection = ResourceReadModelProjection(projection_session_factory)
-        audit_projection = AuditProjection(projection_session_factory)
-        dispatcher.register_projection(resource_projection)
-        dispatcher.register_projection(audit_projection)
+    resource_projection = ResourceReadModelProjection(projection_session_factory)
+    audit_projection = AuditProjection(projection_session_factory)
+    dispatcher.register_projection(resource_projection)
+    dispatcher.register_projection(audit_projection)
 
-        await resource_projection.bootstrap()
+    await resource_projection.bootstrap()
 
-        if await resource_projection.is_empty() and event_store.events():
-                await dispatcher.replay_events(event_store.events())
+    if await resource_projection.is_empty() and event_store.events():
+        await dispatcher.replay_events(event_store.events())
 
-        app.state.gateway_state = GatewayState(
-                event_store=event_store,
-                dispatcher=dispatcher,
-                peel=peel,
-                resource_projection=resource_projection,
-                audit_projection=audit_projection,
-        )
+    app.state.gateway_state = GatewayState(
+        event_store=event_store,
+        dispatcher=dispatcher,
+        peel=peel,
+        resource_projection=resource_projection,
+        audit_projection=audit_projection,
+    )
 
-        app.state.peel = peel
+    app.state.peel = peel
 
-        # Database session factory for request-scoped services (auth, users, orgs).
-        app.state.db_session_factory = policy_session_factory
+    # Database session factory for request-scoped services (auth, users, orgs).
+    app.state.db_session_factory = policy_session_factory
 
-        # Identity Service: authentication boundary (issues/verifies signed tokens).
-        # The working session factory is injected so DB-backed providers
-        # (password, production) use the same database as the rest of the app.
-        app.state.identity_service = build_default_identity_service(
-                session_factory=policy_session_factory
-        )
+    # Identity Service: authentication boundary (issues/verifies signed tokens).
+    # The working session factory is injected so DB-backed providers
+    # (password, production) use the same database as the rest of the app.
+    app.state.identity_service = build_default_identity_service(
+        session_factory=policy_session_factory
+    )
 
-        # Gateway AI Runtime (Phase 3): LLM providers, runtime tools, and
-        # ephemeral chat sessions. Providers are config-driven (env override
-        # for the Ollama endpoint); registries are per-app instances so tests
-        # can swap in fakes via app.state.
-        provider_registry = ProviderRegistry()
-        register_default_providers(provider_registry)
-        app.state.llm_provider_registry = provider_registry
-        # Discovery is the sole source of tool registration: it populates the
-        # process-wide FunctionRegistry (used by ToolExecutor to resolve
-        # callables by GRN binding) and builds the LLM-facing catalog.
-        # 1. Build the LLM-facing runtime tool registry (discovers + caches tools)
-        app.state.runtime_tool_registry = build_default_tool_registry()
+    # Gateway AI Runtime (Phase 3): LLM providers, runtime tools, and
+    # ephemeral chat sessions. Providers are config-driven (env override
+    # for the Ollama endpoint); registries are per-app instances so tests
+    # can swap in fakes via app.state.
+    provider_registry = ProviderRegistry()
+    register_default_providers(provider_registry)
+    app.state.llm_provider_registry = provider_registry
+    # Discovery is the sole source of tool registration: it populates the
+    # process-wide FunctionRegistry (used by ToolExecutor to resolve
+    # callables by GRN binding) and builds the LLM-facing catalog.
+    # 1. Build the LLM-facing runtime tool registry (discovers + caches tools)
+    app.state.runtime_tool_registry = build_default_tool_registry()
 
-        # 2. Populate fn_registry so ToolExecutor can dispatch callables by binding.
-        #    register_into skips already-registered bindings, so this is idempotent.
-        tool_indexer.register_into(function_registry)
-        app.state.fn_registry = function_registry
+    # 2. Populate fn_registry so ToolExecutor can dispatch callables by binding.
+    #    register_into skips already-registered bindings, so this is idempotent.
+    tool_indexer.register_into(function_registry)
+    app.state.fn_registry = function_registry
 
-        logger.info(
+    logger.info(
         "FunctionRegistry: %d bindings registered: %s",
         len(function_registry),
         function_registry.list_bindings(),
-        )
-        app.state.chat_session_manager = SessionManager()
-        # App-wide rendezvous for human-in-the-loop tool approvals: shared by
-        # the streaming chat turn (which pauses) and the approval endpoint
-        # (which resumes it). Must be a single instance across requests.
-        from gabriel.gateway.approvals import ApprovalRegistry
+    )
+    app.state.chat_session_manager = SessionManager()
+    # App-wide rendezvous for human-in-the-loop tool approvals: shared by
+    # the streaming chat turn (which pauses) and the approval endpoint
+    # (which resumes it). Must be a single instance across requests.
+    from gabriel.gateway.approvals import ApprovalRegistry
 
-        app.state.approval_registry = ApprovalRegistry()
+    app.state.approval_registry = ApprovalRegistry()
 
+    # Document & Knowledge (Phase 4): hot-swappable embedding providers
+    # (Ollama default) and the RAG retriever used by the chat runtime.
+    from gabriel.knowledge.embeddings import (
+        EmbeddingProviderRegistry,
+        register_default_embedding_providers,
+    )
+    from gabriel.knowledge.retrieval import KnowledgeRetriever
 
-        # Document & Knowledge (Phase 4): hot-swappable embedding providers
-        # (Ollama default) and the RAG retriever used by the chat runtime.
-        from gabriel.knowledge.embeddings import (
-                EmbeddingProviderRegistry,
-                register_default_embedding_providers,
-        )
-        from gabriel.knowledge.retrieval import KnowledgeRetriever
-
-        embedding_registry = EmbeddingProviderRegistry()
-        register_default_embedding_providers(embedding_registry)
-        app.state.embedding_registry = embedding_registry
-        app.state.knowledge_retriever = KnowledgeRetriever(
-                policy_session_factory, registry=embedding_registry
-        )
+    embedding_registry = EmbeddingProviderRegistry()
+    register_default_embedding_providers(embedding_registry)
+    app.state.embedding_registry = embedding_registry
+    app.state.knowledge_retriever = KnowledgeRetriever(
+        policy_session_factory, registry=embedding_registry
+    )
 
 
 def get_gateway_state(request: Request) -> GatewayState:
-        return request.app.state.gateway_state
+    return request.app.state.gateway_state
 
 
 def get_gateway_service(request: Request) -> GatewayService:
-        state = get_gateway_state(request)
-        return GatewayService(state)
+    state = get_gateway_state(request)
+    return GatewayService(state)
 
 
 def get_identity_service(request: Request) -> IdentityService:
-        return request.app.state.identity_service
+    return request.app.state.identity_service
 
 
 def get_db_session_factory(request: Request) -> async_sessionmaker[AsyncSession]:
-        """Return the application-wide async session factory."""
-        factory = getattr(request.app.state, "db_session_factory", None)
-        return factory if factory is not None else async_session
+    """Return the application-wide async session factory."""
+    factory = getattr(request.app.state, "db_session_factory", None)
+    return factory if factory is not None else async_session
+
 
 def get_chat_service(request: Request) -> ChatService:
-        state = get_gateway_state(request)
-        return ChatService(ChatRepository(state.resource_projection))
+    state = get_gateway_state(request)
+    return ChatService(ChatRepository(state.resource_projection))
 
 
 def get_provider_registry(request: Request) -> ProviderRegistry:
-        """LLM provider registry initialized at app startup (Phase 3)."""
-        return request.app.state.llm_provider_registry
+    """LLM provider registry initialized at app startup (Phase 3)."""
+    return request.app.state.llm_provider_registry
 
 
 def get_session_manager(request: Request) -> SessionManager:
-        """Ephemeral chat session manager (Phase 3)."""
-        return request.app.state.chat_session_manager
+    """Ephemeral chat session manager (Phase 3)."""
+    return request.app.state.chat_session_manager
 
 
 def get_knowledge_retriever(request: Request):
-        """RAG retriever wired to the app's embedding registry (Phase 4)."""
-        return getattr(request.app.state, "knowledge_retriever", None)
+    """RAG retriever wired to the app's embedding registry (Phase 4)."""
+    return getattr(request.app.state, "knowledge_retriever", None)
 
 
 def get_chat_runtime_service(request: Request):
-        """ChatRuntimeService wired to the app's registries and DB sessions."""
-        from gabriel.gateway.service import ChatRuntimeService
+    """ChatRuntimeService wired to the app's registries and DB sessions."""
+    from gabriel.gateway.service import ChatRuntimeService
 
-        logger = get_logger(__name__)
+    logger = get_logger(__name__)
 
-        tools = request.app.state.runtime_tool_registry
-        if not tools:
-                logger.warning("No tools found")
-        else:
-                logger.info("Found %d tools", len(tools.llm_specs()))
+    tools = request.app.state.runtime_tool_registry
+    if not tools:
+        logger.warning("No tools found")
+    else:
+        logger.info("Found %d tools", len(tools.llm_specs()))
 
-        return ChatRuntimeService(
-                session_factory=get_db_session_factory(request),
-                providers=request.app.state.llm_provider_registry,
-                tools=request.app.state.runtime_tool_registry,
-                sessions=request.app.state.chat_session_manager,
-                retriever=get_knowledge_retriever(request),
-                fn_registry=request.app.state.fn_registry,
-                peel=request.app.state.peel,
-                approvals=getattr(request.app.state, "approval_registry", None),
-        )
+    return ChatRuntimeService(
+        session_factory=get_db_session_factory(request),
+        providers=request.app.state.llm_provider_registry,
+        tools=request.app.state.runtime_tool_registry,
+        sessions=request.app.state.chat_session_manager,
+        retriever=get_knowledge_retriever(request),
+        fn_registry=request.app.state.fn_registry,
+        peel=request.app.state.peel,
+        approvals=getattr(request.app.state, "approval_registry", None),
+    )
 
 
 def get_execution_context(request: Request) -> ExecutionContext:
-        context = getattr(request.state, "execution_context", None)
-        if context is None:
-                raise HTTPException(status_code=401, detail="Unauthorized")
-        return context
+    context = getattr(request.state, "execution_context", None)
+    if context is None:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return context
 
 
 def build_command(
-        context: ExecutionContext,
-        command_type: str,
-        payload: dict[str, Any],
-        *,
-        action_name: str | None = None,
-        target_resource_grn: str | None = None,
+    context: ExecutionContext,
+    command_type: str,
+    payload: dict[str, Any],
+    *,
+    action_name: str | None = None,
+    target_resource_grn: str | None = None,
 ) -> Command:
-        return Command(
-                type=command_type,
-                principal_id=str(context.principal.id),
-                organization_id=context.organization,
-                action_name=action_name,
-                target_resource_grn=target_resource_grn,
-                correlation_id=str(context.correlation_id),
-                payload=payload,
-                metadata={"execution_id": str(context.execution_id), **context.metadata},
-        )
-
+    return Command(
+        type=command_type,
+        principal_id=str(context.principal.id),
+        organization_id=context.organization,
+        action_name=action_name,
+        target_resource_grn=target_resource_grn,
+        correlation_id=str(context.correlation_id),
+        payload=payload,
+        metadata={"execution_id": str(context.execution_id), **context.metadata},
+    )

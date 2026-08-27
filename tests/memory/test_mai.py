@@ -38,6 +38,7 @@ def mock_context() -> ExecutionContext:
         metadata={},
     )
 
+
 @pytest.mark.asyncio
 async def test_scoped_memory_usage(mock_context):
     provider = LocalMemoryProvider()

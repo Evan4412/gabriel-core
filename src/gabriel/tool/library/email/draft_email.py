@@ -1,4 +1,5 @@
 """draft_email — save an email to the Drafts folder."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from email.message import EmailMessage

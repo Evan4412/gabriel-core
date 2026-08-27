@@ -1,4 +1,5 @@
 """Shared fixtures for knowledge slice tests (in-memory SQLite)."""
+
 import hashlib
 import math
 

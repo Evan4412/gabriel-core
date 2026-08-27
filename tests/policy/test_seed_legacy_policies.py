@@ -18,7 +18,9 @@ import gabriel.events.orm  # noqa: F401
 import gabriel.policy.orm  # noqa: F401
 
 
-SEED_SCRIPT_PATH = Path(__file__).resolve().parents[2] / "scripts" / "seed_legacy_policies.py"
+SEED_SCRIPT_PATH = (
+    Path(__file__).resolve().parents[2] / "scripts" / "seed_legacy_policies.py"
+)
 
 
 spec = importlib.util.spec_from_file_location("seed_legacy_policies", SEED_SCRIPT_PATH)
@@ -45,7 +47,9 @@ async def test_seed_legacy_gate_policies_and_peel_tool_eval(tmp_path):
     db_path = tmp_path / "seed_legacy_policies.db"
     database_url = f"sqlite+aiosqlite:///{db_path.as_posix()}"
     engine = create_async_engine(database_url, echo=False)
-    session_factory = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    session_factory = async_sessionmaker(
+        engine, expire_on_commit=False, class_=AsyncSession
+    )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

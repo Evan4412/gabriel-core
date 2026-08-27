@@ -1,4 +1,5 @@
 """list_events — list upcoming calendar events."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from datetime import datetime, UTC
@@ -45,7 +46,8 @@ async def list_events(
             {
                 "id": e.get("id"),
                 "summary": e.get("summary"),
-                "start": e.get("start", {}).get("dateTime") or e.get("start", {}).get("date"),
+                "start": e.get("start", {}).get("dateTime")
+                or e.get("start", {}).get("date"),
                 "end": e.get("end", {}).get("dateTime") or e.get("end", {}).get("date"),
                 "location": e.get("location"),
                 "status": e.get("status"),

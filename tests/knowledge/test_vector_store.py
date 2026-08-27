@@ -1,4 +1,5 @@
 """ChunkVectorStore: similarity search (SQLite fallback path) & chunk CRUD."""
+
 import pytest
 
 from gabriel.knowledge.vector_store import ChunkVectorStore, cosine_similarity
@@ -73,17 +74,31 @@ async def test_search_filters_by_source_document_and_org(db_session, fake_embedd
     store = ChunkVectorStore(db_session)
     vec = (await fake_embedder.embed(["shared text"]))[0]
     await store.add_chunk(
-        org_id=ORG, document_grn=DOC, knowledge_source_grn=SOURCE,
-        chunk_index=0, content="in source", token_count=2, embedding=vec,
+        org_id=ORG,
+        document_grn=DOC,
+        knowledge_source_grn=SOURCE,
+        chunk_index=0,
+        content="in source",
+        token_count=2,
+        embedding=vec,
     )
     await store.add_chunk(
-        org_id=ORG, document_grn=OTHER_DOC, knowledge_source_grn=None,
-        chunk_index=0, content="no source", token_count=2, embedding=vec,
+        org_id=ORG,
+        document_grn=OTHER_DOC,
+        knowledge_source_grn=None,
+        chunk_index=0,
+        content="no source",
+        token_count=2,
+        embedding=vec,
     )
     await store.add_chunk(
-        org_id="other-org", document_grn="grn:other-org:document/x:1",
-        knowledge_source_grn=None, chunk_index=0, content="other org",
-        token_count=2, embedding=vec,
+        org_id="other-org",
+        document_grn="grn:other-org:document/x:1",
+        knowledge_source_grn=None,
+        chunk_index=0,
+        content="other org",
+        token_count=2,
+        embedding=vec,
     )
 
     by_source = await store.search(
@@ -104,13 +119,22 @@ async def test_search_filters_by_source_document_and_org(db_session, fake_embedd
 async def test_keyword_search_fallback(db_session):
     store = ChunkVectorStore(db_session)
     await store.add_chunk(
-        org_id=ORG, document_grn=DOC, knowledge_source_grn=None,
-        chunk_index=0, content="GABRIEL uses pgvector for retrieval",
-        token_count=5, embedding=None,
+        org_id=ORG,
+        document_grn=DOC,
+        knowledge_source_grn=None,
+        chunk_index=0,
+        content="GABRIEL uses pgvector for retrieval",
+        token_count=5,
+        embedding=None,
     )
     await store.add_chunk(
-        org_id=ORG, document_grn=DOC, knowledge_source_grn=None,
-        chunk_index=1, content="unrelated content", token_count=2, embedding=None,
+        org_id=ORG,
+        document_grn=DOC,
+        knowledge_source_grn=None,
+        chunk_index=1,
+        content="unrelated content",
+        token_count=2,
+        embedding=None,
     )
     results = await store.keyword_search(org_id=ORG, query="pgvector")
     assert len(results) == 1
@@ -122,8 +146,13 @@ async def test_assign_knowledge_source_relabels_chunks(db_session):
     store = ChunkVectorStore(db_session)
     for i in range(2):
         await store.add_chunk(
-            org_id=ORG, document_grn=DOC, knowledge_source_grn=None,
-            chunk_index=i, content=f"c{i}", token_count=1, embedding=None,
+            org_id=ORG,
+            document_grn=DOC,
+            knowledge_source_grn=None,
+            chunk_index=i,
+            content=f"c{i}",
+            token_count=1,
+            embedding=None,
         )
     updated = await store.assign_knowledge_source(DOC, ORG, SOURCE)
     assert updated == 2

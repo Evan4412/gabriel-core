@@ -18,6 +18,7 @@ Changes
    (``vector_collection`` / ``document_collection`` / ``external``),
    decoupling the knowledge abstraction from the vector store.
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -75,9 +76,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "ix_knowledge_sources_source_type", table_name="knowledge_sources"
-    )
+    op.drop_index("ix_knowledge_sources_source_type", table_name="knowledge_sources")
     op.drop_column("knowledge_sources", "source_type")
     op.drop_column("tools", "configuration")
     op.drop_column("tools", "enabled")

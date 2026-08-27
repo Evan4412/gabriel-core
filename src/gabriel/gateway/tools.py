@@ -23,6 +23,7 @@ LLM's function-calling API. ``FunctionTool.from_function_registry`` bridges
 the two worlds so existing library callables are reusable without
 re-implementation.
 """
+
 from __future__ import annotations
 
 import json
@@ -229,9 +230,11 @@ class RuntimeToolRegistry:
                      ``None`` exports every registered tool.
         """
         logger.info(f"Agent tool names: {self.list_tools()}")
-        names = self.list_tools() if allowed is None else [
-            n for n in allowed if n in self._tools
-        ]
+        names = (
+            self.list_tools()
+            if allowed is None
+            else [n for n in allowed if n in self._tools]
+        )
         return [self._tools[n].to_llm_spec() for n in names]
 
     def __len__(self) -> int:
@@ -291,8 +294,11 @@ async def execute_tool_call(
     if allowed is not None and call.name not in allowed:
         error = f"Tool '{call.name}' is not allowed for this agent."
         return ToolResult(
-            tool_call_id=call.id, name=call.name,
-            content=json.dumps({"error": error}), success=False, error=error,
+            tool_call_id=call.id,
+            name=call.name,
+            content=json.dumps({"error": error}),
+            success=False,
+            error=error,
         )
     try:
         tool = registry.get(call.name)

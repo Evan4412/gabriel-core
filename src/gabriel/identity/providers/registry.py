@@ -5,6 +5,7 @@ A minimal, explicit registry mapping a method name (``"dev"``, ``"password"``,
 can be registered and are resolved by name at login time, so several
 authentication methods can run concurrently.
 """
+
 from __future__ import annotations
 
 from gabriel.identity.exceptions import ProviderNotFoundError

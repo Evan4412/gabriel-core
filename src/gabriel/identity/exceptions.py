@@ -1,5 +1,6 @@
 # TODO Add custom constructors only for exceptions where structured context is genuinely useful
 
+
 class IdentityError(Exception):
     """Base exception for all Gabriel identity errors."""
 

@@ -18,6 +18,7 @@ approval endpoint resolves that key, waking the stream.
 The registry is a single app-wide instance (see
 ``gabriel.api.dependencies``) so both requests share the same state.
 """
+
 from __future__ import annotations
 
 import asyncio

@@ -4,6 +4,7 @@ Emits domain events for every membership state change (P-4: event-driven;
 ADR-017 transactional outbox — events are appended in the same session as the
 membership row and committed together by the caller/service).
 """
+
 from __future__ import annotations
 
 from sqlalchemy import select
@@ -19,7 +20,9 @@ from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFound
 class MembershipService:
     """Business logic for organization memberships (org-scoped by design)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         self.session = session
         self.event_repo = event_repo
 
@@ -79,7 +82,9 @@ class MembershipService:
         commit: bool = True,
     ) -> OrgMembershipORM:
         """Change a member's role."""
-        normalized_role = new_role if isinstance(new_role, OrgRole) else OrgRole(new_role)
+        normalized_role = (
+            new_role if isinstance(new_role, OrgRole) else OrgRole(new_role)
+        )
         membership = await self._get_or_raise(org_id, principal_id)
 
         old_role = membership.role
@@ -117,7 +122,8 @@ class MembershipService:
         # Safety: an organization must always retain at least one owner.
         if membership.role == OrgRole.OWNER.value:
             owners = [
-                m for m in await self.list_members(org_id)
+                m
+                for m in await self.list_members(org_id)
                 if m.role == OrgRole.OWNER.value
             ]
             if len(owners) <= 1:
@@ -148,9 +154,7 @@ class MembershipService:
         )
         return list(result.scalars().all())
 
-    async def get_membership(
-        self, org_id: str, principal_id: str
-    ) -> OrgMembershipORM:
+    async def get_membership(self, org_id: str, principal_id: str) -> OrgMembershipORM:
         return await self._get_or_raise(org_id, principal_id)
 
     async def find_membership(
@@ -171,9 +175,7 @@ class MembershipService:
 
     async def _get(self, org_id: str, principal_id: str) -> OrgMembershipORM | None:
         result = await self.session.execute(
-            select(OrgMembershipORM).filter_by(
-                org_id=org_id, principal_id=principal_id
-            )
+            select(OrgMembershipORM).filter_by(org_id=org_id, principal_id=principal_id)
         )
         return result.scalar_one_or_none()
 

@@ -1,4 +1,5 @@
 """Fixtures for runtime tests."""
+
 import pytest
 from uuid import uuid4
 from datetime import datetime, UTC
@@ -118,4 +119,5 @@ def context_builder() -> ExecutionContextBuilder:
 def scoped_client(execution_context: ExecutionContext):
     """Create a scoped client."""
     from gabriel.runtime.scope import ScopedClient
+
     return ScopedClient(execution_context)

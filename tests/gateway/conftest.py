@@ -1,4 +1,5 @@
 """Fixtures for Gateway AI Runtime tests (Phase 3)."""
+
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
@@ -108,5 +109,7 @@ class FakeProvider:
         return ProviderHealth(provider=self._name, healthy=True, detail="fake ok")
 
 
-def make_tool_call(name: str, call_id: str = "call-1", **arguments: Any) -> ToolCallRequest:
+def make_tool_call(
+    name: str, call_id: str = "call-1", **arguments: Any
+) -> ToolCallRequest:
     return ToolCallRequest(id=call_id, name=name, arguments=arguments)

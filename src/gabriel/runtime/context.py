@@ -1,4 +1,5 @@
 """Execution context: The immutable "process" of Gabriel."""
+
 from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
@@ -53,16 +54,18 @@ class ExecutionContext:
 
     def __hash__(self) -> int:
         """Make context hashable (for use in sets/dicts)."""
-        return hash((
-            self.execution_id,
-            self.principal.id.org_id,  # Use org_id from principal
-            self.organization,
-            self.correlation_id,
-            self.causation_id,
-            self.session_id,
-            str(self.resource) if self.resource else None,
-            self.started_at,
-        ))
+        return hash(
+            (
+                self.execution_id,
+                self.principal.id.org_id,  # Use org_id from principal
+                self.organization,
+                self.correlation_id,
+                self.causation_id,
+                self.session_id,
+                str(self.resource) if self.resource else None,
+                self.started_at,
+            )
+        )
 
     def __eq__(self, other: object) -> bool:
         """Compare contexts for equality."""

@@ -6,6 +6,7 @@ listing, mutation with version bumps, and soft deletion. Every mutation
 appends a domain event within the same transaction (ADR-017 transactional
 outbox).
 """
+
 from __future__ import annotations
 
 from datetime import datetime, UTC
@@ -32,7 +33,9 @@ def utcnow() -> datetime:
 class ConversationService:
     """Business logic for conversations (org-scoped)."""
 
-    def __init__(self, session: AsyncSession, event_repo: EventRepository | None = None):
+    def __init__(
+        self, session: AsyncSession, event_repo: EventRepository | None = None
+    ):
         register_core_resource_types()
         self.session = session
         self.repo = ConversationRepository(session)
@@ -82,7 +85,10 @@ class ConversationService:
                     "title": title,
                     "agent_grn": agent_grn,
                 },
-                metadata={"service": "ConversationService", "operation": "create_conversation"},
+                metadata={
+                    "service": "ConversationService",
+                    "operation": "create_conversation",
+                },
             )
         )
         if commit:
@@ -91,7 +97,9 @@ class ConversationService:
             await self.session.flush()
         return orm_to_domain(orm)
 
-    async def get_conversation(self, grn_str: str, org_id: str | None = None) -> Conversation:
+    async def get_conversation(
+        self, grn_str: str, org_id: str | None = None
+    ) -> Conversation:
         return orm_to_domain(await self.repo.get_by_grn(grn_str, org_id=org_id))
 
     async def list_conversations(
@@ -130,7 +138,9 @@ class ConversationService:
             orm.title = title
         if status is not None:
             normalized = (
-                status if isinstance(status, ConversationStatus) else ConversationStatus(status)
+                status
+                if isinstance(status, ConversationStatus)
+                else ConversationStatus(status)
             )
             orm.status = normalized.value
         if participants is not None:
@@ -154,7 +164,10 @@ class ConversationService:
                     "title": orm.title,
                     "status": orm.status,
                 },
-                metadata={"service": "ConversationService", "operation": "update_conversation"},
+                metadata={
+                    "service": "ConversationService",
+                    "operation": "update_conversation",
+                },
             )
         )
         await self.session.commit()
@@ -198,7 +211,10 @@ class ConversationService:
                 resource_grn=grn_str,
                 correlation_id=correlation_id,
                 payload={"resource_type": "conversation", "grn": grn_str},
-                metadata={"service": "ConversationService", "operation": "delete_conversation"},
+                metadata={
+                    "service": "ConversationService",
+                    "operation": "delete_conversation",
+                },
             )
         )
         await self.session.commit()

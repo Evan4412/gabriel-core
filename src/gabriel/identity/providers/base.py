@@ -16,6 +16,7 @@ Design notes
   session view). Keeping the return type richer than a bare ``Principal`` means
   future providers (OAuth profile data, SAML attributes) need no signature change.
 """
+
 from __future__ import annotations
 
 import abc
@@ -52,7 +53,9 @@ class IdentityProvider(abc.ABC):
     name: str = ""
 
     @abc.abstractmethod
-    async def authenticate(self, credentials: Mapping[str, Any]) -> AuthenticationResult:
+    async def authenticate(
+        self, credentials: Mapping[str, Any]
+    ) -> AuthenticationResult:
         """Verify ``credentials`` and return the authenticated principal.
 
         Args:

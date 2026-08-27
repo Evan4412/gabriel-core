@@ -1,4 +1,5 @@
 """DocumentLibraryService & DocumentProcessingService (Phase 4)."""
+
 from pathlib import Path
 
 import pytest
@@ -56,8 +57,11 @@ async def test_upload_txt_document(library):
 @pytest.mark.asyncio
 async def test_upload_markdown_document(library):
     document = await library.upload_document(
-        ORG, filename="readme.md", content=b"# Title\n\nBody text.",
-        created_by=USER, commit=False,
+        ORG,
+        filename="readme.md",
+        content=b"# Title\n\nBody text.",
+        created_by=USER,
+        commit=False,
     )
     text = await library.get_document_text(str(document.grn), org_id=ORG)
     assert "Title" in text

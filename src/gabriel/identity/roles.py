@@ -13,6 +13,7 @@ This keeps the two PEEL layers cleanly separated: roles → capabilities
 (what kind of actor you are), policies → permissions (what exactly you may
 touch).
 """
+
 from __future__ import annotations
 
 from enum import StrEnum
@@ -45,8 +46,7 @@ _BASE_CAPABILITIES: frozenset[Capability] = frozenset(
 )
 
 ROLE_CAPABILITIES: dict[OrgRole, frozenset[Capability]] = {
-    OrgRole.VIEWER: _BASE_CAPABILITIES
-    | frozenset({Capability.READ_RESOURCE}),
+    OrgRole.VIEWER: _BASE_CAPABILITIES | frozenset({Capability.READ_RESOURCE}),
     OrgRole.MEMBER: _BASE_CAPABILITIES
     | frozenset(
         {

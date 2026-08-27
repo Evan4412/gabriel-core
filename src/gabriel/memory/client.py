@@ -16,6 +16,7 @@ memory. It enforces two responsibilities before any backend call:
 Porting note: PEEL evaluation reuses the existing PolicyEngine + Effect
 model from gabriel.policy, matching the Dispatcher integration pattern.
 """
+
 from __future__ import annotations
 
 from typing import Any

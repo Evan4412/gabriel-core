@@ -1,4 +1,5 @@
 """Persistence model for the Conversation resource."""
+
 from __future__ import annotations
 
 from sqlalchemy import Index, JSON, String
@@ -21,4 +22,6 @@ class ConversationORM(Base, GabrielResourceMixin):
         String(32), nullable=False, default="active", index=True
     )
     participants: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
-    agent_grn: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
+    agent_grn: Mapped[str | None] = mapped_column(
+        String(255), nullable=True, index=True
+    )

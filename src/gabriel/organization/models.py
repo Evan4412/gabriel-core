@@ -1,5 +1,6 @@
 from gabriel.resource.models import Resource, ResourceType
 
+
 class Organization(Resource):
     resource_type: ResourceType = ResourceType.ORGANIZATION
     display_name: str

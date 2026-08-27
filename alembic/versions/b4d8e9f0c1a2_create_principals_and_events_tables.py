@@ -8,6 +8,7 @@ Creates:
 - principals table (identity abstractions, keyed by PrincipalID)
 - events table (append-only event log for ADR-017 transactional outbox)
 """
+
 from collections.abc import Sequence
 
 from alembic import op
@@ -15,8 +16,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'b4d8e9f0c1a2'
-down_revision: str | Sequence[str] | None = 'ae642da113fe'
+revision: str = "b4d8e9f0c1a2"
+down_revision: str | Sequence[str] | None = "ae642da113fe"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 

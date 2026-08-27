@@ -134,7 +134,9 @@ class PrincipalService:
         """List all principals scoped to an organization."""
         return await self.repo.list_for_org(org_id)
 
-    async def _emit_principal_created(self, principal: Principal, created_by: str) -> None:
+    async def _emit_principal_created(
+        self, principal: Principal, created_by: str
+    ) -> None:
         if self.event_repo is None:
             return
 
@@ -168,7 +170,11 @@ class PrincipalService:
     ) -> set[Capability]:
         normalized: set[Capability] = set()
         for capability in capabilities:
-            normalized.add(capability if isinstance(capability, Capability) else Capability(capability))
+            normalized.add(
+                capability
+                if isinstance(capability, Capability)
+                else Capability(capability)
+            )
         return normalized
 
     @staticmethod

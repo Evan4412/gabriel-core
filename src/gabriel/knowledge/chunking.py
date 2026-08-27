@@ -5,6 +5,7 @@ the legacy RAG-into-memory path and the Phase-4 document-chunk pipeline share
 one implementation. A "token" is a whitespace-delimited word — cheap, stable,
 and good enough for windowing; embedding models do their own tokenisation.
 """
+
 from __future__ import annotations
 
 import os

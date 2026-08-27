@@ -1,4 +1,5 @@
 """Mappers between Domain (User) and Persistence (UserORM)."""
+
 from gabriel.resource.grn import GRN
 from gabriel.user.models import User
 from gabriel.user.orm import UserORM

@@ -48,7 +48,9 @@ class ResourceReadModelProjection(Projection):
         if not grn:
             return
 
-        previous = self._resources.get(grn, {"grn": grn, "attributes": {}, "payload": {}})
+        previous = self._resources.get(
+            grn, {"grn": grn, "attributes": {}, "payload": {}}
+        )
         next_state = _apply_event(previous, event)
         self._resources[grn] = next_state
         await self._upsert(next_state, event)
@@ -86,7 +88,9 @@ class ResourceReadModelProjection(Projection):
         async with self._session_factory() as session:
             row = await session.get(ResourceProjectionORM, resource["grn"])
             if row is None:
-                row = ResourceProjectionORM(grn=resource["grn"], organization_id=event.organization_id)
+                row = ResourceProjectionORM(
+                    grn=resource["grn"], organization_id=event.organization_id
+                )
                 session.add(row)
 
             row.organization_id = event.organization_id

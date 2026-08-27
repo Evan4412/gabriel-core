@@ -1,4 +1,5 @@
 """Tests for Capability enum and capability checking."""
+
 import pytest
 
 from gabriel.runtime.capabilities import Capability
@@ -61,9 +62,7 @@ class TestScopedClientCapabilityChecking:
 
         scoped_client.has_capability(Capability.READ_MEMORY)
 
-    def test_has_capability_with_string(
-        self, execution_context, org_id: str
-    ):
+    def test_has_capability_with_string(self, execution_context, org_id: str):
         """ScopedClient.has_capability works with string."""
         from gabriel.runtime.scope import ScopedClient
 
@@ -111,7 +110,9 @@ class TestScopedClientCapabilityChecking:
         client = ScopedClient(execution_context)
         assert client.principal == execution_context.principal
 
-    def test_scoped_client_organization_id_property(self, execution_context, org_id: str):
+    def test_scoped_client_organization_id_property(
+        self, execution_context, org_id: str
+    ):
         """ScopedClient.organization_id property works."""
         from gabriel.runtime.scope import ScopedClient
 

@@ -9,6 +9,7 @@ work unchanged; the Alembic migration converts it to pgvector ``vector(768)``
 on PostgreSQL (768 dims = nomic-embed-text, the default Ollama embedding
 model). This mirrors ``MemoryEntryORM.embedding``.
 """
+
 from __future__ import annotations
 
 from datetime import datetime

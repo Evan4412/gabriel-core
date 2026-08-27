@@ -1,4 +1,5 @@
 """move_email — move an email to another IMAP folder."""
+
 from __future__ import annotations
 from langchain_core.tools import tool
 from typing import Any

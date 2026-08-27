@@ -17,7 +17,13 @@ from gabriel.memory.models import MemoryLayer
 
 def test_all_legacy_types_have_templates() -> None:
     # Legacy taxonomy from agents/base_agent.py AGENT_TYPE_MAP + experimental types.
-    assert set(list_templates()) == {"chat", "engineer", "researcher", "daemon", "server"}
+    assert set(list_templates()) == {
+        "chat",
+        "engineer",
+        "researcher",
+        "daemon",
+        "server",
+    }
 
 
 def test_get_template_unknown_raises() -> None:

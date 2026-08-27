@@ -19,6 +19,7 @@ Changes
    HNSW cosine index; on other dialects (SQLite tests) it stays JSON and
    similarity is computed in-process.
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -83,7 +84,9 @@ def upgrade() -> None:
         sa.Column("document_count", sa.Integer, nullable=False, server_default="0"),
     )
     op.create_index(
-        "ix_knowledge_sources_org_created", "knowledge_sources", ["org_id", "created_at"]
+        "ix_knowledge_sources_org_created",
+        "knowledge_sources",
+        ["org_id", "created_at"],
     )
 
     # 3. document_chunks — derived chunk windows + embeddings

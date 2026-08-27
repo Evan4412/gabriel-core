@@ -55,7 +55,9 @@ def _resource_to_summary(resource: dict[str, Any]) -> AgentSummary:
         status=status,
         icon=attributes.get("icon") or config.get("icon"),
         category=attributes.get("category") or config.get("category"),
-        provider=attributes.get("provider") or config.get("provider") or config.get("llm_provider"),
+        provider=attributes.get("provider")
+        or config.get("provider")
+        or config.get("llm_provider"),
         model=attributes.get("model") or config.get("model") or config.get("llm_model"),
         enabled=enabled,
     )

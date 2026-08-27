@@ -1,4 +1,5 @@
 """API tests for /api/v1/gateway (Phase 3 — Gateway AI Runtime)."""
+
 from __future__ import annotations
 
 import json
@@ -53,9 +54,9 @@ def _parse_sse(raw: str) -> list[tuple[str, dict]]:
         event, data = None, None
         for line in block.splitlines():
             if line.startswith("event: "):
-                event = line[len("event: "):]
+                event = line[len("event: ") :]
             elif line.startswith("data: "):
-                data = json.loads(line[len("data: "):])
+                data = json.loads(line[len("data: ") :])
         if event is not None:
             frames.append((event, data))
     return frames
@@ -63,9 +64,13 @@ def _parse_sse(raw: str) -> list[tuple[str, dict]]:
 
 def test_gateway_requires_authentication(client):
     assert client.get("/api/v1/gateway/providers").status_code == 401
-    assert client.post(
-        "/api/v1/gateway/chat", json={"conversation_grn": "grn:x:conversation/c:1", "content": "hi"}
-    ).status_code == 401
+    assert (
+        client.post(
+            "/api/v1/gateway/chat",
+            json={"conversation_grn": "grn:x:conversation/c:1", "content": "hi"},
+        ).status_code
+        == 401
+    )
 
 
 def test_list_providers_reports_health(client, make_auth_headers):
@@ -217,7 +222,9 @@ def test_sessions_lifecycle(client, make_auth_headers):
     other = client.get("/api/v1/gateway/sessions", headers=other_headers).json()
     assert all(s["conversation_grn"] != conversation_grn for s in other["items"])
     assert (
-        client.delete(f"/api/v1/gateway/sessions/{session_id}", headers=other_headers).status_code
+        client.delete(
+            f"/api/v1/gateway/sessions/{session_id}", headers=other_headers
+        ).status_code
         == 404
     )
 

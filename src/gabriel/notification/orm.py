@@ -1,4 +1,5 @@
 """Persistence model for the Notification resource."""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -16,7 +17,12 @@ class NotificationORM(Base, GabrielResourceMixin):
     __table_args__ = (
         # Listing pattern: a recipient's notifications, unread first / newest first.
         Index("ix_notifications_recipient_read", "recipient", "read"),
-        Index("ix_notifications_org_recipient_created", "org_id", "recipient", "created_at"),
+        Index(
+            "ix_notifications_org_recipient_created",
+            "org_id",
+            "recipient",
+            "created_at",
+        ),
     )
 
     recipient: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
@@ -24,5 +30,7 @@ class NotificationORM(Base, GabrielResourceMixin):
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False, default="")
     read: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    read_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     source_event_id: Mapped[str | None] = mapped_column(String(64), nullable=True)

@@ -1,4 +1,5 @@
 """KnowledgeSourceService: CRUD, attach/detach, chunk relabelling."""
+
 import pytest
 
 from gabriel.document.library import DocumentLibraryService
@@ -49,8 +50,12 @@ async def test_update_and_soft_delete_source(db_session):
     service = KnowledgeSourceService(db_session)
     source = await service.create_source(ORG, "Old", created_by=USER)
     updated = await service.update_source(
-        str(source.grn), updated_by=USER, org_id=ORG,
-        name="New", status="archived", metadata={"k": "v"},
+        str(source.grn),
+        updated_by=USER,
+        org_id=ORG,
+        name="New",
+        status="archived",
+        metadata={"k": "v"},
     )
     assert updated.name == "New"
     assert updated.status == KnowledgeSourceStatus.ARCHIVED
@@ -72,8 +77,13 @@ async def test_attach_and_detach_document(db_session, tmp_path):
     # Give the document some chunks to relabel.
     store = ChunkVectorStore(db_session)
     await store.add_chunk(
-        org_id=ORG, document_grn=str(document.grn), knowledge_source_grn=None,
-        chunk_index=0, content="hello", token_count=1, embedding=None,
+        org_id=ORG,
+        document_grn=str(document.grn),
+        knowledge_source_grn=None,
+        chunk_index=0,
+        content="hello",
+        token_count=1,
+        embedding=None,
     )
 
     attached = await service.attach_document(
@@ -111,7 +121,5 @@ async def test_delete_source_detaches_documents(db_session, tmp_path):
     await service.delete_source(
         str(source.grn), deleted_by=USER, org_id=ORG, commit=False
     )
-    refreshed_doc = await service.documents.get_document(
-        str(document.grn), org_id=ORG
-    )
+    refreshed_doc = await service.documents.get_document(str(document.grn), org_id=ORG)
     assert refreshed_doc.knowledge_source_grn is None

@@ -116,7 +116,9 @@ class AgentTemplate:
             runtime=self.runtime,
             model=model or self.default_model,
             provider=provider or self.provider,
-            system_prompt=self.system_prompt if system_prompt is None else system_prompt,
+            system_prompt=self.system_prompt
+            if system_prompt is None
+            else system_prompt,
             capabilities=list(self.capabilities),
             tools=tools,
             memory_layers=self.memory_layers,
@@ -152,8 +154,14 @@ CHAT_TEMPLATE = AgentTemplate(
         AgentCapability.MEMORY_WRITE.value,
         AgentCapability.TOOL_INVOKE.value,
     ],
-    tools=_tools("get_time", "days_between", "calculate", "convert_units", "list_tools"),
-    read_layers=[MemoryLayer.WORKING.value, MemoryLayer.SHORT_TERM.value, MemoryLayer.LONG_TERM.value],
+    tools=_tools(
+        "get_time", "days_between", "calculate", "convert_units", "list_tools"
+    ),
+    read_layers=[
+        MemoryLayer.WORKING.value,
+        MemoryLayer.SHORT_TERM.value,
+        MemoryLayer.LONG_TERM.value,
+    ],
     write_layers=[MemoryLayer.WORKING.value, MemoryLayer.SHORT_TERM.value],
     retention="session",
     triggers=[
@@ -183,15 +191,23 @@ ENGINEER_TEMPLATE = AgentTemplate(
         AgentCapability.FILE_WRITE.value,
     ],
     tools=_tools(
-        "find_file", "search_documents", "semantic_search",
-        "calculate", "convert_units", "hash_text", "get_time",
+        "find_file",
+        "search_documents",
+        "semantic_search",
+        "calculate",
+        "convert_units",
+        "hash_text",
+        "get_time",
     ),
     read_layers=[
-        MemoryLayer.WORKING.value, MemoryLayer.SHORT_TERM.value,
-        MemoryLayer.LONG_TERM.value, MemoryLayer.PROCEDURAL.value,
+        MemoryLayer.WORKING.value,
+        MemoryLayer.SHORT_TERM.value,
+        MemoryLayer.LONG_TERM.value,
+        MemoryLayer.PROCEDURAL.value,
     ],
     write_layers=[
-        MemoryLayer.WORKING.value, MemoryLayer.SHORT_TERM.value,
+        MemoryLayer.WORKING.value,
+        MemoryLayer.SHORT_TERM.value,
         MemoryLayer.LONG_TERM.value,
     ],
     retention="persistent",
@@ -200,8 +216,11 @@ ENGINEER_TEMPLATE = AgentTemplate(
         Trigger(event_type="api:POST:/chat/send", filter={"channel": "engineer"}),
     ],
     runtime_config=RuntimeConfiguration(
-        runtime=DEFAULT_RUNTIME, temperature=0.0, max_tokens=10000,
-        timeout_seconds=60, max_iterations=25,
+        runtime=DEFAULT_RUNTIME,
+        temperature=0.0,
+        max_tokens=10000,
+        timeout_seconds=60,
+        max_iterations=25,
     ),
 )
 
@@ -225,16 +244,24 @@ RESEARCHER_TEMPLATE = AgentTemplate(
         AgentCapability.SCHEDULE.value,
     ],
     tools=_tools(
-        "semantic_search", "search_documents", "find_file",
-        "get_current_weather", "get_time", "days_between",
+        "semantic_search",
+        "search_documents",
+        "find_file",
+        "get_current_weather",
+        "get_time",
+        "days_between",
     ),
     read_layers=[
-        MemoryLayer.WORKING.value, MemoryLayer.SHORT_TERM.value,
-        MemoryLayer.LONG_TERM.value, MemoryLayer.SEMANTIC.value,
+        MemoryLayer.WORKING.value,
+        MemoryLayer.SHORT_TERM.value,
+        MemoryLayer.LONG_TERM.value,
+        MemoryLayer.SEMANTIC.value,
     ],
     write_layers=[
-        MemoryLayer.SHORT_TERM.value, MemoryLayer.LONG_TERM.value,
-        MemoryLayer.SEMANTIC.value, MemoryLayer.ARCHIVAL.value,
+        MemoryLayer.SHORT_TERM.value,
+        MemoryLayer.LONG_TERM.value,
+        MemoryLayer.SEMANTIC.value,
+        MemoryLayer.ARCHIVAL.value,
     ],
     retention="persistent",
     triggers=[
@@ -242,8 +269,11 @@ RESEARCHER_TEMPLATE = AgentTemplate(
         Trigger(event_type="schedule:cron", filter={"cron": "0 8 * * *"}),
     ],
     runtime_config=RuntimeConfiguration(
-        runtime=DEFAULT_RUNTIME, temperature=0.0, max_tokens=8000,
-        timeout_seconds=120, max_iterations=30,
+        runtime=DEFAULT_RUNTIME,
+        temperature=0.0,
+        max_tokens=8000,
+        timeout_seconds=120,
+        max_iterations=30,
     ),
 )
 
@@ -265,7 +295,8 @@ DAEMON_TEMPLATE = AgentTemplate(
     ],
     tools=_tools("find_file", "search_documents", "semantic_search", "get_time"),
     read_layers=[
-        MemoryLayer.WORKING.value, MemoryLayer.EPISODIC.value,
+        MemoryLayer.WORKING.value,
+        MemoryLayer.EPISODIC.value,
         MemoryLayer.LONG_TERM.value,
     ],
     write_layers=[MemoryLayer.EPISODIC.value, MemoryLayer.LONG_TERM.value],
@@ -275,8 +306,11 @@ DAEMON_TEMPLATE = AgentTemplate(
         Trigger(event_type="ResourceCreated", filter={"resource_type": "document"}),
     ],
     runtime_config=RuntimeConfiguration(
-        runtime=DEFAULT_RUNTIME, temperature=0.0, max_tokens=4096,
-        timeout_seconds=300, max_iterations=50,
+        runtime=DEFAULT_RUNTIME,
+        temperature=0.0,
+        max_tokens=4096,
+        timeout_seconds=300,
+        max_iterations=50,
     ),
 )
 

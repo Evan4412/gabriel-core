@@ -23,7 +23,11 @@ class OrganizationService:
     - Emits events transactionally (ADR-017 outbox pattern)
     """
 
-    def __init__(self, repository: OrganizationRepository, event_repo: EventRepository | None = None):
+    def __init__(
+        self,
+        repository: OrganizationRepository,
+        event_repo: EventRepository | None = None,
+    ):
         register_core_resource_types()
         self.repo = repository
         self.event_repo = event_repo

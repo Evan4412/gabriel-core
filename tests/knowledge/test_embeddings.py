@@ -1,4 +1,5 @@
 """Embedding providers & registry: Ollama default, hot-swap, failure modes."""
+
 import json
 
 import httpx
@@ -27,9 +28,7 @@ async def test_ollama_embed_batches_texts():
         payload = json.loads(request.content)
         seen["model"] = payload["model"]
         seen["input"] = payload["input"]
-        return httpx.Response(
-            200, json={"embeddings": [[0.1, 0.2], [0.3, 0.4]]}
-        )
+        return httpx.Response(200, json={"embeddings": [[0.1, 0.2], [0.3, 0.4]]})
 
     provider = OllamaEmbeddingProvider(
         model="test-embed", transport=_transport(handler)

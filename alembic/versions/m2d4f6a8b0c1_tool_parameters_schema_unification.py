@@ -39,7 +39,9 @@ def upgrade() -> None:
     )
 
     # Preserve existing input contracts while moving to a single field.
-    op.execute("UPDATE tools SET parameters = input_schema WHERE input_schema IS NOT NULL")
+    op.execute(
+        "UPDATE tools SET parameters = input_schema WHERE input_schema IS NOT NULL"
+    )
 
     with op.batch_alter_table("tools") as batch_op:
         batch_op.alter_column(
@@ -76,5 +78,7 @@ def downgrade() -> None:
             existing_nullable=False,
         )
 
-    op.execute("UPDATE tools SET input_schema = parameters WHERE parameters IS NOT NULL")
+    op.execute(
+        "UPDATE tools SET input_schema = parameters WHERE parameters IS NOT NULL"
+    )
     op.drop_column("tools", "parameters")

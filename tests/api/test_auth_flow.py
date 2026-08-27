@@ -3,6 +3,7 @@
 Runs against the real app (TestClient) with the fallback SQLite database, so
 emails and org names are uuid-suffixed to stay unique across runs.
 """
+
 from __future__ import annotations
 
 import uuid

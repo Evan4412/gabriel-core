@@ -15,6 +15,7 @@ verb (e.g. ``resource:create``) to the capability a principal must hold.
 
 It must NOT contain UI, LLM, or chat logic.
 """
+
 from __future__ import annotations
 
 from gabriel.identity.models import Capability

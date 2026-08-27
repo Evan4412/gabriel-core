@@ -1,4 +1,5 @@
 """API tests for /api/v1/knowledge (Phase 4 — knowledge sources & search)."""
+
 from __future__ import annotations
 
 from uuid import uuid4
@@ -27,7 +28,12 @@ def _create_source(client, headers, name="Handbook", **extra):
     return response.json()
 
 
-def _upload_document(client, headers, filename="notes.txt", text=b"gabriel retrieval augmented generation"):
+def _upload_document(
+    client,
+    headers,
+    filename="notes.txt",
+    text=b"gabriel retrieval augmented generation",
+):
     response = client.post(
         "/api/v1/documents",
         files={"file": (filename, text, "text/plain")},
@@ -39,8 +45,12 @@ def _upload_document(client, headers, filename="notes.txt", text=b"gabriel retri
 
 def test_knowledge_requires_authentication(client):
     assert client.get("/api/v1/knowledge/sources").status_code == 401
-    assert client.post("/api/v1/knowledge/sources", json={"name": "x"}).status_code == 401
-    assert client.post("/api/v1/knowledge/search", json={"query": "x"}).status_code == 401
+    assert (
+        client.post("/api/v1/knowledge/sources", json={"name": "x"}).status_code == 401
+    )
+    assert (
+        client.post("/api/v1/knowledge/search", json={"query": "x"}).status_code == 401
+    )
 
 
 def test_source_crud_lifecycle(client, make_auth_headers):

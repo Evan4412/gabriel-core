@@ -1,4 +1,5 @@
 """ChatRuntimeService end-to-end tests with a scriptable fake provider."""
+
 from __future__ import annotations
 
 import json
@@ -35,9 +36,9 @@ def parse_frames(frames: list[str]) -> list[tuple[str, dict]]:
         event, data = "", {}
         for line in frame.strip().splitlines():
             if line.startswith("event: "):
-                event = line[len("event: "):]
+                event = line[len("event: ") :]
             elif line.startswith("data: "):
-                data = json.loads(line[len("data: "):])
+                data = json.loads(line[len("data: ") :])
         parsed.append((event, data))
     return parsed
 
@@ -93,7 +94,11 @@ async def create_agent(session_factory, **overrides) -> str:
         fields = {
             "created_by": ALICE,
             "system_prompt": "You are Gabriel.",
-            "model_config": {"provider": "fake", "model": "fake-model", "temperature": 0.2},
+            "model_config": {
+                "provider": "fake",
+                "model": "fake-model",
+                "temperature": 0.2,
+            },
         }
         fields.update(overrides)
         agent = await service.create_agent(ORG, "Chat agent", **fields)

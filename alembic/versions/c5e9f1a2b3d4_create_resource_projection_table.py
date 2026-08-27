@@ -6,6 +6,7 @@ Create Date: 2026-06-29 23:10:00.000000
 
 Creates resource_projections table for O(1) resource reads and fast listing.
 """
+
 from collections.abc import Sequence
 
 from alembic import op
@@ -25,7 +26,9 @@ def upgrade() -> None:
         sa.Column("grn", sa.String(length=255), primary_key=True, nullable=False),
         sa.Column("organization_id", sa.String(length=128), nullable=False),
         sa.Column("resource_type", sa.String(length=64), nullable=True),
-        sa.Column("state", sa.String(length=32), nullable=False, server_default="active"),
+        sa.Column(
+            "state", sa.String(length=32), nullable=False, server_default="active"
+        ),
         sa.Column("attributes", sa.JSON(), nullable=False, server_default="{}"),
         sa.Column("payload", sa.JSON(), nullable=False, server_default="{}"),
         sa.Column("last_event_type", sa.String(length=128), nullable=True),
@@ -66,8 +69,14 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("ix_resource_projections_org_state", table_name="resource_projections")
+    op.drop_index(
+        "ix_resource_projections_org_state", table_name="resource_projections"
+    )
     op.drop_index("ix_resource_projections_org_type", table_name="resource_projections")
-    op.drop_index("ix_resource_projections_resource_type", table_name="resource_projections")
-    op.drop_index("ix_resource_projections_organization_id", table_name="resource_projections")
+    op.drop_index(
+        "ix_resource_projections_resource_type", table_name="resource_projections"
+    )
+    op.drop_index(
+        "ix_resource_projections_organization_id", table_name="resource_projections"
+    )
     op.drop_table("resource_projections")

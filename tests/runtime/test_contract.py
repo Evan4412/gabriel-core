@@ -1,8 +1,11 @@
-
 from gabriel.agent.models import Agent
 from gabriel.agent.specification import AgentSpecification
 from gabriel.resource.grn import GRN
-from gabriel.runtime.execution import ExecutionMetrics, ExecutionRequest, ExecutionResult
+from gabriel.runtime.execution import (
+    ExecutionMetrics,
+    ExecutionRequest,
+    ExecutionResult,
+)
 
 
 def _make_agent(org_id: str = "org-123") -> Agent:
