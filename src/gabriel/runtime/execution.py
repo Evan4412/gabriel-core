@@ -47,12 +47,7 @@ class ExecutionResult:
     success: bool
     output: dict[str, Any]
     events: list
-    metrics: ExecutionMetrics # FIXME
-
-    @property
-    def sucess(self) -> bool:
-        """Backwards-compatible misspelled alias."""
-        return self.success
+    metrics: ExecutionMetrics
 
     def to_dict(self) -> dict[str, Any]:
         return {

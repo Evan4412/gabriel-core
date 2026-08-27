@@ -117,7 +117,7 @@ GABRIEL_CONTENT_ROOT=.gabriel/content       # where uploaded file bytes are stor
 # From the repository root, in a Python 3.11 virtualenv
 python -m venv .venv && source .venv/bin/activate
 pip install -e .            # installs gabriel-core and its dependencies (see pyproject.toml)
-# or: pip install -r requirements.txt
+# optional extras: pip install -e ".[ingest,dev]"
 ```
 
 ---
