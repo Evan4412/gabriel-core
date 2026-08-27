@@ -108,6 +108,3 @@ class ApprovalRegistry:
         pending.decision = decision
         pending.event.set()
         return True
-
-    def has_pending(self, session_id: str, tool_name: str) -> bool:
-        return self._key(session_id, tool_name) in self._pending

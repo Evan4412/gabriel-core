@@ -16,13 +16,10 @@ from gabriel.events.event import Event
 from gabriel.events.resource_projection import ResourceReadModelProjection
 from gabriel.events.projections.audit_projection import AuditProjection
 from gabriel.events.sql_event_store import SqlAlchemyEventStore
-from gabriel.document.content_store import DiskContentStore
 from gabriel.database.base import Base
 from gabriel.database.session import async_session, engine
 
-from gabriel.api.services.agents import AgentRepository, AgentService
 from gabriel.api.services.chat import ChatService, ChatRepository
-from gabriel.api.services.notification import NotificationService, NotificationRepository
 
 from gabriel.identity.identity_service import (
     IdentityService,
@@ -486,28 +483,9 @@ def get_db_session_factory(request: Request) -> async_sessionmaker[AsyncSession]
         factory = getattr(request.app.state, "db_session_factory", None)
         return factory if factory is not None else async_session
 
-
-def get_agent_service(request: Request) -> AgentService:
-        state = get_gateway_state(request)
-        return AgentService(AgentRepository(state.resource_projection))
-
 def get_chat_service(request: Request) -> ChatService:
         state = get_gateway_state(request)
         return ChatService(ChatRepository(state.resource_projection))
-
-def get_notification_service(request: Request) -> NotificationService:
-        state = get_gateway_state(request)
-        return NotificationService(NotificationRepository(state.resource_projection))
-
-def get_document_ingestion_service(request: Request):
-        """Provide a DocumentIngestionService backed by the app Dispatcher."""
-        from gabriel.document.service import DocumentIngestionService
-
-        state = get_gateway_state(request)
-        return DocumentIngestionService(
-                dispatcher=state.dispatcher,
-                content_store=DiskContentStore(Path(".gabriel/content")),
-        )
 
 
 def get_provider_registry(request: Request) -> ProviderRegistry:
@@ -518,11 +496,6 @@ def get_provider_registry(request: Request) -> ProviderRegistry:
 def get_session_manager(request: Request) -> SessionManager:
         """Ephemeral chat session manager (Phase 3)."""
         return request.app.state.chat_session_manager
-
-
-def get_embedding_registry(request: Request):
-        """Embedding provider registry initialized at app startup (Phase 4)."""
-        return request.app.state.embedding_registry
 
 
 def get_knowledge_retriever(request: Request):

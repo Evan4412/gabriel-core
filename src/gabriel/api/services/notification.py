@@ -42,13 +42,6 @@ class NotificationRepository:
         # Placeholder implementation for fetching notifications
         return [Notification(**notification) for notification in MOCK_NOTIFICATIONS]
 
-        # Placeholder implmentation.
-        resources = self._resource_projection.list_resources(
-            organization_id=organization_id,
-            resource_type="notification",
-        )
-        return [Notification(**resource) for resource in resources]
-
     def mark_all_read(self, organization_id: str) -> None:
         # Placeholder implementation for marking all notifications as read
         pass

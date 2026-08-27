@@ -14,7 +14,6 @@ Porting notes (from Gabriel/database/)
 """
 from __future__ import annotations
 
-from datetime import datetime, UTC
 from typing import Any
 from collections.abc import Awaitable, Callable
 
@@ -28,10 +27,6 @@ from gabriel.memory.orm import MemoryEntryORM
 
 # Embed function signature: takes a string, returns a float list (can be async).
 EmbedFn = Callable[[str], Awaitable[list[float]]]
-
-
-def _now() -> datetime:
-    return datetime.now(UTC)
 
 
 def _vector_literal(vec: list[float]) -> str:

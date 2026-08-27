@@ -14,9 +14,6 @@ from dataclasses import dataclass
 # ---------------------------------------------------------------------------
 # Generic
 # ---------------------------------------------------------------------------
-class OkResponse(BaseModel):
-    ok: bool = True
-    detail: str | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -83,17 +80,6 @@ class AgentSummary:
     category: str | None
     provider: str | None
     model: str | None
-    enabled: bool
-
-class AgentSummaryResponse(BaseModel):
-    id: str
-    name: str
-    description: str | None = None
-    status: str
-    icon: str | None = None
-    category: str | None = None
-    provider: str | None = None
-    model: str | None = None
     enabled: bool
 
 
@@ -190,18 +176,6 @@ class EventListResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Documents
 # ---------------------------------------------------------------------------
-class DocumentResponse(BaseModel):
-    grn: str
-    resource_type: str = "document"
-    state: str
-    filename: str
-    media_type: str | None = None
-    source_uri: str | None = None
-    content_hash: str | None = None
-    content_pointer: str | None = None
-    byte_size: int | None = None
-    event_id: str
-    event_type: str
 
 class DocumentAllowedTypesResponse(BaseModel):
     allowed_types: set[str] = Field(

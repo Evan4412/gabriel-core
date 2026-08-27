@@ -5,7 +5,6 @@ Events are append-only and queried by organization, resource, correlation_id,
 and timestamp for audit trails and replays.
 """
 
-from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -185,36 +184,3 @@ class EventRepository:
             .order_by(EventORM.occurred_at)
         )
         return list(result.scalars().all())
-
-    async def events_since(self, since: datetime) -> list[EventORM]:
-        """Get all events that occurred since a given timestamp.
-
-        Useful for event sourcing replays or change data capture.
-
-        Args:
-            since: The datetime cutoff (inclusive).
-
-        Returns:
-            list[EventORM]: All events since that time, in occurred order.
-        """
-        result = await self.session.execute(
-            select(EventORM)
-            .filter(EventORM.occurred_at >= since)
-            .order_by(EventORM.occurred_at)
-        )
-        return list(result.scalars().all())
-
-    async def count_events(self, organization_id: str) -> int:
-        """Get count of events for an organization.
-
-        Args:
-            organization_id: The organization ID.
-
-        Returns:
-            int: Number of events in the organization.
-        """
-        result = await self.session.execute(
-            select(EventORM)
-            .filter_by(organization_id=organization_id)
-        )
-        return len(result.scalars().all())

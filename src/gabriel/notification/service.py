@@ -210,13 +210,6 @@ class NotificationService:
 
     # ── Queries ──────────────────────────────────────────────────────────────
 
-    async def get_notification(
-        self, grn_str: str, *, org_id: str, recipient: str | None = None
-    ) -> Notification:
-        return orm_to_domain(
-            await self.repo.get_by_grn(grn_str, org_id=org_id, recipient=recipient)
-        )
-
     async def list_notifications(
         self,
         org_id: str,

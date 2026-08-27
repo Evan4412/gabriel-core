@@ -120,9 +120,6 @@ class MessageService:
             await self.session.flush()
         return orm_to_domain(orm)
 
-    async def get_message(self, grn_str: str, org_id: str | None = None) -> Message:
-        return orm_to_domain(await self.repo.get_by_grn(grn_str, org_id=org_id))
-
     async def list_messages(
         self,
         conversation_grn: str,

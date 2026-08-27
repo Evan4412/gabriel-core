@@ -60,20 +60,3 @@ class ResourceValidator:
             ) from e
 
         return True
-
-    def validate_batch(self, resources: list[Any]) -> list[bool]:
-        """Validate multiple resources.
-
-        Args:
-            resources: List of resources to validate.
-
-        Returns:
-            List of validation results (True for each valid resource).
-
-        Raises:
-            ResourceValidationError: If any resource fails validation.
-        """
-        results = []
-        for resource in resources:
-            results.append(self.validate(resource))
-        return results

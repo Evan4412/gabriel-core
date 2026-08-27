@@ -82,10 +82,6 @@ class IdentityService:
 
     # ── Session validation ─────────────────────────────────────────────────
 
-    def verify_token(self, token: Token | str) -> TokenPayload:
-        """Verify a signed token and return its claims (raises on failure)."""
-        return self.token_service.verify(token)
-
     def principal_from_token(self, token: Token | str) -> Principal:
         """Verify a token and reconstruct the :class:`Principal` from its claims."""
         payload = self.token_service.verify(token)

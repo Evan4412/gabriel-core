@@ -60,12 +60,3 @@ class Resource(BaseModel):
                 "updated_by": updated_by,
             }
         )
-
-    def with_metadata(self, key: str, value: Any) -> "Resource":
-        """ Returns a new Resource with updated metadata"""
-        return self.model_copy(
-            update={
-                "metadata": {**self.metadata, key: value},
-                "updated_at": utcnow(),
-            }
-        )

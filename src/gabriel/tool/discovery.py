@@ -17,8 +17,6 @@ The indexer is the single source of truth consumed by:
 
 * :func:`gabriel.gateway.tools.build_default_tool_registry` (LLM-facing
   runtime tools);
-* :class:`gabriel.tool.sync.ToolCatalogSynchronizer` (syncing ``Tool``
-  governance resources via ``POST /tools/sync`` or the CLI);
 * :class:`gabriel.tool.executor.ToolExecutor` (via the shared
   :class:`~gabriel.tool.registry.FunctionRegistry`).
 """
@@ -66,37 +64,6 @@ def _short_description(fn: Callable[..., Any]) -> str:
     doc = inspect.getdoc(fn) or ""
     first_paragraph = doc.strip().split("\n\n", 1)[0]
     return " ".join(first_paragraph.split())
-
-
-def _parameters_schema(fn: Callable[..., Any]) -> dict[str, Any]:
-    """Derive a JSON Schema for *fn*'s LLM-facing parameters.
-
-    Parameters whose name starts with ``_`` are executor-injected metadata
-    (e.g. ``_org_id``, ``_credentials``) and are never exposed to the LLM.
-    """
-    signature = inspect.signature(fn)
-    try:
-        import typing
-
-        hints = typing.get_type_hints(fn)
-    except Exception:  # noqa: BLE001 - best-effort; fall back to raw annotations
-        hints = {}
-
-    properties: dict[str, Any] = {}
-    required: list[str] = []
-    for param_name, param in signature.parameters.items():
-        if param_name.startswith("_"):
-            continue
-        if param.kind in (
-            inspect.Parameter.VAR_POSITIONAL,
-            inspect.Parameter.VAR_KEYWORD,
-        ):
-            continue
-        annotation = hints.get(param_name, param.annotation)
-        properties[param_name] = {"type": _json_type_for(annotation)}
-        if param.default is inspect.Parameter.empty:
-            required.append(param_name)
-    return {"type": "object", "properties": properties, "required": required}
 
 
 def _lc_parameters(lc_tool: BaseTool) -> dict[str, Any]:

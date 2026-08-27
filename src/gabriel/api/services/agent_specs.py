@@ -65,9 +65,6 @@ class AgentSpecService:
     # ------------------------------------------------------------------
     # Templates
     # ------------------------------------------------------------------
-    def list_template_keys(self) -> list[str]:
-        """Return the available template keys (legacy agent types)."""
-        return list_templates()
 
     def describe_templates(self) -> list[dict[str, Any]]:
         """Return browser-friendly descriptors for every template."""
@@ -130,15 +127,6 @@ class AgentSpecService:
     def delete(self, name: str) -> None:
         """Delete a persisted specification."""
         self._store.delete(name)
-
-    def seed_templates(self) -> list[str]:
-        """Persist every template spec into the store; return names written."""
-        names: list[str] = []
-        for key in list_templates():
-            spec = build_specification(key)
-            self._store.save(spec)
-            names.append(spec.name)
-        return names
 
 
 def get_agent_spec_service() -> AgentSpecService:
