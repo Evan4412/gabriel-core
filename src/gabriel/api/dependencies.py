@@ -347,25 +347,15 @@ async def _build_persisted_event_store() -> SqlAlchemyEventStore:
 async def initialize_gateway_state(app) -> None:
     event_store = await _build_persisted_event_store()
 
-    policy_session_factory = (
-        event_store.session_factory
-        if hasattr(event_store, "session_factory")
-        else async_session
-    )
-    persisted_policies = await _load_policies(policy_session_factory)
+    session_factory = getattr(event_store, "session_factory", async_session)
+    persisted_policies = await _load_policies(session_factory)
 
     peel = PEEL(PolicyEngine(persisted_policies))
     dispatcher = Dispatcher(event_store=event_store, peel=peel)
-    _register_handlers(dispatcher, policy_session_factory, peel.engine)
+    _register_handlers(dispatcher, session_factory, peel.engine)
 
-    projection_session_factory = (
-        event_store.session_factory
-        if hasattr(event_store, "session_factory")
-        else async_session
-    )
-
-    resource_projection = ResourceReadModelProjection(projection_session_factory)
-    audit_projection = AuditProjection(projection_session_factory)
+    resource_projection = ResourceReadModelProjection(session_factory)
+    audit_projection = AuditProjection(session_factory)
     dispatcher.register_projection(resource_projection)
     dispatcher.register_projection(audit_projection)
 
@@ -385,13 +375,13 @@ async def initialize_gateway_state(app) -> None:
     app.state.peel = peel
 
     # Database session factory for request-scoped services (auth, users, orgs).
-    app.state.db_session_factory = policy_session_factory
+    app.state.db_session_factory = session_factory
 
     # Identity Service: authentication boundary (issues/verifies signed tokens).
     # The working session factory is injected so DB-backed providers
     # (password, production) use the same database as the rest of the app.
     app.state.identity_service = build_default_identity_service(
-        session_factory=policy_session_factory
+        session_factory=session_factory
     )
 
     # Gateway AI Runtime (Phase 3): LLM providers, runtime tools, and
@@ -437,7 +427,7 @@ async def initialize_gateway_state(app) -> None:
     register_default_embedding_providers(embedding_registry)
     app.state.embedding_registry = embedding_registry
     app.state.knowledge_retriever = KnowledgeRetriever(
-        policy_session_factory, registry=embedding_registry
+        session_factory, registry=embedding_registry
     )
 
 
