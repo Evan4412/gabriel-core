@@ -21,19 +21,7 @@ async def list_conversations(
     context: ExecutionContext = Depends(get_execution_context),
     service: ChatService = Depends(get_chat_service),
 ):
-    chatConversations = service.get_chat_summary(context.principal)
-    return [
-        ChatSummaryResponse(
-            id=completion.id,
-            title=completion.title,
-            agentGRN=completion.agentGRN,
-            messageCount=completion.messageCount,
-            lastMessagePreview=completion.lastMessagePreview,
-            createdAt=completion.createdAt,
-            updatedAt=completion.updatedAt,
-        )
-        for completion in chatConversations
-    ]
+    return service.get_chat_summary(context.principal)
 
 
 @router.post(

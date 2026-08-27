@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from gabriel.api.schema import ChatSummary
+from typing import Any
 from gabriel.identity.principal import Principal
 
 
@@ -10,7 +10,7 @@ class ChatRepository:
     def __init__(self, resource_projection) -> None:
         self._resource_projection = resource_projection
 
-    def get_chat_summary(self, organization_id: str) -> list[ChatSummary]:
+    def get_chat_summary(self, organization_id: str) -> list[dict[str, Any]]:
         return self._resource_projection.list_resources(
             organization_id=organization_id,
             resource_type="conversations",
@@ -23,5 +23,5 @@ class ChatService:
     def __init__(self, repository: ChatRepository) -> None:
         self._repository = repository
 
-    def get_chat_summary(self, principal: Principal) -> list[ChatSummary]:
+    def get_chat_summary(self, principal: Principal) -> list[dict[str, Any]]:
         return self._repository.get_chat_summary(principal.organization_id)

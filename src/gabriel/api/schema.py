@@ -192,17 +192,6 @@ class DocumentAllowedTypesResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 
-@dataclass(frozen=True)
-class ChatSummary:
-    id: str
-    title: str | None
-    agentGRN: str | None
-    createdAt: datetime | str | None
-    updatedAt: datetime | str | None
-    messageCount: int | None
-    lastMessagePreview: str | None
-
-
 class ChatSummaryResponse(BaseModel):
     id: str | None = None
     title: str | None = None
