@@ -28,8 +28,8 @@ from gabriel.api.tenancy import require_same_org
 from gabriel.events.repository import EventRepository
 from gabriel.resource.exceptions import DuplicateResourceError, ResourceNotFoundError
 from gabriel.runtime.context import ExecutionContext
-from gabriel.tool.discovery import ToolLibraryIndexer
 from gabriel.tool.models import ExecutionRuntime, SafetyLevel, ToolCategory
+from gabriel.tool.provisioning import provision_library_tools
 from gabriel.tool.repository import ToolRepository
 from gabriel.tool.service import ToolService
 
@@ -200,37 +200,5 @@ async def sync_tools(
     session_factory: async_sessionmaker[AsyncSession] = Depends(get_db_session_factory),
 ):
     """Provision all library-discovered tools as governed Tool resources for this org."""
-    indexer = ToolLibraryIndexer()
-    discovered = indexer.discover()
-    created = []
-    skipped = []
-
     async with session_factory() as session:
-        svc = _service(session)
-        existing_names = {
-            t.name
-            for t in await svc.list_tools(context.organization)
-            if t.org_id == context.organization
-        }
-        for tool in discovered:
-            if tool.name in existing_names:
-                skipped.append(tool.name)
-                continue
-            try:
-                await svc.create_tool(
-                    context.organization,
-                    "system",
-                    name=tool.name,
-                    description=tool.description,
-                    category=tool.category,
-                    parameters=tool.parameters,
-                    safety_level=tool.safety_level,
-                    runtime_binding=tool.runtime_binding,
-                    execution_runtime=tool.execution_runtime,
-                    enabled=True,
-                )
-                created.append(tool.name)
-            except Exception:
-                skipped.append(tool.name)
-
-    return {"created": created, "skipped": skipped}
+        return await provision_library_tools(session, context.organization)

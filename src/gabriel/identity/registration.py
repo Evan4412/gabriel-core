@@ -25,6 +25,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from gabriel.events.event import Event
 from gabriel.events.repository import EventRepository
 from gabriel.identity.roles import OrgRole
+from gabriel.logging_config import get_logger
 from gabriel.organization.mappers import domain_to_orm as org_domain_to_orm
 from gabriel.organization.models import Organization
 from gabriel.organization.repository import OrganizationRepository
@@ -34,8 +35,11 @@ from gabriel.resource.factory import ResourceFactory
 from gabriel.resource.grn import GRN
 from gabriel.resource.models import ResourceState
 from gabriel.resource.registry import registry
+from gabriel.tool.provisioning import provision_library_tools
 from gabriel.user.models import User
 from gabriel.user.service import UserService
+
+logger = get_logger(__name__)
 
 
 def _slugify(value: str) -> str:
@@ -141,6 +145,22 @@ class RegistrationService:
             raise DuplicateResourceError(
                 f"Registration for '{email}' conflicts with existing records"
             ) from exc
+
+        # 3. Provision the default library tools as enabled Tool resources for
+        #    the new org. Tool exposure is opt-in (ADR-019/ADR-024): without an
+        #    enabled Tool resource, an agent's declared tools never reach the
+        #    model. Provisioning here means a brand-new org's agents can use
+        #    tools immediately instead of silently getting none until an admin
+        #    runs POST /tools/sync. Best-effort: a provisioning failure must not
+        #    fail registration (admins can re-run POST /tools/sync).
+        try:
+            await provision_library_tools(self.session, org_id, created_by=email)
+        except Exception:  # pragma: no cover - defensive
+            logger.exception(
+                "Tool provisioning failed for new org %s; agents will have no "
+                "tools until POST /tools/sync is run",
+                org_id,
+            )
 
         return RegistrationResult(user=user, organization=organization)
 
