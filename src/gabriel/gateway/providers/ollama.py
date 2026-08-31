@@ -137,7 +137,7 @@ class OllamaProvider:
             max_tokens=max_tokens,
         )
 
-        logger.info(f"(chat_completion) Tools received for Ollama: {tools}")
+        logger.debug("chat_completion: %d tool spec(s) bound", len(tools or []))
 
         runnable = self._bind_runtime_options(
             llm,
@@ -183,7 +183,7 @@ class OllamaProvider:
             max_tokens=max_tokens,
         )
 
-        logger.info(f"(stream_chat_completion) Tools received for Ollama: {tools}")
+        logger.debug("stream_chat_completion: %d tool spec(s) bound", len(tools or []))
 
         runnable = self._bind_runtime_options(
             llm,

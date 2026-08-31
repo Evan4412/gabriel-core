@@ -278,7 +278,33 @@ class ChatRuntimeService:
         declared = set(spec.tool_names())
         disabled = set(spec.disabled_tool_names())
         base = declared or allowed_catalog
-        return sorted((base & allowed_catalog) - disabled)
+        resolved = sorted((base & allowed_catalog) - disabled)
+
+        # Make the opt-in governance gate observable instead of silent: an
+        # agent can declare tools that never reach the model because the org
+        # never provisioned/enabled the matching ``Tool`` resource (e.g. the
+        # ``POST /tools/sync`` bootstrap was never run) or the name is not in
+        # the runtime catalog. Without this, tools "silently" disappear and
+        # the model reports it has none. See ``_org_enabled_tool_names``.
+        if declared:
+            unresolved = (declared - disabled) - set(resolved)
+            if unresolved:
+                unknown = sorted(unresolved - catalog)
+                not_enabled = sorted(unresolved & catalog)
+                logger.warning(
+                    "Agent %s declares %d tool(s) that will NOT be exposed to "
+                    "the model for org %s. Not enabled for org (run POST "
+                    "/tools/sync or enable the Tool resource): %s. Unknown to "
+                    "the runtime catalog: %s. Exposing: %s.",
+                    getattr(spec, "name", "<agent>"),
+                    len(unresolved),
+                    org_id,
+                    not_enabled or "none",
+                    unknown or "none",
+                    resolved or "none",
+                )
+
+        return resolved
 
     async def _org_enabled_tool_names(
         self, session: AsyncSession, org_id: str
@@ -614,7 +640,7 @@ class ChatRuntimeService:
             context_blocks=context_blocks,
             context_window=config.context_window,
         )
-        logger.info(f"Config allowed tools: {config.allowed_tools}")
+        logger.debug("Resolved allowed tools for turn: %s", config.allowed_tools)
         tool_specs = self.tools.llm_specs(allowed=config.allowed_tools)
 
         answer_parts: list[str] = []
@@ -627,7 +653,7 @@ class ChatRuntimeService:
                 pending_calls: tuple[ToolCallRequest, ...] = ()
                 iteration_text: list[str] = []
 
-                logger.info(f"Tool specs for this turn: {tool_specs}")
+                logger.debug("Exposing %d tool spec(s) to provider", len(tool_specs))
 
                 stream = provider.stream_chat_completion(
                     messages,
