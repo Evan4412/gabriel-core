@@ -614,7 +614,7 @@ class ChatRuntimeService:
             context_blocks=context_blocks,
             context_window=config.context_window,
         )
-        logger.info(f"Config allowed tools: {config.allowed_tools}")
+        logger.debug("Resolved allowed tools for turn: %s", config.allowed_tools)
         tool_specs = self.tools.llm_specs(allowed=config.allowed_tools)
 
         answer_parts: list[str] = []
@@ -627,7 +627,7 @@ class ChatRuntimeService:
                 pending_calls: tuple[ToolCallRequest, ...] = ()
                 iteration_text: list[str] = []
 
-                logger.info(f"Tool specs for this turn: {tool_specs}")
+                logger.debug("Exposing %d tool spec(s) to provider", len(tool_specs))
 
                 stream = provider.stream_chat_completion(
                     messages,
