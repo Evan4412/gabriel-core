@@ -20,6 +20,7 @@ deterministic and flows through the real governed ``ToolExecutor``.
 from __future__ import annotations
 
 import json
+import logging
 
 import pytest
 
@@ -254,3 +255,60 @@ async def test_non_streaming_path_completes_tool_round_trip(session_factory):
     assert "calculate" in _tool_names_in_request(provider, 0)
     assert len(provider.calls) == 2
     assert result["content"] == "Buffered: 4"
+
+
+# ---------------------------------------------------------------------------
+# 7. Regression for the reported field bug: an agent that declares tools but
+#    whose org never provisioned/enabled the matching ``Tool`` resource (i.e.
+#    ``POST /tools/sync`` was never run) sends NO tools to the model — the
+#    model then reports it has none. This reproduces the exact symptom and
+#    proves that (a) it is the opt-in governance gate dropping the tools, not
+#    the wiring, and (b) the drop is now surfaced via a WARNING instead of
+#    failing silently. Note: these tests deliberately do NOT call
+#    ``enable_tool`` before running the turn.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_declared_tools_dropped_when_org_not_provisioned(
+    session_factory, caplog
+):
+    provider = FakeProvider(script=[{"text": "I have no tools."}])
+    runtime = build_runtime(session_factory, provider)
+    # Agent declares the tool, but the org has NO enabled Tool resource for it.
+    agent_grn = await create_agent(session_factory, allowed_tools=["calculate"])
+    conversation_grn = await create_conversation(session_factory, agent_grn=agent_grn)
+
+    with caplog.at_level(logging.WARNING, logger="gabriel.gateway.service"):
+        await _run_stream(runtime, conversation_grn)
+
+    # No tools reached the model (native tools payload is empty/None).
+    assert not provider.calls[0].get("tools")
+
+    # The drop is surfaced (no longer silent) and names the dropped tool plus
+    # the operator remedy.
+    warnings = [
+        r.getMessage()
+        for r in caplog.records
+        if r.levelno == logging.WARNING and "will NOT be exposed" in r.getMessage()
+    ]
+    assert warnings, "expected a diagnostic warning for the dropped tool"
+    assert "calculate" in warnings[0]
+    assert "/tools/sync" in warnings[0]
+
+
+@pytest.mark.asyncio
+async def test_provisioning_the_org_tool_restores_tool_exposure(session_factory):
+    """The documented remedy works: enabling the org Tool resource (what
+    ``POST /tools/sync`` does) makes the declared tool reach the model."""
+    provider = FakeProvider(script=[{"text": "ok"}])
+    runtime = build_runtime(session_factory, provider)
+    agent_grn = await create_agent(session_factory, allowed_tools=["calculate"])
+    conversation_grn = await create_conversation(session_factory, agent_grn=agent_grn)
+
+    # Provision + enable the org Tool resource (the fix for the reported bug).
+    await enable_tool(session_factory, "calculate")
+
+    await _run_stream(runtime, conversation_grn)
+
+    assert _tool_names_in_request(provider, 0) == {"calculate"}
